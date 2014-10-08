@@ -1,0 +1,185 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>测试用</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pro.css?embed" />
+    <link rel="stylesheet" type="text/css" href="vendor/ionicons/css/ionicons.css" />
+    <style>
+        .my-banner {
+            margin-bottom: 20px;
+            padding: 10px 12px;
+            background-color: #FF9937;
+            height: 85px;
+            color: #ffffff
+        }
+        .my-banner-text {
+            display: block;
+        }
+        .my-banner-count {
+            font-size: 40px;
+            -webkit-transform: translate3d(0, 0, 0);
+        }
+        .my-banner-unit {
+            font-size: 20px;
+        }
+
+        .my-item-left{
+            position: absolute;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: #eee;
+            height: 60px;
+            width: 60px;
+            padding: 8px 6px;
+            font-size: 12px;
+            line-height: 12px;
+        }
+
+        .my-item-count {
+            font-size: 30px;
+            line-height: 30px;
+        }
+
+        .my-item-right {
+            margin-left: 70px;
+        }
+
+        .my-item-right p {
+            font-size: 14px;
+        }
+
+        .my-deletable {
+            z-index: 2;
+            background: #fff;
+        }
+
+        .my-delete {
+            height: 80px;
+            line-height: 80px;
+            width: 60px;
+            text-align: center;
+            position: absolute;
+            top:0;
+            right: 0;
+            background: rgb(250, 34, 34);
+            z-index: 1;
+            color: #fff;
+        }
+
+        [data-lazy] {
+            display: block;
+            margin: 10px auto;
+            height: 120px;
+            width: 240px;
+            border: 1px solid #eee;
+        }
+
+    </style>
+	<script src="js/jquery.min.js">	</script>
+	<script>
+	
+var ticket = getUrlParam('ticket');
+var workerAccouont = '';
+document.getElementById("radio1").checked = true;
+setmsg(1);
+
+$.getScript('http://crm1.dkf.qq.com/php/index.php/thirdapp/appdemo/get_workeraccount_by_sessionkey?callback=wokeraccountCallback&ticket='+ticket);
+
+function wokeraccountCallback(data){
+	document.getElementById('area').value += '您现在登录的帐号是：' +  $xss(data.workeraccount,"html") + '\n';
+	document.getElementById('workeraccount').innerHTML =  $xss(data.workeraccount,"html");
+}
+function MCS_ClientNotify(EventData) {
+	EventData = strToJson(EventData);
+	switch(EventData['event']){
+		case 'OnUserChange':{
+			OnUserChange(EventData);
+			break;
+		}
+		case 'OnMapMsgClick':{
+			OnMapMsgClick(EventData);
+			break;
+		}
+	}
+}
+
+	function OnUserChange(data){
+	
+		$.get('/getinfoopen?openid='+data['userid'],function(data1,status){
+		$("#order-list").html("");
+		    alert(data1);
+			$("#user-name").html(data1.usr_name);
+			$("#credit").html(data1.credit);
+			$("#the-code").html(data1.the_code);
+		});
+		
+		$.get("/orderlist?openid="+data['userid'],function(data1,status){
+			data1.forEach(function(value,index){
+			    var html_element = '';
+                html_element +=	'<ul class="ui-list arrow-right"> <li class="ui-item"> <a href="/orderinfo?orderid=';
+				html_element += value.orderid;
+				html_element += '">订单号：';
+				html_element += value.orderid;
+				html_element += '<span class="ui-right">状态：<span class="ui-red">';
+				html_element += value.status;
+				html_element += '/span></span><div class="my-item-right"><p class="ui-no-wrap">';
+				html_element += value.title;
+				html_element += '</p><p class="ui-red">商户：';
+				html_element += value.provider;
+				html_element += '</p>lass="ui-gray">生成日期：';
+				html_element += value.date;
+				html_element += '</p></div>	</a></li></ul>';
+				
+				$("#order-list").append(html_element);
+			})
+		})
+	}
+
+	function strToJson(str){
+	var json = (new Function("return " + str))();
+	return json;
+}
+	</script>
+   </head>
+<body class="ui-app">
+
+
+
+
+<!-- 一个App可以多个page -->
+<div class="ui-page page1 js-active">
+    <div class="ui-page-content">
+        <!-- 主体内容 -->
+
+        <div class="ui-tab js-active" id="page1-tab1" role="tabpanel">
+
+             
+            <ul class="ui-list">
+               
+                <li class="ui-item ui-ignore-space"><a href="#">
+                    
+                    <div class="my-item-right">
+                        <p class="ui-no-wrap" id ="user-name"></p>
+                        <p class="ui-grey" >积分: <span id = "the-code"></span></p>
+                        <p class="ui-red">信誉：<span id = "credit"></span></p>
+                    </div>
+                </a></li>
+            </ul>
+			<button class="ui-button ui-block ui-info">最近订单</button>
+            <div id = "order-list">
+           	
+           </div>
+          <button class="ui-button ui-block ui-danger" id = "more-order">more</button>
+        </div>
+
+</div>
+
+
+</div>
+
+</body>
+</html>
