@@ -71,7 +71,7 @@ app.post('/myadmin/auth',function(req,res){
     console.log(obj);
     if(req.body.email==obj.email&&req.body.password==obj.password){
         req.session.name = req.body.email;
-        res.redirect("/admin/index.html");
+        res.redirect("/web/admin/index.html");
     }
     else
         res.send("error");
@@ -123,7 +123,7 @@ function admin_check(req,res,next){
         next();
     }
     else{
-       res.redirect('/admin/sign_in.html');
+       res.redirect('/web/admin/sign_in.html');
     }
 }
 
