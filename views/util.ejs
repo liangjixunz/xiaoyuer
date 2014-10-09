@@ -109,7 +109,7 @@ function MCS_ClientNotify(EventData) {
 
 	function OnUserChange(data){
 	
-		$.get('/getinfoopen?openid='+data['userid'],function(data1,status){
+		$.get('/web/kf/info?openid='+data['userid'],function(data1,status){
 		$("#order-list").html("");
 		    alert(data1);
 			$("#user-name").html(data1.usr_name);
@@ -117,7 +117,7 @@ function MCS_ClientNotify(EventData) {
 			$("#the-code").html(data1.the_code);
 		});
 		
-		$.get("/orderlist?openid="+data['userid'],function(data1,status){
+		$.get("/web/kf/orderlist?openid="+data['userid'],function(data1,status){
 			data1.forEach(function(value,index){
 			    var html_element = '';
                 html_element +=	'<ul class="ui-list arrow-right"> <li class="ui-item"> <a href="/orderinfo?orderid=';

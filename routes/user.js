@@ -1,10 +1,13 @@
-/* GET users listing. */
-exports.list = function(req, res){
-  res.send('respond with a resource');
-};
+var userInfo = require("xiaoyuer/userInfo")
+
+
 exports.util = function(req,res){
     res.render('util',{});
 }
+/*
+*获取自己的订单列表
+* 利用req.session.openid
+ */
 exports.order = function(req,res){
     res.render('orderlist',{
         username:"愚吉",
@@ -26,10 +29,33 @@ exports.order = function(req,res){
             }]
     });
 }
-
+/*
+ *发现
+ * 利用req.session.openid
+ */
 exports.seek = function(req,res){
     res.render('seek',{
         new_items:10,
         services:[]
+    })
+}
+ /*
+ *客服用
+ * 根据openid
+ *获取用户基本信息
+  */
+exports.user_info =  function(req,res){
+    userInfo.getUserInfo(req.query.openid,function(result){
+        res.send(result);
+    })
+}
+/*
+ *客服用
+ * 根据openid
+ *获取用户订单列表
+ */
+exports.order_list =  function(req,res){
+    userInfo.getOrder(req.query.openid,function(result){
+        res.send(result);
     })
 }

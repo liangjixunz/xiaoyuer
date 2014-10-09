@@ -28,11 +28,29 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(app.router);
 
 app.get('/', routes.index);
-app.get('/users', users.list);
+
+/*
+*客服所用页面
+ */
 app.get('/util', users.util);
+/*
+*客服使用的API
+ */
+app.get('/kf/info',users.user_info);
+
+app.get('/kf/orderinfo',users.order_list)
+/*
+*用户的订单列表
+ */
 app.get('/orderlist', users.order);
+/*
+*发现
+ */
 app.get('/seek', users.seek);
 
+/*
+*精选服务
+ */
 app.get('/oneorder',oneservice.order)
 app.get('/oneservice',function(req,res){
     res.render("oneservice",{});
@@ -47,8 +65,15 @@ app.get('/event/whoisme',function(req,res){
 
     res.send(req.session.openid);
 })
+/*
+*点击链接
+ */
 app.get(/\/repost[\s\S]+/,gift.repostPre);
 app.get('/event/fromwe',gift.set_session)
+/*
+*微信端用户获取活动列表
+* 以及其基本信息
+ */
 app.get('/event/index',gift.event_index);
 app.get('/forwarding',gift.repostPre);
 app.get('/myadmin/au',function(req,res){
