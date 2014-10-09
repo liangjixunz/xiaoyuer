@@ -1,4 +1,5 @@
-var db = require("xiaoyuer/gift/db");
+var db = require("xiaoyuer/gift/db"),
+    area_class = require("xiaoyuer/area_class");
 
 exports.new_event = function(req,res){
     console.log(req.body);
@@ -88,5 +89,19 @@ exports.reply_set = function(req,res){
     res.render("auto_reply",{});
 }
 
-
-
+/*
+*更新地区代码表
+* @param content
+* Method: POST
+ */
+exports.area_update = function(req,res){
+    res.send(area_class.area.update(JSON.parse(req.body.content)));
+}
+/*
+ *更新分类表
+ * @param content
+ * Method: POST
+ */
+exports.class_update = function(req,res){
+    res.send(area_class.classify.update(JSON.parse(req.body.content)));
+}

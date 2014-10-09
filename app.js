@@ -88,7 +88,15 @@ app.get('/myadmin/event/forwardinginfo',admin_check,admin.event_forwarding_info)
 
 app.get('/event/basicinfo',admin_check,admin.event_info)
 
+/*
+*设置自动回复
+ */
 app.get('/myadmin/setreply',admin_check,admin.reply_set);
+/*
+*更新地区和分类
+ */
+app.post('/myadmin/area/update',admin.area_update);
+app.post("/myadmin/classify/update",admin.class_update);
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
