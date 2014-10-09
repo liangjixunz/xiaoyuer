@@ -70,7 +70,7 @@ app.post('/myadmin/auth',function(req,res){
    var obj = JSON.parse(data);
     console.log(obj);
     if(req.body.email==obj.email&&req.body.password==obj.password){
-        req.session.name = req.body.email;
+        req.session.adminname = req.body.email;
         res.redirect("/web/admin/index.html");
     }
     else
@@ -85,6 +85,10 @@ app.get('/event/info',gift.event_info);
 app.get('/myadmin/event/withdraw',admin_check,admin.event_withdraw_info);
 
 app.get('/myadmin/event/forwardinginfo',admin_check,admin.event_forwarding_info);
+
+app.get('/event/basicinfo',admin_check,admin.event_info)
+
+app.get('/myadmin/setreply',admin_check,admin.reply_set);
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
@@ -115,11 +119,9 @@ app.use(function(err, req, res, next) {
 });
 
 function admin_check(req,res,next){
-    console.log("hello");
-    console.log(__dirname);
     var str = fs.readFileSync(__dirname+"/shared/admin");
     var obj = JSON.parse(str);
-    if(req.session.name==obj.email){
+    if(req.session.adminname==obj.email){
         next();
     }
     else{

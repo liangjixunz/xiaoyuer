@@ -61,7 +61,7 @@
     $("#sub-text").html(body.content);
     else{
     $("#sub-text").html(body.content.text);
-    $("#sub-pic").html("<img src='" +body.content.pic+"'>");
+    $("#sub-pic").html("<img src='" +body.content.picurl+"'>");
     }
     });
 
@@ -129,31 +129,36 @@
 
             <ul class='nav nav-stacked'>
                 <li class=''>
-                    <a href='/admin/index.html'>
+                    <a href='/web/admin/index.html'>
                         <i class='icon-dashboard'></i>
                         <span>Dashboard</span>
                     </a>
                 </li>
                 <li class='active'>
-                    <a href='/admin/new_event.html'>
+                    <a href='/web/admin/new_event.html'>
                         <i class='icon-edit'></i>
                         <span>新的转发活动</span>
 
                     </a>
                 </li>
                 <li class=''>
-                    <a href='/myadmin/event/index'>
+                    <a href='/web/myadmin/event/index'>
                         <i class='icon-star'></i>
                         <span>转发流水</span>
                     </a>
                 </li>
                 <li class=''>
-                    <a href='/myadmin/event/withdraw'>
+                    <a href='/web/myadmin/event/withdraw'>
                         <i class='icon-table'></i>
                         <span>提现流水</span>
                     </a>
                 </li>
-
+                <li class=''>
+                    <a href='/web/myadmin/setreply'>
+                        <i class='icon-table'></i>
+                        <span>设置自动回复</span>
+                    </a>
+                </li>
 
 
             </ul>
@@ -218,6 +223,10 @@
                                                     <div class="form-group">
                                                         <label for="inputText7">图片链接</label>
                                                         <textarea class="form-control sub-pic" id="inputText7"  placeholder="" type="text"value=""> </textarea>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="inputText11">链接</label>
+                                                        <textarea class="form-control sub-url" id="inputText11"  placeholder="" type="text"value=""> </textarea>
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="inputText6">回复内容</label>
@@ -295,6 +304,10 @@
                                                                 <input class="form-control auto-pic"  id="inputText5" placeholder="" type="text" value="">
                                                             </div>
                                                             <div class="form-group">
+                                                                <label for="inputText10">链接</label>
+                                                                <input class="form-control auto-url"  id="inputText10" placeholder="" type="text" value="">
+                                                            </div>
+                                                            <div class="form-group">
                                                                 <label for="inputTextArea1">回复内容</label>
                                                                 <textarea class="form-control auto-text"  placeholder="Textarea" rows="3"></textarea>
                                                             </div>
@@ -324,8 +337,12 @@
                                                             <input class="form-control append-keyword" id="inputText2" placeholder="Text field" type="text">
                                                         </div>
                                                             <div class="form-group">
-                                                                <label for="inputText3">图片链接</label>
-                                                                <input class="form-control append-pic" id="inputText3" placeholder="Text field" type="text" value="">
+                                                                <label for="inputText9">图片链接</label>
+                                                                <input class="form-control append-pic" id="inputText9" placeholder="Text field" type="text" value="">
+                                                            </div>
+                                                            <div class="form-group">
+                                                                <label for="inputText3">链接</label>
+                                                                <input class="form-control append-url" id="inputText3" placeholder="Text field" type="text" value="">
                                                             </div>
                                                             <div class="form-group">
                                                                 <label for="inputTextArea1">回复内容</label>
@@ -491,8 +508,9 @@ var edit_by_id =( function(){
              var obj = {type:"text",content:{},keyword:""};
              if( $(".auto-pic").attr("value")){
                  obj.type="news";
-                 obj.content.pic = $(".auto-pic").attr("value");
+                 obj.content.picurl = $(".auto-pic").attr("value");
                  obj.content.text = $(".auto-text").attr("value");
+                 obj.content.url = $(".auto-url").attr("value");
              }
              else
                  obj.content = $(".auto-text").attr("value");
@@ -528,13 +546,15 @@ var edit_by_id =( function(){
         $("#"+id+">th").each(function(){
             temp[temp.length] = $(this).text();
         });
-        if(eval('('+temp[2]+')').pic){
-            $(".auto-pic").attr("value",eval('('+temp[2]+')').pic);
-            $(".auto-text").attr("value",eval('('+temp[2]+')').text)
+        if(eval('('+temp[2]+')').picurl){
+            $(".auto-pic").attr("value",eval('('+temp[2]+')').picurl);
+            $(".auto-text").attr("value",eval('('+temp[2]+')').text);
+            $(".auto-url").attr("value",eval('('+temp[2]+')').url) ;
         }
         else{
             $(".auto-text").attr("value",eval(temp[2]));
-            $(".auto-pic").attr("value","")
+            $(".auto-pic").attr("value","");
+            $(".auto-url").attr("value","")
         }
 
         $(".auto-keyword").attr("value",temp[1])
@@ -546,10 +566,12 @@ var edit_by_id =( function(){
              if(body.type == "text"){
                  $(".sub-content").attr("value",body.content);
                  $(".sub-pic").attr('value',"");
+                 $(".sub-url").attr("value","");
              }
              else{
                  $(".sub-content").attr("value",body.content.text);
-                 $(".sub-pic").attr("value",body.content.pic);
+                 $(".sub-pic").attr("value",body.content.picurl);
+                 $(".sub-url").attr("value",body.content.url)
              }
 
          });
@@ -560,8 +582,9 @@ var edit_by_id =( function(){
              var obj = {type:"text",content:{}};
              if( $(".sub-pic").attr("value")){
                  obj.type="news";
-                 obj.content.pic = $(".sub-pic").attr("value");
+                 obj.content.picurl = $(".sub-pic").attr("value");
                  obj.content.text = $(".sub-content").attr("value");
+                 obj.content.url = $(".sub-url").attr("value");
              }
               else
                  obj.content = $(".sub-content").attr("value");
@@ -571,8 +594,8 @@ var edit_by_id =( function(){
                      if(body.type == "text")
                          $("#sub-text").html(body.content);
                      else{
-                         $("#sub-text").html(body.content.text);
-                         $("#sub-pic").html("<img src='" +body.content.pic+"'>");
+                         $("#sub-text").html("<a href = '"+body.content.url+"'>"+body.content.text+"</a>");
+                         $("#sub-pic").html("<img src='" +body.content.picurl+"'>");
                      }
                  });
 
@@ -584,8 +607,9 @@ var edit_by_id =( function(){
              var obj = {type:"text",content:{},keyword:""};
              if( $(".append-pic").attr("value")){
                  obj.type="news";
-                 obj.content.pic = $(".append-pic").attr("value");
+                 obj.content.picurl = $(".append-pic").attr("value");
                  obj.content.text = $(".append-text").attr("value");
+                 obj.content.url  = $(".append-url").attr("value");
              }
              else
                  obj.content = $(".append-text").attr("value");
