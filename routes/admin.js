@@ -27,10 +27,31 @@ exports.event_withdraw_info = function(req,res){
     db.get_with_draw_index(function(result){
         res.render("withdraw",{
             withdraw_list:result,
-            processed:123,
-            processing:23,
-            total_withdraw:333.06
+            processed:(function(){
+                var totals = 0;
+                result.forEach(function(value){
+                    if(value.withdraw_is_over)
+                        totals +=1;
+                })
+                return totals;
+            })(),
+            processing:(function(){
+                var totals = 0;
+                result.forEach(function(value){
+                    if(value.withdraw_is_over==0)
+                        totals +=1;
+                })
+                return totals;
+            })(),
+            total_withdraw:(function(){
+                var totals = 0.0;
+                result.forEach(function(value){
+                        totals += value.money;
+                })
+                return totals;
+            })()
         })
+        console.log(result);
     })
 }
 
@@ -60,12 +81,12 @@ exports.event_index = function(req,res){
 exports.event_total = function(req,res){
 
 }
-
+/*
+ *微信自动回复的设置
+ */
 exports.reply_set = function(req,res){
     res.render("auto_reply",{});
 }
 
-/*
-*微信自动回复的设置
- */
+
 
