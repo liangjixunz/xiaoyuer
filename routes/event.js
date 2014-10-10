@@ -2,6 +2,7 @@ var request = require("request");
 var db = require("xiaoyuer/gift/db");
 exports.event_info= function(req,res){
     db.get_event_info(req.query.event_id,function(result){
+        console.log(result);
         res.render('forwarding',result);
 
 })
@@ -9,7 +10,7 @@ exports.event_info= function(req,res){
 
 exports.event_index = function(req,res){
     if(!req.session.openid){
-        res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=http://bear.chinacloudapp.cn/event/fromwe&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
+        res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=http://ber.chinacloudapp.cn/web/event/fromwe&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
     }
     else {
         var obj = {
@@ -68,7 +69,7 @@ exports.set_session = function(req,res){
                 db.new_user(req.session.openid,function(result){
                       console.log(result);
                 })
-                    res.redirect("/event/index");
+                    res.redirect("/web/event/index");
             }
         })
 
@@ -105,7 +106,7 @@ exports.repostPre = function(req,res){
                 })
                 db.new_award(openid_from,openid_obj.openid,event_id,function(result){
                         req.session.openid = openid_obj.openid;
-                        res.redirect("/event/info?event_id="+event_id +"&over=0");
+                        res.redirect("/web/event/info?event_id="+event_id +"&over=0");
                 })
             }
         })

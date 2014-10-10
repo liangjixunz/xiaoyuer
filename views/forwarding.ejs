@@ -83,7 +83,7 @@
     <script src = "/js/WeixinApi.js"></script>
     <script>
     var openid;
-    var baseurl = "http://bear.chinacloudapp.cn";
+    var baseurl = "http://ber.chinacloudapp.cn/web";
     var event_id = window.location.search.slice(0);
     event_id = event_id.match(/=[^\/]+/)[0].slice(1);
     $.get("/event/whoisme",function(data,status){
@@ -150,12 +150,12 @@
                             <div class="ui-carousel-item js-active">
                                 <img width="100%" src="http://www.51ztzj.com/upload/image/20131227/dn201312274001_1366x768.jpg">
                             </div>
-                            <%if(picUrl.length){%>
-                            <%picurl.forEach(function(value){%>
+                            <%if(picUrl){%>
+
                             <div class="ui-carousel-item">
-                                <img withth ="100%" src="<%=value%>">
+                                <img withth ="100%" src="<%=picUrl%>">
                             </div>
-                            <%});}%>
+                            <%}%>
 
                         </div>
                     </div>

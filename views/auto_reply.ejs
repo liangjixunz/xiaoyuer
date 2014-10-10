@@ -487,10 +487,10 @@
                     str += JSON.stringify(value.content);
                     str += "</th><th>";
                     if(value.id==1)
-                        str +='<a class="btn btn-success edit-auto" data-toggle="modal" href="#modal-edit" role="button" onclick="edit_by_id('+ value.id + '")>编辑</a></th></tr>' ;
+                        str +='<a class="btn btn-success edit-auto" data-toggle="modal" href="#modal-edit" role="button" onclick="edit_by_id('+value.id + ')">编辑</a></th></tr>' ;
                     else{
                         str +='<input class="btn btn-danger delete-auto" value="删除" onclick= "delete_by_id('+ value.id +')" type="button"> ';
-                        str +='<a class="btn btn-success edit-auto" data-toggle="modal" href="#modal-edit" role="button" onclick="edit_by_id('+ value.id + '")>编辑</a></th></tr>' ;
+                        str +='<a class="btn btn-success edit-auto" data-toggle="modal" href="#modal-edit" role="button" onclick="edit_by_id('+value.id + ')">编辑</a></th></tr>' ;
                     }
                     $("#the-tbody").append(str);
                 })
