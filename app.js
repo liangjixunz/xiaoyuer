@@ -132,6 +132,32 @@ app.use(function(req, res, next) {
 
 /// error handlers
 
+/*
+*用户登录和注册
+* 页面都是静态文件
+* 异步处理
+ */
+/*
+*检测昵称
+ */
+app.get('/user/check/nick',user.check_nick);
+/*
+*检测手机号是否占用
+ */
+app.get('/user/check/mobilephone',user.check_phone);
+/*
+*检测验证码
+ */
+app.get('/user/check/code',user.check_code);
+/*
+*注册接口
+ */
+app.post('/user/register',user.register);
+/*
+*登录接口
+* 结果是绑定和设定session
+ */
+app.post('/user/login',user.login);
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {

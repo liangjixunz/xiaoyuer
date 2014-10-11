@@ -31,6 +31,7 @@ exports.order_list = function(req,res){
 }
 exports.order = function(req,res){
    var page = req.query.page;
+   var t_type = req.query.type;
 }
 /*
  *发现

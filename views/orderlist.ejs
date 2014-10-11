@@ -130,7 +130,7 @@
 
 			<%})}%>
             </ul>
-            <div align="center"><button class="btn btn-3 btn-3a icon-cart">&nbsp; M O R E &nbsp;</button></div>
+            <div align="center"><button class="btn btn-3 btn-3a icon-cart" id = "more-orderA">&nbsp; M O R E &nbsp;</button></div>
         </div>
         <div class="ui-tab" id="page1-tab2" role="tabpane1">
 
@@ -165,7 +165,7 @@
 
                 <%})}%>
             </ul>
-            <div align="center"><button class="btn btn-3 btn-3a icon-cart">&nbsp; M O R E &nbsp;</button></div>
+            <div align="center"><button class="btn btn-3 btn-3a icon-cart" id = "more-orderB">&nbsp; M O R E &nbsp;</button></div>
         </div>
 </div>
 
@@ -179,9 +179,10 @@
 <script data-main="/js/mobile" src="/js/require.js"></script>
 <script src = "/js/ajax.js"></script>
 <script>
-    var page = 2;
-    $("#more-order").tap(function(){
-        var url = "/order?page="+page;
+    var pageA = 2;
+    var pageB =2;
+    $("#more-orderA").tap(function(){
+        var url = "/order?type=A&page="+pageA;
         Ajax.get(url,function(response){
             if(response.lenght){
                 response.forEach(function(value){
@@ -196,6 +197,28 @@
                     html_ele += new Date(value.generate_time).Format("yyyy-MM-dd hh:mm:ss");
                     html_ele += '</p>   </div></a></li>';
                     $('order-list').append(html_ele);
+                })
+                pageA +=1;
+            }
+        })
+    })
+    $("#more-orderB").tap(function(){
+        var url = "/order?type=B&page="+pageB;
+        Ajax.get(url,function(response){
+            if(response.lenght){
+                response.forEach(function(value){
+                    var html_ele = '';
+                    html_ele += '<li class="ui-item"><a href="orderinfo?id=';
+                    html_ele += value.id;
+                    html_ele += '">订单号：';
+                    html_ele += value.id;
+                    html_ele += '<span class="ui-right">状态：<span class="ui-red"> 待商定</span></span><div class="my-item-left"><img src = "img"> </div><div class="my-item-right"> <p class="ui-no-wrap">微信公众号开发</p><p class="ui-red">￥:';
+                    html_ele += value.price;
+                    html_ele += '</p> <p class="ui-gray">生成日期：';
+                    html_ele += new Date(value.generate_time).Format("yyyy-MM-dd hh:mm:ss");
+                    html_ele += '</p>   </div></a></li>';
+                    $('order-list').append(html_ele);
+                    pageB +=1;
                 })
             }
         })
