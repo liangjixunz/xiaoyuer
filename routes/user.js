@@ -8,7 +8,7 @@ exports.util = function(req,res){
 *获取自己的订单列表
 * 利用req.session.openid
  */
-exports.order = function(req,res){
+exports.order_list = function(req,res){
     res.render('orderlist',{
         username:"愚吉",
         credit:"三星",
@@ -28,6 +28,9 @@ exports.order = function(req,res){
                 generate_time:"Tue Sep 30 2014 09:10:38 GMT+0800"
             }]
     });
+}
+exports.order = function(req,res){
+   var page = req.query.page;
 }
 /*
  *发现

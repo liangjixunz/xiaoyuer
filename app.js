@@ -42,7 +42,8 @@ app.get('/kf/orderinfo',users.order_list)
 /*
 *用户的订单列表
  */
-app.get('/orderlist', users.order);
+app.get('/orderlist', users.order_list);
+app.get('/order',user.order);
 /*
 *发现
  */

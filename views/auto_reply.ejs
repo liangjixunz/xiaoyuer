@@ -608,12 +608,17 @@
             if( $(".append-pic").attr("value")){
                 obj.type="news";
                 obj.content.picurl = $(".append-pic").attr("value");
+                $(".append-pic").attr("value","");
                 obj.content.text = $(".append-text").attr("value");
                 obj.content.url  = $(".append-url").attr("value");
+                $(".append-url").attr("value","")
             }
             else
                 obj.content = $(".append-text").attr("value");
+
+            $(".append-text").attr("value","");
             obj.keyword = $(".append-keyword").attr("value");
+            $(".append-keyword").attr("value","");
             obj.id = new Date().getTime();
             $.post("/weixin/reply/set/append",{content:JSON.stringify(obj)},function(data){
                 $.get("/weixin/reply/get/auto?t="+new Date().getTime(),function(body){

@@ -86,7 +86,7 @@
     var baseurl = "http://ber.chinacloudapp.cn/web";
     var event_id = window.location.search.slice(0);
     event_id = event_id.match(/=[^\/]+/)[0].slice(1);
-    $.get("/event/whoisme",function(data,status){
+    $.get("/web/event/whoisme",function(data,status){
         openid =data;
     })
     WeixinApi.ready(function(Api) {

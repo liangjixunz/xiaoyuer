@@ -79,49 +79,17 @@
         }
 
     </style>
-    <script src = "/js/zepto.min.js">    </script>
-    <script>
-        var page = 2;
-        $("#more-order").tap(function(){
-            var url = "/order?page="+page;
-            $.get(url,function(response){
-                if(response.lenght){
-                    response.forEach(function(value){
-                        var html_ele = '';
-                        html_ele += '<li class="ui-item"><a href="orderinfo?id=';
-                        html_ele += value.id;
-                        html_ele += '">订单号：';;
-                        html_ele += value.id;
-                        html_ele += '<span class="ui-right">状态：<span class="ui-red"> 待商定</span></span><div class="my-item-left"><img src = "img"> </div><div class="my-item-right"> <p class="ui-no-wrap">微信公众号开发</p><p class="ui-red">￥:';
-                        html_ele += value.price;
-                        html_ele += '</p> <p class="ui-gray">生成日期：';
-                        html_ele += new Date(value.generate_time).Format("yyyy-MM-dd hh:mm:ss");
-                        html_ele += '</p>   </div></a></li>';
-                        $('order-list').append(html_ele);
-                    })
-                }
-            })
-        })
-        Date.prototype.Format = function (fmt) { //author: meizz
-            var o = {
-                "M+": this.getMonth() + 1, //月份
-                "d+": this.getDate(), //日
-                "h+": this.getHours(), //小时
-                "m+": this.getMinutes(), //分
-                "s+": this.getSeconds(), //秒
-                "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-                "S": this.getMilliseconds() //毫秒
-            };
-            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-            for (var k in o)
-                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-            return fmt;
-        };
-    </script>
-   </head>
+    </head>
 <body class="ui-app">
 
-
+<div class="ui-top-bar js-no-bounce">
+    <div class="ui-tab page1 js-active">
+        <ul class="ui-groupbutton" role="tablist">
+            <li class="ui-button js-active" data-toggle="tab" data-target="#page1-tab1" aria-controls="tab1" role="tab">需求单</li>
+            <li class="ui-button" data-toggle="tab" data-target="#page1-tab2" aria-controls="tab2" role="tab">服务单<span class="ui-red-counter">123</span></li>
+        </ul>
+    </div>
+</div>
 
 <!-- 一个App可以多个page -->
 <div class="ui-page page1 js-active">
@@ -164,11 +132,90 @@
             </ul>
             <div align="center"><button class="btn btn-3 btn-3a icon-cart">&nbsp; M O R E &nbsp;</button></div>
         </div>
+        <div class="ui-tab" id="page1-tab2" role="tabpane1">
 
+
+            <ul class="ui-list" >
+
+                <li class="ui-item ui-ignore-space"><a href="#">
+                        <div class="my-item-left">
+                            <img src = "img">
+                        </div>
+                        <div class="my-item-right">
+                            <p class="ui-no-wrap">笨笨</p>
+                            <p class="ui-grey" id = "the-code">积分: 88888888</p>
+                            <p class="ui-red">我的信誉：<%=credit%></p>
+                        </div>
+                    </a></li>
+            </ul>
+            <ul class="ui-list arrow-right" id = "order-list">
+                <%if(order_list.length){%>
+                <%order_list.forEach(function(value){%>
+
+                <li class="ui-item"><a href="orderinfo?id=<%=value.id%>">订单号：<%=value.id%><span class="ui-right">状态：<span class="ui-red"> 待商定</span></span>
+                        <div class="my-item-left">
+                            <img src = "img">
+                        </div>
+                        <div class="my-item-right">
+                            <p class="ui-no-wrap">微信公众号开发</p>
+                            <p class="ui-red">￥: <%=value.price%></p>
+                            <p class="ui-gray">生成日期：<%=new Date(value.generate_time).Format("yyyy-MM-dd hh:mm:ss")%></p>
+                        </div>
+                    </a></li>
+
+                <%})}%>
+            </ul>
+            <div align="center"><button class="btn btn-3 btn-3a icon-cart">&nbsp; M O R E &nbsp;</button></div>
+        </div>
 </div>
 
 
 </div>
+
+        <!-- 主体内容 -->
+
+
+
+<script data-main="/js/mobile" src="/js/require.js"></script>
+<script src = "/js/ajax.js"></script>
+<script>
+    var page = 2;
+    $("#more-order").tap(function(){
+        var url = "/order?page="+page;
+        Ajax.get(url,function(response){
+            if(response.lenght){
+                response.forEach(function(value){
+                    var html_ele = '';
+                    html_ele += '<li class="ui-item"><a href="orderinfo?id=';
+                    html_ele += value.id;
+                    html_ele += '">订单号：';
+                    html_ele += value.id;
+                    html_ele += '<span class="ui-right">状态：<span class="ui-red"> 待商定</span></span><div class="my-item-left"><img src = "img"> </div><div class="my-item-right"> <p class="ui-no-wrap">微信公众号开发</p><p class="ui-red">￥:';
+                    html_ele += value.price;
+                    html_ele += '</p> <p class="ui-gray">生成日期：';
+                    html_ele += new Date(value.generate_time).Format("yyyy-MM-dd hh:mm:ss");
+                    html_ele += '</p>   </div></a></li>';
+                    $('order-list').append(html_ele);
+                })
+            }
+        })
+    })
+    Date.prototype.Format = function (fmt) { //author: meizz
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    };
+</script>
 
 </body>
 </html>
