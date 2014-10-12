@@ -1,13 +1,17 @@
 var db = require("xiaoyuer/gift/db"),
     area_class = require("xiaoyuer/area_class");
-
+/*
+*创建一个新的活动
+ */
 exports.new_event = function(req,res){
     console.log(req.body);
     db.add_event(req.body,function(result){
         res.redirect("/web/myadmin/event/index");
     })
 } ;
-
+/*
+*转发详情
+ */
 exports.event_forwarding_info = function(req,res){
     db.get_forwarding_info(req.query.event_id,function(result){
         db.get_event_moreinfo(req.query.event_id,function(result1){
@@ -24,6 +28,9 @@ exports.event_forwarding_info = function(req,res){
     })
 }
 
+/*
+*转发活动列表
+ */
 exports.event_withdraw_info = function(req,res){
     db.get_with_draw_index(function(result){
         res.render("withdraw",{
@@ -56,12 +63,17 @@ exports.event_withdraw_info = function(req,res){
     })
 }
 
+/*
+*活动的描述
+ */
 exports.event_info = function(req,res){
     db.get_event_info(req.query.event_id,function(result){
         res.send(result);
     })
 }
-
+/*
+*活动列表
+ */
 exports.event_index = function(req,res){
     db.get_event_index(function(result){
         res.render("event_list",{
@@ -104,4 +116,10 @@ exports.area_update = function(req,res){
  */
 exports.class_update = function(req,res){
     res.send(area_class.classify.update(JSON.parse(req.body.content)));
+}
+/*
+*更新公益分类表
+ */
+exports.welfare_class_update = function(req,res){
+    res.send(area_class.welfare_calssify.update(JSON.parse(req.body.content)));
 }

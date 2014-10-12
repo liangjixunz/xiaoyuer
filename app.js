@@ -8,9 +8,6 @@ var bodyParser = require('body-parser');
 var fs = require("fs")
 
 var routes = require('./routes');
-var users = require('./routes/user');
-var gift = require('./routes/event');
-var admin = require('./routes/admin');
 var oneservice = require('./routes/oneservice');
 var app = express();
 
@@ -32,22 +29,22 @@ app.get('/', routes.index);
 /*
 *客服所用页面
  */
-app.get('/util', users.util);
+app.get('/util', routes.user.util);
 /*
 *客服使用的API
  */
-app.get('/kf/info',users.user_info);
+app.get('/kf/info',routes.user.user_info);
 
-app.get('/kf/orderinfo',users.order_list)
+app.get('/kf/orderinfo',routes.user.order_list)
 /*
 *用户的订单列表
  */
-app.get('/orderlist', users.order_list);
-app.get('/order',user.order);
+app.get('/orderlist', routes.user.order_list);
+app.get('/order',routes.user.order);
 /*
 *发现
  */
-app.get('/seek', users.seek);
+app.get('/seek', routes.user.seek);
 
 /*
 *精选服务
@@ -69,14 +66,14 @@ app.get('/event/whoisme',function(req,res){
 /*
 *点击链接
  */
-app.get(/\/repost[\s\S]+/,gift.repostPre);
-app.get('/event/fromwe',gift.set_session)
+app.get(/\/repost[\s\S]+/,routes.event.repostPre);
+app.get('/event/fromwe',routes.event.set_session)
 /*
 *微信端用户获取活动列表
 * 以及其基本信息
  */
-app.get('/event/index',gift.event_index);
-app.get('/forwarding',gift.repostPre);
+app.get('/event/index',routes.event.event_index);
+app.get('/forwarding',routes.event.repostPre);
 app.get('/myadmin/au',function(req,res){
     res.send("hello");
 })
@@ -102,27 +99,28 @@ app.post('/myadmin/auth',function(req,res){
     else
         res.send("error");
 })
-app.post('/myadmin/event/new',admin_check,admin.new_event) ;
+app.post('/myadmin/event/new',admin_check,routes.admin.new_event) ;
 
-app.get('/myadmin/event/index',admin_check,admin.event_index);
+app.get('/myadmin/event/index',admin_check,routes.admin.event_index);
 
-app.get('/event/info',gift.event_info);
+app.get('/event/info',routes.event.event_info);
 
-app.get('/myadmin/event/withdraw',admin_check,admin.event_withdraw_info);
+app.get('/myadmin/event/withdraw',admin_check,routes.admin.event_withdraw_info);
 
-app.get('/myadmin/event/forwardinginfo',admin_check,admin.event_forwarding_info);
+app.get('/myadmin/event/forwardinginfo',admin_check,routes.admin.event_forwarding_info);
 
-app.get('/event/basicinfo',admin_check,admin.event_info)
+app.get('/event/basicinfo',admin_check,routes.admin.event_info)
 
 /*
 *设置自动回复
  */
-app.get('/myadmin/setreply',admin_check,admin.reply_set);
+app.get('/myadmin/setreply',admin_check,routes.admin.reply_set);
 /*
 *更新地区和分类
  */
-app.post('/myadmin/area/update',admin.area_update);
-app.post("/myadmin/classify/update",admin.class_update);
+app.post('/myadmin/area/update',routes.admin.area_update);
+app.post("/myadmin/classify/update",routes.admin.class_update);
+app.post("/myadmin/welfare/update",routes.admin.welfare_class_update)
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
@@ -140,24 +138,29 @@ app.use(function(req, res, next) {
 /*
 *检测昵称
  */
-app.get('/user/check/nick',user.check_nick);
+app.get('/user/check/nick',routes.user.check_username);
 /*
 *检测手机号是否占用
+* @param
  */
-app.get('/user/check/mobilephone',user.check_phone);
+app.get('/user/check/mobile',routes.user.check_mobile);
+/*
+*获取验证码
+ */
+app.get("/user/get/cert",routes.user.get_cert);
 /*
 *检测验证码
  */
-app.get('/user/check/code',user.check_code);
+app.get('/user/check/code',routes.user.check_cert);
 /*
 *注册接口
  */
-app.post('/user/register',user.register);
+app.post('/user/register',routes.user.register);
 /*
 *登录接口
 * 结果是绑定和设定session
  */
-app.post('/user/login',user.login);
+app.post('/user/login',routes.user.login);
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
@@ -188,5 +191,6 @@ function admin_check(req,res,next){
        res.redirect('/web/admin/sign_in.html');
     }
 }
+
 
 module.exports = app;
