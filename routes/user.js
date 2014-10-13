@@ -60,7 +60,7 @@ exports.user_info =  function(req,res){
  *获取用户订单列表
  */
 exports.order_list =  function(req,res){
-    userInfo.getOrder(req.session.openid,function(result){
+    order.getOrder(req.session.openid,function(result){
         res.send(result);
     })
 }
