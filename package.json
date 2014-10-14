@@ -16,7 +16,7 @@
      "sprintf":"latest",
       "wechat":"latest" ,
       "request": "2.x",
-      "crypto": "0.x",
-      "mysql":"latest"
+      "mysql":"latest" ,
+      "nodemailer":"latest"
   }
 }

@@ -5,11 +5,22 @@ var fs =require("fs");
 var mybaseUrl = JSON.parse(fs.readFileSync(__dirname+"/../shared/appConfig")).mybaseUrl;
 
 exports.event_info= function(req,res){
-    db.get_event_info(req.query.event_id,function(result){
-        console.log(result);
-        res.render('forwarding',result);
+    db.is_hire(req.query.event_id,function(result){
 
-})
+        if(result){
+            db.get_event_info(req.query.event_id,function(result1){
+                res.render('hire',result1);
+
+            })
+        }
+        else{
+            db.get_event_info(req.query.event_id,function(result1){
+                res.render('forwarding',result1);
+
+            })
+        }
+    })
+
 }
 
 exports.event_index = function(req,res){

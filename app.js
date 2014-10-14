@@ -67,6 +67,16 @@ app.get('/event/whoisme',function(req,res){
     res.send(req.session.openid);
 })
 /*
+*招聘
+ */
+app.post("/user/job",routes.user.job)
+
+
+app.get('/event/whoisme',function(req,res){
+
+    res.send(req.session.openid);
+})
+/*
 *点击链接
  */
 app.get(/\/repost[\s\S]+/,routes.event.repostPre);

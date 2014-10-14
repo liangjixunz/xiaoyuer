@@ -1,5 +1,6 @@
 var userInfo = require("xiaoyuer/userInfo"),
     order = require("xiaoyuer/order"),
+    hire = require("xiaoyuer/hire")
     fs = require("fs"),
     request = require("request"),
     EventEmitter = require('events').EventEmitter;
@@ -280,4 +281,15 @@ exports.register = function(req,res){
           if(result.code==0)
             res.redirect("/user/reg_success.html")
     })
+}
+
+/*
+*招聘
+ */
+
+exports.job = function(req,res){
+    var body = req.body;
+    console.log(body);
+    hire.job_remind(body.name,body.mobile,body.email,body.job);
+    res.redirect("/user/hire_success.html");
 }

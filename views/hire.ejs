@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset='utf-8'>
+    <title>加入小鱼儿</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/pro.css?embed" />
+    <link rel="stylesheet" type="text/css" href="/vendor/ionicons/css/ionicons.css" />
+    <style>
+        .my-banner {
+            margin-bottom: 20px;
+            padding: 10px 12px;
+            background-color: #FF9937;
+            height: 85px;
+            color: #ffffff
+        }
+        .my-banner-text {
+            display: block;
+        }
+        .my-banner-count {
+            font-size: 40px;
+            -webkit-transform: translate3d(0, 0, 0);
+        }
+        .my-banner-unit {
+            font-size: 20px;
+        }
+
+        .my-item-left{
+            position: absolute;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: #eee;
+            height: 60px;
+            width: 60px;
+            padding: 8px 6px;
+            font-size: 12px;
+            line-height: 12px;
+        }
+
+        .my-item-count {
+            font-size: 30px;
+            line-height: 30px;
+        }
+
+        .my-item-right {
+            margin-left: 70px;
+        }
+
+        .my-item-right p {
+            font-size: 14px;
+        }
+
+        .my-deletable {
+            z-index: 2;
+            background: #fff;
+        }
+
+        .my-delete {
+            height: 80px;
+            line-height: 80px;
+            width: 60px;
+            text-align: center;
+            position: absolute;
+            top:0;
+            right: 0;
+            background: rgb(250, 34, 34);
+            z-index: 1;
+            color: #fff;
+        }
+
+        [data-lazy] {
+            display: block;
+            margin: 10px auto;
+            height: 120px;
+            width: 240px;
+            border: 1px solid #eee;
+        }
+
+    </style>
+    <script src = "/js/zepto.min.js"></script>
+    <script src = "/js/WeixinApi.js"></script>
+    <script>
+        var openid;
+        var baseurl = "http://ber.chinacloudapp.cn/web";
+        var event_id = window.location.search.slice(0);
+        event_id = event_id.match(/=[^\/]+/)[0].slice(1);
+        $.get("/web/event/whoisme",function(data,status){
+            openid =data;
+        })
+        WeixinApi.ready(function(Api) {
+
+            var is_over = window.location.search.slice(1);
+            is_over = (is_over.match(/&over=\d/)?is_over.match(/&over=\d/):[0])[0].slice(-1);
+            if(is_over==1)
+                Api.hideOptionMenu();
+
+            else
+                Api.showOptionMenu();
+
+            // 微信分享的数据
+            var wxData = {
+                "appId": "wxfd339e5a03048eb3", // 服务号可以填写appId
+                "imgUrl": 'http://www.baidufe.com/fe/blog/static/img/weixin-qrcode-2.jpg',
+                "link": 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=' + baseurl + '/repost/' + openid + '/id/' + event_id + '&response_type=code&scope=snsapi_base&state=1#wechat_redirect',
+                "desc": '小鱼儿活动，分享就能获得红包哦，快来一起抢吧',
+                "title": "小鱼儿活动，分享就能获得红包哦，快来一起抢吧"
+            };
+
+            // 分享的回调
+            var wxCallbacks = {
+
+                // 分享成功
+                confirm: function (resp) {
+                    // 分享成功了，我们是不是可以做一些分享统计呢？
+                    alert("分享成功，好友点击链接后即可获得红包");
+                }
+
+            };
+
+            // 用户点开右上角popup菜单后，点击分享给好友，会执行下面这个代码
+            Api.shareToFriend(wxData, wxCallbacks);
+        })
+
+    </script>
+</head>
+
+<body class="ui-app">
+<div class="ui-bottom-bar js-no-bounce js-active ui-ed"  role="toolbar" id = "join">
+    <a class="ui-bottom-bar-button" role="button" href = "/user/hire.html" data-toggle="tab" >
+        <span class="ui-icon ion-ios7-paperplane"></span>
+        <span class="ui-label">填写信息</span>
+    </a>
+</div>
+
+
+<!-- 一个App可以多个page -->
+<div class="ui-page page1 js-active">
+
+    <div class="ui-page-content">
+        <!-- 主体内容 -->
+
+        <div class="ui-tab js-active" id="page1-tab1" role="tabpanel">
+
+            <ul class="ui-list ">
+                <li>
+                    <div class="ui-carousel js-slide" data-ride="carousel">
+                        <div class="ui-carousel-inner">
+                            <div class="ui-carousel-item js-active">
+                                <img width="100%" src="http://www.51ztzj.com/upload/image/20131227/dn201312274001_1366x768.jpg">
+                            </div>
+                            <%if(picUrl){%>
+
+                            <div class="ui-carousel-item">
+                                <img withth ="100%" src="<%=picUrl%>">
+                            </div>
+                            <%}%>
+
+                        </div>
+                    </div>
+                </li>
+                <li class="ui-item ">
+                    <a><%=event_title%><span class="ui-right"></span> </a>
+                </li>
+                <li  class="ui-item ">
+                    <a class="ui-gray"> &reg;创客汇南京<span class="ui-right"></span> </a>
+                </li>
+
+                <li class="ui-item">
+                    <%var strs = event_description.split("\n")%>
+                    <%strs.forEach(function(value){%>
+                    <a><%=value%><span class="ui-right"></span> </a>
+                    <%})%>
+                </li>
+
+            </ul>
+
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+</body>
+</html>
