@@ -59,8 +59,13 @@ exports.user_info =  function(req,res){
  * 根据openid
  *获取用户订单列表
  */
-exports.order_list =  function(req,res){
-    order.getOrder(req.session.openid,function(result){
+exports.require_order_list =  function(req,res){
+    order.get_require_order(req.session.openid,function(result){
+        res.send(result);
+    })
+}
+exports.service_order_list =  function(req,res){
+    order.get_service_order(req.session.openid,function(result){
         res.send(result);
     })
 }
