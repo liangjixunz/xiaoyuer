@@ -1,5 +1,9 @@
 var request = require("request");
 var db = require("xiaoyuer/gift/db");
+var fs =require("fs");
+
+var mybaseUrl = JSON.parse(fs.readFileSync(__dirname+"/../shared/appConfig")).mybaseUrl;
+
 exports.event_info= function(req,res){
     db.get_event_info(req.query.event_id,function(result){
         console.log(result);
@@ -10,7 +14,7 @@ exports.event_info= function(req,res){
 
 exports.event_index = function(req,res){
     if(!req.session.openid){
-        res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=http://ber.chinacloudapp.cn/web/event/fromwe&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
+        res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=http://" + mybaseUrl +"/web/event/fromwe&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
     }
     else {
         var obj = {

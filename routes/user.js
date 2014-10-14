@@ -1,15 +1,123 @@
 var userInfo = require("xiaoyuer/userInfo"),
-    order = require("xiaoyuer/order");
+    order = require("xiaoyuer/order"),
+    fs = require("fs"),
+    request = require("request"),
+    EventEmitter = require('events').EventEmitter;
 
+var noteReady = new EventEmitter();
+var sprintf = require("sprintf").sprintf;
+
+var mybaseUrl = JSON.parse(fs.readFileSync(__dirname+"/../shared/appConfig")).mybaseUrl;
 
 exports.util = function(req,res){
     res.render('util',{});
 }
 /*
-*获取自己的订单列表
-* 利用req.session.openid
+*订单相关api
  */
-exports.order_list = function(req,res){
+exports.order = (function(){
+
+    var AppID = JSON.parse(fs.readFileSync(__dirname+"/../shared/appConfig")).AppID;
+    var AppSecret = JSON.parse(fs.readFileSync(__dirname+"/../shared/appConfig")).AppSecret;
+    function index(req,res){
+        user_info(req,res,function(result){
+            if(result==-1){
+
+            }
+            else{
+                var  render_obj = {};
+                var count = 0;
+                render_obj.user_info = result;
+                order.get_require_order(req.session.openid,1,function(result1){
+                    noteReady.emit("req_ready");
+                    render_obj.require = result1;
+                })
+                order.get_service_order(req.session.openid,1,function(result2){
+                    noteReady.emit("ser_ready");
+                    render_obj.service = result2;
+                })
+                noteReady.on("req_ready",function(){
+                    count +=1;
+                    if(count == 2){
+                        res.render("orderlist",render_obj);
+                    }
+                })
+                noteReady.on("ser_ready",function(){
+                    count +=1;
+                    if(count == 2){
+                        res.render("orderlist",render_obj);
+                    }
+                })
+            }
+        })
+    }
+    /*
+    *分页获取服务单信息
+     */
+    function service(req,res){
+        order.get_service_order(req.session.openid,req.query.page,function(result){
+            res.send(result);
+        })
+    }
+    /*
+     *分页获取需求单信息
+     */
+    function require(req,res){
+        order.get_require_order(req.session.openid,req.query.page,function(result){
+            res.send(result);
+        })
+    }
+
+    /*
+    *获取用户信息
+    * 若不存在openid的session则跳转
+    *若未绑定则跳转到登录
+     */
+    function user_info(req,res,callback){
+        if(req.session.openid){
+            userInfo.getUserInfo(req.session.openid,function(result){
+                switch(result.code){
+                    case 0:
+                        callback(result);
+                        break;
+                    case -1:
+                        res.redirect("/user/tologin.html");
+                        callback(-1);
+                        break;
+
+                }
+            })
+        }
+        else{
+            res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=http://" + mybaseUrl +"/web/order/fromwe&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
+
+        }
+
+    }
+
+    function set_session(req,res){
+         var code = req.query.code;
+         var url_temp = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_cod";
+         var url = sprintf(url_temp,AppID,AppSecret,code);
+         request(url,function(err,response,body){
+             console.log(body);
+             if (!err &&response.statusCode == 200) {
+                  var openid_obj = JSON.parse(body) ;
+                  req.session.openid = openid_obj.openid;
+                  res.redirect("/web/order/index");
+                }
+         })
+
+    }
+    return {
+        index:index,
+        service:service,
+        require:require,
+        set_session:set_session
+    }
+})();
+
+exports.order_test = function(req,res){
     res.render('orderlist',{
         username:"愚吉",
         credit:"三星",
@@ -30,10 +138,7 @@ exports.order_list = function(req,res){
             }]
     });
 }
-exports.order = function(req,res){
-   var page = req.query.page;
-   var t_type = req.query.type;
-}
+
 /*
  *发现
  * 利用req.session.openid
@@ -49,26 +154,36 @@ exports.seek = function(req,res){
  * 根据openid
  *获取用户基本信息
   */
-exports.user_info =  function(req,res){
-    userInfo.getUserInfo(req.query.openid,function(result){
-        res.send(result);
-    })
-}
-/*
- *客服用
- * 根据openid
- *获取用户订单列表
- */
-exports.require_order_list =  function(req,res){
-    order.get_require_order(req.session.openid,function(result){
-        res.send(result);
-    })
-}
-exports.service_order_list =  function(req,res){
-    order.get_service_order(req.session.openid,function(result){
-        res.send(result);
-    })
-}
+exports.kf = (function(){
+
+    function  user_info (req,res){
+        userInfo.getUserInfo(req.query.openid,function(result){
+            res.send(result);
+        })
+    }
+    return {
+        user_info :user_info,
+        order_require: function(req,res){
+            order.get_require_order(req.query.openid,req.query.page,function(result){
+                res.send(result);
+            })
+        },
+        /*客服用
+         * 根据openid分页
+         *获取用户服务订单列表
+         */
+        order_service:  function(req,res){
+            order.get_service_order(req.query.openid,req.query.page,function(result){
+                res.send(result);
+            })
+        }
+
+    }
+})();
+
+
+
+
 /*
 *用户登录
  */
@@ -163,6 +278,6 @@ exports.register = function(req,res){
     var body = req.body;
     userInfo.register(req.session.openid,body.username,body.password,body.mobile,function(result){
           if(result.code==0)
-            res.redirect("/user/success_register.html")
+            res.redirect("/user/reg_success.html")
     })
 }

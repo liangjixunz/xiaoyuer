@@ -33,14 +33,17 @@ app.get('/util', routes.user.util);
 /*
 *客服使用的API
  */
-app.get('/kf/info',routes.user.user_info);
+app.get('/kf/info',routes.user.kf.user_info);
+app.get('/kf/order/service',routes.user.kf.order_service);
+app.get('/kf/order/require',routes.user.kf.order_require)
 
-app.get('/kf/orderinfo',routes.user.order_list)
 /*
 *用户的订单列表
  */
-app.get('/orderlist', routes.user.order_list);
-app.get('/order',routes.user.order);
+app.get('/order/index', routes.user.order.index);
+app.get('/order/service',routes.user.order.service);
+app.get('/order/require',routes.user.order.require);
+app.get('/order/fromwe',routes.user.order.set_session)
 /*
 *发现
  */
