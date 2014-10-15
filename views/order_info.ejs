@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8'>
+    <title>订单详情</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/pro.css?embed" />
+    <link rel="stylesheet" type="text/css" href="/vendor/ionicons/css/ionicons.css" />
+    <link rel="stylesheet" type="text/css" href = "/stylesheets/head.css">
+    <style>
+
+
+        .my-item-left{
+            position: absolute;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background: #eee;
+            height: 60px;
+            width: 60px;
+            padding: 8px 6px;
+            font-size: 12px;
+            line-height: 12px;
+        }
+
+        .my-item-right {
+            margin-left: 8px;
+        }
+        .my-item-right1 {
+            margin-left: 100px;
+        }
+
+        .my-item-right p {
+            font-size: 14px;
+        }
+
+        [data-lazy] {
+            display: block;
+            margin: 10px auto;
+            height: 120px;
+            width: 240px;
+            border: 1px solid #eee;
+        }
+
+    </style>
+</head>
+<body class="ui-app">
+<div class="the-bottom" id="header">
+    <a class="back" href="javascript:history.back();"></a>
+    <span class="headline"><%=title%></span>
+</div>
+    <div class="ui-page-content">
+        <!-- 主体内容 -->
+                <ul class="ui-list ">
+
+                     <li>
+                         <img src="/images/1.jpg" width = "100%">
+                     </li>
+                    <li class="ui-item">
+                        <button disabled class="ui-button">&nbsp;&nbsp;订单号&nbsp;</button>
+                        <span class="my-item-right ui-red"><%=order_id%></span>
+                    </li>
+                     <li class="ui-item">
+
+                         <button disabled class="ui-button">&nbsp;&nbsp;服务商&nbsp;</button>
+                         <span class = "my-item-right ui-gray"><%=offer%></span>
+                     <p></p>
+                        <button disabled class="ui-button">生成时间</button>
+                        <span class = "my-item-right ui-gray"> <%=generation%></span>
+                  <p></p>
+                        <button disabled class="ui-button">订单状态</button>
+                        <span class = "my-item-right ui-red"> <%=status%></span>
+                    </li>
+
+                    <li  class="ui-item">
+                        <button disabled class="ui-button">详细信息</button>
+                        <div ><%=description%>
+                        </div>
+                    </li>
+                    <p>
+                        &nbsp:
+                    </p>
+
+                </ul>
+
+        </div>
+
+
+
+
+
+
+
+
+</body>
+</html>

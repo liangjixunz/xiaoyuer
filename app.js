@@ -43,7 +43,8 @@ app.get('/kf/order/require',routes.user.kf.order_require)
 app.get('/order/index', routes.user.order.index);
 app.get('/order/service',routes.user.order.service);
 app.get('/order/require',routes.user.order.require);
-app.get('/order/fromwe',routes.user.order.set_session)
+app.get('/order/fromwe',routes.user.order.set_session);
+app.get('/order/info',routes.user.order.info)
 /*
 *发现
  */

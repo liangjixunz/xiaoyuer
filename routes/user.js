@@ -104,17 +104,36 @@ exports.order = (function(){
              console.log(body);
              if (!err &&response.statusCode == 200) {
                   var openid_obj = JSON.parse(body) ;
-                  req.session.openid = openid_obj.openid;
-                  res.redirect("/web/order/index");
+                  if(openid_obj.openid){
+                      req.session.openid = openid_obj.openid;
+                      res.redirect("/web/order/index");
+                  }
+                  else{
+                      res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=http://" + mybaseUrl +"/web/order/fromwe&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
+
+                  }
                 }
          })
+
+    }
+
+    function info(req,res){
+        res.render("order_info",{
+            title:"微信公众号开发",
+            description:"第三方的，沙迪克，大叔\n峰会上凤凰科技\n发卡号是胡覅\n",
+            order_id:31232434,
+            offer:"愚吉",
+            generation:"2014-10-15 23:10:09",
+            status:"已支付"
+        })
 
     }
     return {
         index:index,
         service:service,
         require:require,
-        set_session:set_session
+        set_session:set_session,
+        info:info
     }
 })();
 
