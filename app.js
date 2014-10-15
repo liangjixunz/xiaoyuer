@@ -142,7 +142,10 @@ app.use(function(req, res, next) {
 });
 
 /// error handlers
-
+/*
+*从图文链接进入登录
+ */
+app.get('/user/fromwe',routes.user.set_session_link)
 /*
 *用户登录和注册
 * 页面都是静态文件

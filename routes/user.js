@@ -98,7 +98,7 @@ exports.order = (function(){
 
     function set_session(req,res){
          var code = req.query.code;
-         var url_temp = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_cod";
+         var url_temp = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code";
          var url = sprintf(url_temp,AppID,AppSecret,code);
          request(url,function(err,response,body){
              console.log(body);
@@ -292,4 +292,24 @@ exports.job = function(req,res){
     console.log(body);
     hire.job_remind(body.name,body.mobile,body.email,body.job);
     res.redirect("/user/hire_success.html");
+}
+/*
+*从链接登录
+ */
+exports.set_session_link = function(req,res){
+    var code = req.query.code;
+    var AppID = JSON.parse(fs.readFileSync(__dirname+"/../shared/appConfig")).AppID;
+    var AppSecret = JSON.parse(fs.readFileSync(__dirname+"/../shared/appConfig")).AppSecret;
+    var url_temp = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code";
+    var url = sprintf(url_temp,AppID,AppSecret,code);
+    console.log(url);
+    request(url,function(err,response,body){
+        console.log(body);
+        if (!err &&response.statusCode == 200) {
+            var openid_obj = JSON.parse(body) ;
+            req.session.openid = openid_obj.openid;
+            res.redirect("/user/tologin.html");
+        }
+    })
+
 }
