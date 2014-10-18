@@ -28,32 +28,35 @@ exports.event_index = function(req,res){
         res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=http://" + mybaseUrl +"/web/event/fromwe&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
     }
     else {
-        var obj = {
-            event_effect: [],
-            event_over: [],
-            username: "愚吉",
-            user_banlance: "",
-            withdraw: ""
-        };
-        db.get_event_index(function (result) {
+        db.new_user(req.session.openid,function(res2){
+            var obj = {
+                event_effect: [],
+                event_over: [],
+                username: "愚吉",
+                user_banlance: "",
+                withdraw: ""
+            };
+            db.get_event_index(function (result) {
 
-            result.forEach(function (value) {
-                db.get_ever_get(value.event_id, req.session.openid, function (result2) {
-                    value.left_time = value.max_time - result2.total_time;
-                    if (new Date(value.event_finish) > new Date()) {
-                        obj.event_effect[obj.event_effect.length] = value;
-                    }
-                    else
-                        obj.event_over[obj.event_over.length] = value;
+                result.forEach(function (value) {
+                    db.get_ever_get(value.event_id, req.session.openid, function (result2) {
+                        value.left_time = value.max_time - result2.total_time;
+                        if (new Date(value.event_finish) > new Date()) {
+                            obj.event_effect[obj.event_effect.length] = value;
+                        }
+                        else
+                            obj.event_over[obj.event_over.length] = value;
+                    })
+
                 })
-
-            })
-            db.user_info(req.session.openid, function (result1) {
-                obj.user_banlance = result1.user_balance;
-                obj.withdraw = result1.withdraw;
-                res.render("gift_list", obj);
+                db.user_info(req.session.openid, function (result1) {
+                    obj.user_banlance = result1.user_balance;
+                    obj.withdraw = result1.withdraw;
+                    res.render("gift_list", obj);
+                })
             })
         })
+
     }
 }
 

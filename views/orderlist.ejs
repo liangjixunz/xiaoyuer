@@ -8,8 +8,92 @@
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" type="text/css" href="/stylesheets/pro.css?embed" />
     <link rel="stylesheet" type="text/css" href="/vendor/ionicons/css/ionicons.css" />
-    <link rel="stylesheet" type="text/css" href="/stylesheets/buttons.css" />
     <style>
+        .button-rounded {
+            -moz-border-radius: 3px;
+            -webkit-border-radius: 3px;
+            border-radius: 3px; }
+        .button {
+            -moz-box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.5), 0px 1px 2px rgba(0, 0, 0, 0.15);
+            -webkit-box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.5), 0px 1px 2px rgba(0, 0, 0, 0.15);
+            box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.5), 0px 1px 2px rgba(0, 0, 0, 0.15);
+            background-color: #EEE;
+            background: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fbfbfb), color-stop(100%, #e1e1e1));
+            background: -moz-linear-gradient(top, #fbfbfb, #e1e1e1);
+            background: -webkit-linear-gradient(top, #fbfbfb, #e1e1e1);
+            background: linear-gradient(to bottom, #fbfbfb, #e1e1e1);
+            display: inline-block;
+            vertical-align: middle;
+            *vertical-align: auto;
+            *zoom: 1;
+            *display: inline;
+            border: 1px solid #d4d4d4;
+            height: 32px;
+            line-height: 30px;
+            padding: 0px 25.6px;
+            font-weight: 300;
+            font-size: 14px;
+            font-family: "Helvetica Neue Light", "Helvetica Neue", "Helvetica", "Arial", "Lucida Grande", sans-serif;
+            color: #666;
+            text-shadow: 0 1px 1px white;
+            margin-top: 7px;
+            text-decoration: none;
+            text-align: center; }
+        .button-border-primary {
+            -moz-box-shadow: none;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            -moz-transition-property: all;
+            -o-transition-property: all;
+            -webkit-transition-property: all;
+            transition-property: all;
+            -moz-transition-duration: 0.3s;
+            -o-transition-duration: 0.3s;
+            -webkit-transition-duration: 0.3s;
+            transition-duration: 0.3s;
+            color: #ffffff;
+            border: 2px solid #EE9572;
+            background: #EE9572;
+            text-shadow: none; }
+        .button-border-pro {
+            -moz-box-shadow: none;
+            -webkit-box-shadow: none;
+            box-shadow: none;
+            -moz-transition-property: all;
+            -o-transition-property: all;
+            -webkit-transition-property: all;
+            transition-property: all;
+            -moz-transition-duration: 0.3s;
+            -o-transition-duration: 0.3s;
+            -webkit-transition-duration: 0.3s;
+            transition-duration: 0.3s;
+            color: #ffffff;
+            border: 2px solid #666;
+            background: #666;
+            text-shadow: none; }
+        .my-item-right {
+            margin-left: 8px;
+        }
+        .my-item-right1{
+            float:right;
+            margin-right: 8px;
+        }
+
+        .my-item-right p {
+            font-size: 14px;
+        }
+        button.button:disabled {
+            -moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+            -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
+            filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
+            opacity: 0.8;
+            background: #EEE;
+            border: 1px solid #DDD;
+            text-shadow: 0 1px 1px white;
+            color: #CCC;
+            cursor: default;
+            -webkit-appearance: none; }
         .my-banner {
             margin-bottom: 20px;
             padding: 10px 12px;
@@ -86,7 +170,7 @@
     <div class="ui-tab page1 js-active">
         <ul class="ui-groupbutton" role="tablist">
             <li class="ui-button js-active" data-toggle="tab" data-target="#page1-tab1" aria-controls="tab1" role="tab">需求单</li>
-            <li class="ui-button" data-toggle="tab" data-target="#page1-tab2" aria-controls="tab2" role="tab">服务单<span class="ui-red-counter">123</span></li>
+            <li class="ui-button" data-toggle="tab" data-target="#page1-tab2" aria-controls="tab2" role="tab">服务单</li>
         </ul>
     </div>
 </div>
@@ -104,7 +188,7 @@
                
                 <li class="ui-item ui-ignore-space"><a href="#">
                     <div class="my-item-left">
-                       <img src = "img">
+                       <img src = "/images/1.jpg" width="100%">
                     </div>
                     <div class="my-item-right">
                          <p class="ui-no-wrap">愚吉</p>
@@ -114,12 +198,12 @@
                 </a></li>
             </ul>
             <ul class="ui-list arrow-right" id = "order-list">
-			<%if(order_list.length){%>
-			<%order_list.forEach(function(value){%>
+			<%if(page1.order_list.length){%>
+			<%page1.order_list.forEach(function(value){%>
 
-                <li class="ui-item"><a href="orderinfo?id=<%=value.id%>">订单号：<%=value.id%><span class="ui-right">状态：<span class="ui-red"> 待商定</span></span>
+                <li class="ui-item"><a href="info?id=<%=value.id%>">订单号：<%=value.id%><span class="ui-right">状态：<span class="ui-red"> 待商定</span></span>
                         <div class="my-item-left">
-                            <img src = "img">
+                            <img src = "/images/1.jpg" width="100%">
                         </div>
                         <div class="my-item-right">
 					<p class="ui-no-wrap">微信公众号开发</p>
@@ -130,8 +214,8 @@
 
 			<%})}%>
             </ul>
-            <div align="center"><button class="btn btn-3 btn-3a icon-cart" id = "more-orderA">&nbsp; M O R E &nbsp;</button></div>
-        </div>
+            <div align="center"><button id ="more-orderA" class="button button-border-primary button-rounded">more</button></div>
+           </div>
         <div class="ui-tab" id="page1-tab2" role="tabpane1">
 
 
@@ -139,7 +223,7 @@
 
                 <li class="ui-item ui-ignore-space"><a href="#">
                         <div class="my-item-left">
-                            <img src = "img">
+                            <img src = "/images/1.jpg" width="100%">
                         </div>
                         <div class="my-item-right">
                             <p class="ui-no-wrap">笨笨</p>
@@ -149,12 +233,12 @@
                     </a></li>
             </ul>
             <ul class="ui-list arrow-right" id = "order-list">
-                <%if(order_list.length){%>
-                <%order_list.forEach(function(value){%>
+                <%if(page2.order_list.length){%>
+                <%page2.order_list.forEach(function(value){%>
 
-                <li class="ui-item"><a href="orderinfo?id=<%=value.id%>">订单号：<%=value.id%><span class="ui-right">状态：<span class="ui-red"> 待商定</span></span>
+                <li class="ui-item"><a href="info?id=<%=value.id%>">订单号：<%=value.id%><span class="ui-right">状态：<span class="ui-red"> 待商定</span></span>
                         <div class="my-item-left">
-                            <img src = "img">
+                            <img src = "/images/1.jpg" width="100%">
                         </div>
                         <div class="my-item-right">
                             <p class="ui-no-wrap">微信公众号开发</p>
@@ -165,7 +249,8 @@
 
                 <%})}%>
             </ul>
-            <div align="center"><button class="btn btn-3 btn-3a icon-cart" id = "more-orderB">&nbsp; M O R E &nbsp;</button></div>
+            <div align="center"><button id= "more-orderB" class="disabled button button-border-pro button-rounded">more</button></div>
+
         </div>
 </div>
 
@@ -181,48 +266,7 @@
 <script>
     var pageA = 2;
     var pageB =2;
-    $("#more-orderA").tap(function(){
-        var url = "/order?type=A&page="+pageA;
-        Ajax.get(url,function(response){
-            if(response.lenght){
-                response.forEach(function(value){
-                    var html_ele = '';
-                    html_ele += '<li class="ui-item"><a href="orderinfo?id=';
-                    html_ele += value.id;
-                    html_ele += '">订单号：';
-                    html_ele += value.id;
-                    html_ele += '<span class="ui-right">状态：<span class="ui-red"> 待商定</span></span><div class="my-item-left"><img src = "img"> </div><div class="my-item-right"> <p class="ui-no-wrap">微信公众号开发</p><p class="ui-red">￥:';
-                    html_ele += value.price;
-                    html_ele += '</p> <p class="ui-gray">生成日期：';
-                    html_ele += new Date(value.generate_time).Format("yyyy-MM-dd hh:mm:ss");
-                    html_ele += '</p>   </div></a></li>';
-                    $('order-list').append(html_ele);
-                })
-                pageA +=1;
-            }
-        })
-    })
-    $("#more-orderB").tap(function(){
-        var url = "/order?type=B&page="+pageB;
-        Ajax.get(url,function(response){
-            if(response.lenght){
-                response.forEach(function(value){
-                    var html_ele = '';
-                    html_ele += '<li class="ui-item"><a href="orderinfo?id=';
-                    html_ele += value.id;
-                    html_ele += '">订单号：';
-                    html_ele += value.id;
-                    html_ele += '<span class="ui-right">状态：<span class="ui-red"> 待商定</span></span><div class="my-item-left"><img src = "img"> </div><div class="my-item-right"> <p class="ui-no-wrap">微信公众号开发</p><p class="ui-red">￥:';
-                    html_ele += value.price;
-                    html_ele += '</p> <p class="ui-gray">生成日期：';
-                    html_ele += new Date(value.generate_time).Format("yyyy-MM-dd hh:mm:ss");
-                    html_ele += '</p>   </div></a></li>';
-                    $('order-list').append(html_ele);
-                    pageB +=1;
-                })
-            }
-        })
-    })
+
     Date.prototype.Format = function (fmt) { //author: meizz
         var o = {
             "M+": this.getMonth() + 1, //月份

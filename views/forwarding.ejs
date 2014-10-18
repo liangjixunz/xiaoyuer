@@ -79,7 +79,7 @@
         }
 
     </style>
-    <script src = "/js/jquery.min.js"></script>
+    <script src = "/js/zepto.min.js"></script>
     <script src = "/js/WeixinApi.js"></script>
     <script>
     var openid;
@@ -122,19 +122,15 @@
         // 用户点开右上角popup菜单后，点击分享给好友，会执行下面这个代码
         Api.shareToFriend(wxData, wxCallbacks);
     })
-
+    $().ready(function(){
+        $(".ui-page-content").swipeRight(function(){
+            history.back();
+        })
+    })
 </script>
 </head>
 
 <body class="ui-app">
-<div class="ui-bottom-bar js-no-bounce js-active ui-ed"  role="toolbar" id = "buy"  > <!-- tabindex="0" 在android上会触发一个高亮边框 -->
-    <div align="center" class="ui-red">
-         <h4></h4>
-    </div>
-
-</div>
-
-
 <!-- 一个App可以多个page -->
 <div class="ui-page page1 js-active">
 

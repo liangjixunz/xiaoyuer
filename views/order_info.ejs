@@ -9,6 +9,7 @@
     <link rel="stylesheet" type="text/css" href="/stylesheets/pro.css?embed" />
     <link rel="stylesheet" type="text/css" href="/vendor/ionicons/css/ionicons.css" />
     <link rel="stylesheet" type="text/css" href = "/stylesheets/head.css">
+    <script src="/js/zepto.min.js"></script>
     <style>
 
 
@@ -61,6 +62,11 @@
             onBridgeReady();
 
         }
+        $().ready(function(){
+            $(".ui-page-content").swipeRight(function(){
+                history.back();
+            })
+        })
     </script>
 </head>
 <body class="ui-app">

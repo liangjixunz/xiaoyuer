@@ -141,21 +141,41 @@ exports.order_test = function(req,res){
     res.render('orderlist',{
         username:"愚吉",
         credit:"三星",
-        order_list:[{
-            id:31244444434,
-            price:"5000/次",
-            generate_time:"Tue Sep 30 2014 09:10:38 GMT+0800"
-        },
-            {
+        page1:{
+            order_list:[{
                 id:31244444434,
                 price:"5000/次",
                 generate_time:"Tue Sep 30 2014 09:10:38 GMT+0800"
             },
-            {
+                {
+                    id:31244444434,
+                    price:"5000/次",
+                    generate_time:"Tue Sep 30 2014 09:10:38 GMT+0800"
+                },
+                {
+                    id:31244444434,
+                    price:"5000/次",
+                    generate_time:"Tue Sep 30 2014 09:10:38 GMT+0800"
+                }]
+        },
+        page2:{
+            order_list:[{
                 id:31244444434,
-                price:"5000/次",
+                price:"1000/次",
                 generate_time:"Tue Sep 30 2014 09:10:38 GMT+0800"
-            }]
+            },
+                {
+                    id:31244444434,
+                    price:"51000/次",
+                    generate_time:"Tue Sep 30 2014 09:10:38 GMT+0800"
+                },
+                {
+                    id:31244444434,
+                    price:"1000/次",
+                    generate_time:"Tue Sep 30 2014 09:10:38 GMT+0800"
+                }]
+        }
+
     });
 }
 
@@ -163,12 +183,23 @@ exports.order_test = function(req,res){
  *发现
  * 利用req.session.openid
  */
-exports.seek = function(req,res){
-    res.render('seek',{
-        new_items:10,
-        services:[]
-    })
-}
+exports.seek = (function(){
+    function index(req,res){
+        res.render('seek',{
+            new_items:10,
+            services:[]
+        });
+    }
+    function the_class(req,res){
+        res.render('seek_class',{
+
+        })
+    }
+    return{
+        index:index,
+        class:the_class
+    }
+})();
  /*
  *客服用
  * 根据openid

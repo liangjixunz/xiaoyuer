@@ -40,7 +40,7 @@ app.get('/kf/order/require',routes.user.kf.order_require)
 /*
 *用户的订单列表
  */
-app.get('/order/index', routes.user.order.index);
+app.get('/order/index', routes.user.order_test);
 app.get('/order/service',routes.user.order.service);
 app.get('/order/require',routes.user.order.require);
 app.get('/order/fromwe',routes.user.order.set_session);
@@ -48,15 +48,31 @@ app.get('/order/info',routes.user.order.info)
 /*
 *发现
  */
-app.get('/seek', routes.user.seek);
-
+app.get('/seek', routes.user.seek.index);
+app.get('/seek/class', routes.user.seek.class);
+app.get('/test',function(req,res){
+    res.render("info",{
+        title:"微信公众号开发",
+        description:"第三方的，沙迪克，大叔\n峰会上凤凰科技\n发卡号是胡覅\n",
+        sold:10,
+        offer:"愚吉",
+        generation:"2014-10-15 23:10:09",
+        price:"300/次"
+    })
+})
 /*
 *精选服务
- */
+ *
 app.get('/oneorder',oneservice.order)
-app.get('/oneservice',function(req,res){
+app.get('/pay/oneservice',function(req,res){
     res.render("oneservice",{});
 })
+app.get('/test/oneservice',function(req,res){
+    res.render("oneservice",{});
+})
+*/
+
+
 /*
 *点击的分享链接
  */
