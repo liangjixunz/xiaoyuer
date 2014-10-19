@@ -24,7 +24,6 @@
             background: linear-gradient(to bottom, #fbfbfb, #e1e1e1);
             display: inline-block;
             vertical-align: middle;
-            *vertical-align: auto;
             *zoom: 1;
             *display: inline;
             border: 1px solid #d4d4d4;
@@ -200,7 +199,6 @@
             <ul class="ui-list arrow-right" id = "order-list">
 			<%if(page1.order_list.length){%>
 			<%page1.order_list.forEach(function(value){%>
-
                 <li class="ui-item"><a href="info?id=<%=value.id%>">订单号：<%=value.id%><span class="ui-right">状态：<span class="ui-red"> 待商定</span></span>
                         <div class="my-item-left">
                             <img src = "/images/1.jpg" width="100%">
@@ -211,10 +209,13 @@
 					<p class="ui-gray">生成日期：<%=new Date(value.generate_time).Format("yyyy-MM-dd hh:mm:ss")%></p>
 				</div>
 				</a></li>
-
 			<%})}%>
+                <li align="center" id="show-more-orderA" style=""><a id= "more-orderA" class="ui-gray">  上拉加载更多……</a></li>
             </ul>
-            <div align="center"><button id ="more-orderA" class="button button-border-primary button-rounded">more</button></div>
+            <p class="ui-panel" id="show-load-orderA"  style="display:none;position:relative; height: 50px;">
+                <span data-spinner data-color="0,0,0"> </span>
+            </p>
+
            </div>
         <div class="ui-tab" id="page1-tab2" role="tabpane1">
 
@@ -248,8 +249,12 @@
                     </a></li>
 
                 <%})}%>
+
+                <li align="center" id="show-more-orderB" style=""><a id= "more-orderB" class="ui-gray">  上拉加载更多……</a></li>
             </ul>
-            <div align="center"><button id= "more-orderB" class="disabled button button-border-pro button-rounded">more</button></div>
+            <p class="ui-panel" id="show-load-orderB"  style="display:none;position:relative; height: 50px;">
+                <span data-spinner data-color="0,0,0"> </span>
+            </p>
 
         </div>
 </div>

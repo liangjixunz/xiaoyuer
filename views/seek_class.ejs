@@ -131,26 +131,16 @@
         <div class="ui-tab js-active" id="page2-tab1" role="tabpanel">
             <div class="header" id="header">
                 <a class="back" href="javascript:history.back();"></a>
-                <span class="headline">服务分类</span>
+                <span class="headline"><%=type%>分类</span>
             </div>
             <ul class="ui-list">
-                <li class="ui-title-item">A</li>
-                <li class="ui-item"><a href="">Amazon</a></li>
-                <li class="ui-item"><a href="">Apple</a></li>
-                <li class="ui-item"><a href="">Alibaba</a></li>
-                <li class="ui-title-item">B</li>
-                <li class="ui-item"><a href="">Baidu</a></li>
-                <li class="ui-title-item">F</li>
-                <li class="ui-item"><a href="">Facebook</a></li>
-                <li class="ui-title-item">G</li>
-                <li class="ui-item"><a href="">Google</a></li>
-                <li class="ui-title-item">M</li>
-                <li class="ui-item"><a href="">Microsoft</a></li>
-                <li class="ui-item"><a href="">Mozilla</a></li>
-                <li class="ui-title-item">Y</li>
-                <li class="ui-item"><a href="">Yahoo</a></li>
-                <li class="ui-title-item">T</li>
-                <li class="ui-item"><a href="">Tencent</a></li>
+                <%if(classify.length){%>
+                <%classify.forEach(function(value){%>
+                <li class="ui-title-item"><%=value.character%></li>
+                <%value.items.forEach(function(value1){%>
+                <li class="ui-item"><a href="/web/seek/<%=type_id%>/class/info?id=<%=value1.id%>"><%=value1.name%></a></li>
+                <%})})}%>
+
             </ul>
         </div>
     </div>

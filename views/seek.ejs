@@ -102,7 +102,7 @@
     
 	 <div class="ui-tab page1 js-active">
          <div class="header" id="header">
-         <span class="headline">找服务</span>
+         <span class="headline"><%=the_type%></span>
      </div>
 
     </div>
@@ -112,7 +112,7 @@
 
 <div class="ui-bottom-bar js-no-bounce" role="toolbar"> <!-- tabindex="0" 在android上会触发一个高亮边框 -->
     <!-- 尾部内容 -->
-    <a class="ui-bottom-bar-button js-active" role="button" data-toggle="tab" href="/web/seek/class">
+    <a class="ui-bottom-bar-button js-active" role="button" data-toggle="tab" href="/web/seek/<%=type_id%>/class">
         <span class="ui-icon ion-ios7-search-strong"></span>
         <span class="ui-label">分类查看</span>
     </a>
@@ -127,39 +127,24 @@
         <!-- 主体内容 -->
 
         <div class="ui-tab js-active " id="page1-tab1" role="tabpanel">
-
-
-
             <ul class="ui-list">
-				
-				
-				<p></p>
-               <li class="ui-item"><a>随机推荐<span class="ui-right"><%=new_items%><span class="ui-red">new</span></span></a></li>
 
-				<li class="ui-item ui-ignore-space  arrow-right"><a href="/web/test?id=1212">
+               <li class="ui-item"><a>随机推荐<span class="ui-right"><%=new_items%><span class="ui-red">new</span></span></a></li>
+                <%if(items.length){%>
+                <%items.forEach(function(value){%>
+				<li class="ui-item ui-ignore-space  arrow-right"><a href="/web/test?type=<%=type_id%>&id=1212">
                     <div class="my-item-left">
                        <img src = "/images/1.jpg" width="100%">
                     </div>
                     <div class="my-item-right ">
-                        <p class="ui-no-wrap">微信公众号开发</p>
-                        <p class="ui-gray" id = "the-code">愚吉</p>
-                        <p class="ui-red">￥5k/次</p>
+                        <p class="ui-no-wrap"><%=value.title%></p>
+                        <p class="ui-gray" id = "the-code"><%=value.provider%></p>
+                        <p class="ui-red"><%=value.price%></p>
                     </div>
-                </a></li>
-                <li class="ui-item ui-ignore-space  arrow-right"><a href="/web/test?id=1212">
-                        <div class="my-item-left">
-                            <img src = "/images/1.jpg" width="100%">
-                        </div>
-                        <div class="my-item-right ">
-                            <p class="ui-no-wrap">洗衣服</p>
-                            <p class="ui-gray" id = "the-code">愚吉</p>
-                            <p class="ui-red">￥15/桶</p>
-                        </div>
-                    </a></li>
-               
+                </a>
+                </li>
+                <%})}%>
             </ul>
-
-            
         </div>
         <!-- /主体内容-->
     </div>

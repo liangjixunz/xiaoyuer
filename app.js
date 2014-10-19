@@ -8,7 +8,6 @@ var bodyParser = require('body-parser');
 var fs = require("fs")
 
 var routes = require('./routes');
-var oneservice = require('./routes/oneservice');
 var app = express();
 
 // view engine setup
@@ -48,8 +47,18 @@ app.get('/order/info',routes.user.order.info)
 /*
 *发现
  */
-app.get('/seek', routes.user.seek.index);
-app.get('/seek/class', routes.user.seek.class);
+app.get('/seek/welfare/index', routes.user.seek.welfare.index);
+app.get('/seek/welfare/class', routes.user.seek.welfare.the_class);
+app.get('/seek/welfare/class/info',routes.user.seek.welfare.info);
+
+app.get('/seek/service/index', routes.user.seek.service.index);
+app.get('/seek/service/class', routes.user.seek.service.the_class);
+app.get('/seek/service/class/info',routes.user.seek.service.info);
+
+app.get('/seek/require/index', routes.user.seek.require.index);
+app.get('/seek/require/class', routes.user.seek.require.the_class);
+app.get('/seek/require/class/info',routes.user.seek.require.info);
+
 app.get('/test',function(req,res){
     res.render("info",{
         title:"微信公众号开发",

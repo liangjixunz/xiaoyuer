@@ -55,8 +55,8 @@
             -webkit-transition-duration: 0.3s;
             transition-duration: 0.3s;
             color: #ffffff;
-            border: 2px solid #97FFFF;
-            background: #EE9572;
+            border: 2px solid #FFFFFF;
+            background: none;
             text-shadow: none; }
         .button-border-pro {
             -moz-box-shadow: none;
@@ -132,18 +132,23 @@
     </script>
 </head>
 <body class="ui-app">
-<div class="the-bottom" id="header">
-    <a class="back" href="javascript:history.back();"></a>
-    <span class="headline"><%=title%></span>
-    <button class="my-item-right1 disabled button button-border-pro button-rounded">已收藏</button>
+<div class="ui-top-bar js-no-bounce">
+
+    <div class="ui-tab page1 js-active">
+        <div class="header" id="header">
+            <a class="back" href="javascript:history.back();"></a>
+            <span class="headline"><%=title%></span>
+            <button class="my-item-right1  button button-border-primary button-rounded">收藏</button>
+        </div>
+    </div>
 </div>
+
 <div class="ui-page-content">
     <!-- 主体内容 -->
     <ul class="ui-list ">
 
-        <li>
             <img src="/images/1.jpg" width = "100%">
-        </li>
+
         <li class="ui-item">
             <button disabled class="ui-button">&nbsp;&nbsp;提供者&nbsp;&nbsp;</button>
             <span class = "my-item-right ui-gray"><%=offer%></span>
@@ -158,7 +163,7 @@
             <span class = "my-item-right ui-gray"> <%=generation%></span>
             <p></p>
             <button disabled class="ui-button">&nbsp;&nbsp;&nbsp;&nbsp;售价&nbsp;&nbsp;&nbsp;&nbsp;</button>
-            <span class = "my-item-right ui-red"> <%=price%></span>
+            <span class = "my-item-right ui-red"> ￥<%=price%></span>
         </li>
 
         <li  class="ui-item">

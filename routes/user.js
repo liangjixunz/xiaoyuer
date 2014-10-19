@@ -3,7 +3,8 @@ var userInfo = require("xiaoyuer/userInfo"),
     hire = require("xiaoyuer/hire")
     fs = require("fs"),
     request = require("request"),
-    EventEmitter = require('events').EventEmitter;
+    EventEmitter = require('events').EventEmitter,
+    area_class = require("xiaoyuer/area_class");
 
 var noteReady = new EventEmitter();
 var sprintf = require("sprintf").sprintf;
@@ -15,6 +16,7 @@ exports.util = function(req,res){
 }
 /*
 *订单相关api
+* 以为非阻塞，所以使用了事件保证两件事都完成
  */
 exports.order = (function(){
 
@@ -101,7 +103,7 @@ exports.order = (function(){
          var url_temp = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code";
          var url = sprintf(url_temp,AppID,AppSecret,code);
          request(url,function(err,response,body){
-             console.log(body);
+
              if (!err &&response.statusCode == 200) {
                   var openid_obj = JSON.parse(body) ;
                   if(openid_obj.openid){
@@ -190,14 +192,176 @@ exports.seek = (function(){
             services:[]
         });
     }
-    function the_class(req,res){
-        res.render('seek_class',{
+     /*
+     *发现-公益
+      */
+    function welfare(){
+        /*
+        *获取公益分类表
+         */
+        var classify = area_class.welfare_calssify.get();
+        return{
+            index: function(req,res) {
+                res.render('seek', {
+                    the_type:"乐活公益",
+                    new_items:2,
+                    type_id :"welfare",
+                    items:[
+                        {
+                            title:"修电脑",
+                            provider:"愚吉",
+                            price:"公益服务，免费"
+                        },
+                        {
+                            title:"剪草坪",
+                            provider:"愚吉",
+                            price:"公益服务，免费"
+                        }
+                    ]
+                })
+            },
+            the_class : function(req,res){
+                res.render('seek_class',{
+                       type:"公益",
+                       type_id :"welfare",
+                       classify:classify
+                })
+            },
+            info :function(req,res){
+                res.render('seek_by_class', {
+                    the_type:"乐活公益",
+                    new_items:2,
+                    class_name:area_class.welfare_calssify.get_name_by_id(req.query.id),
+                    type_id :"welfare",
+                    items:[
+                        {
+                            title:"修电脑",
+                            provider:"愚吉",
+                            price:"公益服务，免费"
+                        },
+                        {
+                            title:"剪草坪",
+                            provider:"愚吉",
+                            price:"公益服务，免费"
+                        }
+                    ]
+                })
+            }
+         }
+     }
 
-        })
+    function service(){
+        var classify = area_class.classify.get();
+        return{
+            index:function(req,res) {
+                res.render('seek', {
+                    the_type:"四海服务",
+                    new_items:2,
+                    type_id :"service",
+                    items:[
+                        {
+                            title:"微信公众平台",
+                            provider:"愚吉",
+                            price:"￥500/次"
+                        },
+                        {
+                            title:"剪草坪",
+                            provider:"愚吉",
+                            price:"￥4000"
+                        }
+                    ]
+                })
+            },
+            the_class: function(req,res){
+                res.render("seek_class",{
+                    type:"服务",
+                    type_id :"service",
+                    classify: classify
+                })
+
+            } ,
+            info:function(req,res){
+                res.render('seek_by_class', {
+                    the_type:"四海服务",
+                    new_items:2,
+                    type_id :"service",
+                    class_name:area_class.classify.get_name_by_id(req.query.id),
+                    items:[
+                        {
+                            title:"微信公众平台",
+                            provider:"愚吉",
+                            price:"￥500/次"
+                        },
+                        {
+                            title:"剪草坪",
+                            provider:"愚吉",
+                            price:"￥4000"
+                        }
+                    ]
+                })
+            }
+
+        }
+    }
+
+    function requires(){
+        var classify = area_class.classify.get();
+        return{
+            index:function(req,res) {
+                res.render('seek', {
+                    the_type:"四海需求",
+                    new_items:2,
+                    class_name:area_class.classify.get_name_by_id(req.query.id),
+                    type_id :"require",
+                    items:[
+                        {
+                            title:"微信公众平台",
+                            provider:"愚吉",
+                            price:"上限￥5000"
+                        },
+                        {
+                            title:"剪草坪",
+                            provider:"愚吉",
+                            price:"￥15/小时"
+                        }
+                    ]
+                })
+            },
+            the_class: function(req,res){
+                res.render("seek_class",{
+                    type:"需求",
+                    type_id :"require",
+                    classify: classify
+                })
+
+            },
+            info:function(req,res){
+                res.render('seek_by_class', {
+                    the_type:"四海需求",
+                    new_items:2,
+                    class_name:area_class.classify.get_name_by_id(req.query.id),
+                    type_id :"require",
+                    items:[
+                        {
+                            title:"微信公众平台",
+                            provider:"愚吉",
+                            price:"上限￥5000"
+                        },
+                        {
+                            title:"剪草坪",
+                            provider:"愚吉",
+                            price:"￥15/小时"
+                        }
+                    ]
+                })
+            }
+
+        }
     }
     return{
-        index:index,
-        class:the_class
+        welfare:welfare(),
+        service:service(),
+        require:requires()
     }
 })();
  /*
@@ -339,7 +503,6 @@ exports.register = function(req,res){
 
 exports.job = function(req,res){
     var body = req.body;
-    console.log(body);
     hire.job_remind(body.name,body.mobile,body.email,body.job);
     res.redirect("/user/hire_success.html");
 }
@@ -352,9 +515,8 @@ exports.set_session_link = function(req,res){
     var AppSecret = JSON.parse(fs.readFileSync(__dirname+"/../shared/appConfig")).AppSecret;
     var url_temp = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code";
     var url = sprintf(url_temp,AppID,AppSecret,code);
-    console.log(url);
     request(url,function(err,response,body){
-        console.log(body);
+
         if (!err &&response.statusCode == 200) {
             var openid_obj = JSON.parse(body) ;
             req.session.openid = openid_obj.openid;
