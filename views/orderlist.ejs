@@ -9,6 +9,45 @@
     <link rel="stylesheet" type="text/css" href="/stylesheets/pro.css?embed" />
     <link rel="stylesheet" type="text/css" href="/vendor/ionicons/css/ionicons.css" />
     <style>
+        #load{
+            margin:auto;
+            left:0px;
+            right:0px;
+            width:40px;
+            height:40px;
+            -moz-animation:spin 2s linear 0s infinite;
+            border-radius:100%;
+            -webkit-animation:spin 2s linear 0s infinite;
+            animation:spin 2s linear 0s infinite;
+            box-shadow:0px 2px 1px #0000FF,
+            0px -2px 1px #FFE000,
+            -2px 0px 1px #00FF00,
+            2px 0px 1px #FF0000;
+        }
+        @keyframes spin{
+            from{
+                -moz-transform:rotate(0deg);
+                -webkit-transform:rotate(0deg);
+                transform:rotate(0deg);
+            }
+            to{
+                -moz-transform:rotate(360deg);
+                -webkit-transform:rotate(360deg);
+                transform:rotate(360deg);
+            }
+        }@-webkit-keyframes spin{
+             from{
+                 -moz-transform:rotate(0deg);
+                 -webkit-transform:rotate(0deg);
+                 transform:rotate(0deg);
+             }
+             to{
+                 -moz-transform:rotate(360deg);
+                 -webkit-transform:rotate(360deg);
+                 transform:rotate(360deg);
+             }
+         }
+
         .button-rounded {
             -moz-border-radius: 3px;
             -webkit-border-radius: 3px;
@@ -250,11 +289,13 @@
 
                 <%})}%>
 
-                <li align="center" id="show-more-orderB" style=""><a id= "more-orderB" class="ui-gray">  上拉加载更多……</a></li>
+
             </ul>
-            <p class="ui-panel" id="show-load-orderB"  style="display:none;position:relative; height: 50px;">
-                <span data-spinner data-color="0,0,0"> </span>
-            </p>
+
+            <p align="center" id="show-more-items" style=""><a id= "more-items" class="ui-gray"> 上拉加载更多……</a></p>
+            <div  id="show-load-items"  style="display:none;">
+                <div id="load"></div>
+            </div>
 
         </div>
 </div>

@@ -11,6 +11,7 @@
     <link rel="stylesheet" type="text/css" href="/stylesheets/buttons.css" />
     <link href="/stylesheets/head.css" rel="stylesheet" type="text/css" />
     <script src="/js/zepto.min.js"></script>
+    <script src="/js/zepto-touch.min.js"></script>
     <script>
         function onBridgeReady(){
             WeixinJSBridge.call('hideOptionMenu');
@@ -115,7 +116,7 @@
     <div class="ui-tab page2 js-active">
         <div class="header" id="header">
             <a class="back" href="javascript:history.back();"></a>
-            <span class="headline">服务分类</span>
+            <span class="headline"><%=type%>分类</span>
         </div>
     </div>
 
@@ -129,10 +130,7 @@
     <div class="ui-page-content">
 
         <div class="ui-tab js-active" id="page2-tab1" role="tabpanel">
-            <div class="header" id="header">
-                <a class="back" href="javascript:history.back();"></a>
-                <span class="headline"><%=type%>分类</span>
-            </div>
+
             <ul class="ui-list">
                 <%if(classify.length){%>
                 <%classify.forEach(function(value){%>

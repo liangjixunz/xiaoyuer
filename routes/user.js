@@ -504,7 +504,7 @@ exports.register = function(req,res){
 exports.job = function(req,res){
     var body = req.body;
     hire.job_remind(body.name,body.mobile,body.email,body.job);
-    res.redirect("/user/hire_success.html");
+    res.redirect("/user/test.html");
 }
 /*
 *从链接登录
