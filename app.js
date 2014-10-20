@@ -59,7 +59,7 @@ app.get('/seek/require/index', routes.user.seek.require.index);
 app.get('/seek/require/class', routes.user.seek.require.the_class);
 app.get('/seek/require/class/info',routes.user.seek.require.info);
 
-app.get('/test',function(req,res){
+app.get('/test1',function(req,res){
     res.render("info",{
         title:"微信公众号开发",
         description:"第三方的，沙迪克，大叔\n峰会上凤凰科技\n发卡号是胡覅\n",
@@ -68,6 +68,10 @@ app.get('/test',function(req,res){
         generation:"2014-10-15 23:10:09",
         price:"300/次"
     })
+})
+app.post('/test',function(req,res){
+    console.log(req.body);
+    res.send(JSON.stringify(req.body));
 })
 /*
 *精选服务

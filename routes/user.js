@@ -404,17 +404,21 @@ exports.kf = (function(){
  */
 exports.login = function(req,res){
     var body = req.body;
-     userInfo.login(req.session.openid,body.password,body.email,function(result){
+    req.session.openid = 1;
+    console.log(body);
+     userInfo.login(req.session.openid,body.password,body.username,function(result){
          switch (result){
-             case 0:
+             case '0':
                  res.redirect("/user/success_login.html");
                  break;
-             case -5:
+             case '-5':
                  res.redirect("/user/tologin.html");
                  break;
-             case -6:
+             case '-6':
                  res.redirect("/user/tologin.html");
                  break;
+             default :
+                 console.log(result);
          }
      })
 }
@@ -425,14 +429,15 @@ exports.check_username = function(req,res){
     var username = req.query.username;
     userInfo.check_nick(username,function(result){
          switch (result){
-             case 0:
+             case '0':
                  res.send(JSON.stringify({code:0,info:"可用"}));
                  break;
-             case -3:
+             case '-3':
                  res.send(JSON.stringify({code:-1,info:"已被注册"}));
                  break;
              default:
                  res.send(JSON.stringify({code:-200,info:"未知错误"}));
+
          }
     })
 }
@@ -443,10 +448,10 @@ exports.check_mobile = function(req,res){
     var phone_number = req.query.mobile;
     userInfo.check_mobile(phone_number,function(result){
         switch (result){
-            case 0:
+            case '0':
                 res.send(JSON.stringify({code:0,info:"可用"}));
                 break;
-            case -3:
+            case '-3':
                 res.send(JSON.stringify({code:-1,info:"已被注册"}));
                 break;
             default:
@@ -461,8 +466,8 @@ exports.get_cert = function(req,res){
     var phone_number = req.query.mobile;
     userInfo.get_code(phone_number,function(result){
         switch (result.code){
-            case 0:
-                req.session.cert = result.cert;
+            case '0':
+                req.session.cert = result.autocode;
                 req.session.time = new Date().getTime();
                 res.send(JSON.stringify(result));
                 break;
@@ -491,8 +496,8 @@ exports.check_cert = function(req,res){
  */
 exports.register = function(req,res){
     var body = req.body;
-    userInfo.register(req.session.openid,body.username,body.password,body.mobile,function(result){
-          if(result.code==0)
+    userInfo.register(req.session.openid,body.user_name,body.password,body.mobile_num,function(result){
+          if(result.code=='0')
             res.redirect("/user/reg_success.html")
     })
 }
@@ -509,19 +514,22 @@ exports.job = function(req,res){
 /*
 *从链接登录
  */
-exports.set_session_link = function(req,res){
-    var code = req.query.code;
+exports.set_session_link = (function(){
     var AppID = JSON.parse(fs.readFileSync(__dirname+"/../shared/appConfig")).AppID;
     var AppSecret = JSON.parse(fs.readFileSync(__dirname+"/../shared/appConfig")).AppSecret;
-    var url_temp = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code";
-    var url = sprintf(url_temp,AppID,AppSecret,code);
-    request(url,function(err,response,body){
+    return  function(req,res){
+        var code = req.query.code;
 
-        if (!err &&response.statusCode == 200) {
-            var openid_obj = JSON.parse(body) ;
-            req.session.openid = openid_obj.openid;
-            res.redirect("/user/tologin.html");
-        }
-    })
+        var url_temp = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code";
+        var url = sprintf(url_temp,AppID,AppSecret,code);
+        request(url,function(err,response,body){
 
-}
+            if (!err &&response.statusCode == 200) {
+                var openid_obj = JSON.parse(body) ;
+                req.session.openid = openid_obj.openid;
+                res.redirect("/user/tologin.html");
+            }
+        })
+
+    }
+})() ;

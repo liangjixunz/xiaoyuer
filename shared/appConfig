@@ -1,7 +1,7 @@
 {
 "AppID":"wxfd339e5a03048eb3",
 "AppSecret":"c91a199b19842aabe1c443dc7fc555d8" ,
-"baseUrl":"",
+"baseUrl":"http://61.155.238.99:85/weixin",
 "token":"xye",
 "mybaseUrl":"ber.chinacloudapp.cn",
 "email":{
