@@ -3,6 +3,7 @@ var userInfo = require("xiaoyuer/userInfo"),
     hire = require("xiaoyuer/hire")
     fs = require("fs"),
     request = require("request"),
+    pic_cache = require("xiaoyuer/pic-cache");
     EventEmitter = require('events').EventEmitter,
     area_class = require("xiaoyuer/area_class");
 
@@ -80,10 +81,13 @@ exports.order = (function(){
         if(req.session.openid){
             userInfo.getUserInfo(req.session.openid,function(result){
                 switch(result.code){
-                    case 0:
+                    case '0':
+                        if(result.photo){
+                            result.photo = "/images/"+pic_cache(result.phto);
+                        }
                         callback(result);
                         break;
-                    case -1:
+                    case '-1':
                         res.redirect("/user/tologin.html");
                         callback(-1);
                         break;
@@ -92,7 +96,7 @@ exports.order = (function(){
             })
         }
         else{
-            res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=http://" + mybaseUrl +"/web/order/fromwe&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
+            res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=" + mybaseUrl +"/order/fromwe&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
 
         }
 
@@ -111,7 +115,7 @@ exports.order = (function(){
                       res.redirect("/web/order/index");
                   }
                   else{
-                      res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=http://" + mybaseUrl +"/web/order/fromwe&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
+                      res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=" + mybaseUrl +"/order/fromwe&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
 
                   }
                 }
@@ -311,13 +315,17 @@ exports.seek = (function(){
                 res.render('seek', {
                     the_type:"四海需求",
                     new_items:2,
-                    class_name:area_class.classify.get_name_by_id(req.query.id),
                     type_id :"require",
                     items:[
                         {
                             title:"微信公众平台",
                             provider:"愚吉",
                             price:"上限￥5000"
+                        },
+                        {
+                            title:"剪草坪",
+                            provider:"愚吉",
+                            price:"￥15/小时"
                         },
                         {
                             title:"剪草坪",
@@ -527,7 +535,7 @@ exports.set_session_link = (function(){
             if (!err &&response.statusCode == 200) {
                 var openid_obj = JSON.parse(body) ;
                 req.session.openid = openid_obj.openid;
-                res.redirect("/user/tologin.html");
+                res.redirect("/user/tologin.html?t="+new Date().getTime());
             }
         })
 

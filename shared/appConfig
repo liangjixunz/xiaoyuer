@@ -1,9 +1,11 @@
 {
 "AppID":"wxfd339e5a03048eb3",
 "AppSecret":"c91a199b19842aabe1c443dc7fc555d8" ,
-"baseUrl":"http://61.155.238.99:85/weixin",
+"baseUrl":"http://zx.xiaoyuer.com/weixin",
 "token":"xye",
-"mybaseUrl":"ber.chinacloudapp.cn",
+"mybaseUrl":"http://ber.chinacloudapp.cn/web",
+"pic_base":"http://wj.xiaoyuer.com/files/",
+"pic_roots":"/../../images/",
 "email":{
 "hr_email":"Service@xiaoyuer.com"
  }

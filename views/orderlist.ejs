@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset='utf-8'>
-    <title>测试用</title>
+    <title>我的订单</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
@@ -207,8 +207,10 @@
 <div class="ui-top-bar js-no-bounce">
     <div class="ui-tab page1 js-active">
         <ul class="ui-groupbutton" role="tablist">
-            <li class="ui-button js-active" data-toggle="tab" data-target="#page1-tab1" aria-controls="tab1" role="tab">需求单</li>
-            <li class="ui-button" data-toggle="tab" data-target="#page1-tab2" aria-controls="tab2" role="tab">服务单</li>
+            <li class="ui-button js-active" data-toggle="tab" data-target="#page1-tab1" aria-controls="tab1" role="tab">需求</li>
+            <li class="ui-button" data-toggle="tab" data-target="#page1-tab2" aria-controls="tab2" role="tab">服务</li>
+            <li class="ui-button " data-toggle="tab" data-target="#page1-tab3" aria-controls="tab1" role="tab">大赛</li>
+            <li class="ui-button" data-toggle="tab" data-target="#page1-tab4" aria-controls="tab2" role="tab">公益</li>
         </ul>
     </div>
 </div>
@@ -249,8 +251,9 @@
 				</div>
 				</a></li>
 			<%})}%>
-                <li align="center" id="show-more-orderA" style=""><a id= "more-orderA" class="ui-gray">  上拉加载更多……</a></li>
+
             </ul>
+            <p align="center" id="show-more-orderA" style=""><a id= "more-orderA" class="ui-gray">  点击加载更多……</a></p>
             <p class="ui-panel" id="show-load-orderA"  style="display:none;position:relative; height: 50px;">
                 <span data-spinner data-color="0,0,0"> </span>
             </p>

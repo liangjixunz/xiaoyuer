@@ -9,6 +9,25 @@ var fs = require("fs")
 
 var routes = require('./routes');
 var app = express();
+var signature_check = (function(){
+    var token = JSON.parse(fs.readFileSync(__dirname+"/shared/appConfig")).token;
+    var sha1 = crypto.createHash('sha1')
+    sha1.update(token);
+    return function(req,res,next){
+        if(req.query.timestamp&&req.query.check){
+            sha1.update(req.query.timestamp);
+            if(req.query.check==sha1.digest('hex')){
+                next();
+            }
+            else
+                res.send(JSON.stringify({code:"-10","err":"permission denied"}))
+            sha1 = crypto.createHash('sha1')
+            sha1.update(token);
+        }
+        else
+            res.send(JSON.stringify({code:"-10","err":"permission denied"}))
+    }
+})();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -161,9 +180,9 @@ app.get('/myadmin/setreply',admin_check,routes.admin.reply_set);
 /*
 *更新地区和分类
  */
-app.post('/myadmin/area/update',routes.admin.area_update);
-app.post("/myadmin/classify/update",routes.admin.class_update);
-app.post("/myadmin/welfare/update",routes.admin.welfare_class_update)
+app.post('/myadmin/area/update',signature_check,routes.admin.area_update);
+app.post("/myadmin/class/update",signature_check,routes.admin.class_update);
+app.post("/myadmin/welfare/update",signature_check,routes.admin.welfare_class_update)
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
     var err = new Error('Not Found');
@@ -238,5 +257,7 @@ function admin_check(req,res,next){
     }
 }
 
-
+process.on('uncaughtException', function (err) {
+    console.log('Caught Exception:' + err);//直接捕获method()未定义函数，Node进程未被退出。
+});
 module.exports = app;

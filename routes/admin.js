@@ -107,7 +107,14 @@ exports.reply_set = function(req,res){
 * Method: POST
  */
 exports.area_update = function(req,res){
-    res.send(area_class.area.update(JSON.parse(req.body.content)));
+    var content = req.body.content;
+        try{
+            content=JSON.parse(req.body.content)
+        }
+    catch (e){
+        console.log(e);
+    }
+    res.send(area_class.area.update(content));
 }
 /*
  *更新分类表
@@ -115,11 +122,25 @@ exports.area_update = function(req,res){
  * Method: POST
  */
 exports.class_update = function(req,res){
-    res.send(area_class.classify.update(JSON.parse(req.body.content)));
+    var content = req.body.content;
+    try{
+        content=JSON.parse(req.body.content)
+    }
+    catch (e){
+        console.log(e);
+    }
+    res.send(area_class.area.update(content));;
 }
 /*
 *更新公益分类表
  */
 exports.welfare_class_update = function(req,res){
-    res.send(area_class.welfare_calssify.update(JSON.parse(req.body.content)));
+    var content = req.body.content;
+    try{
+        content=JSON.parse(req.body.content)
+    }
+    catch (e){
+        console.log(e);
+    }
+    res.send(area_class.area.update(content));
 }

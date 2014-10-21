@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset='utf-8'>
-    <title>创客汇小鱼儿</title>
+    <title><%=the_type%></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
@@ -70,7 +70,9 @@
         .my-item-right p {
             font-size: 14px;
         }
-
+        .ui-q1{
+            margin-left: 70%;
+        }
 
     </style>
 </head>
@@ -81,7 +83,7 @@
     <div class="ui-tab page1 js-active">
         <div class="header" id="header">
             <a class="back" href="javascript:history.back();"></a>
-            <span class="headline"><%=the_type%></span>
+            <span class="headline"><%=class_name%></span>
             <span id="the-refresh"><img style="float:right ;margin-top: 12px;margin-right: 5%" height="48%" src = "/images/refresh.png"></span>
         </div>
 
@@ -102,7 +104,13 @@
 
             <ul class="ui-list">
 
-                <li class="ui-item"><a><%=class_name%><span class="ui-right"><%=new_items%><span class="ui-red">new</span></span></a></li>
+                <ul class="ui-groupbutton" role="tablist">
+                        <li class="ui-button  ">发布时间 &nbsp;<span class="ion-arrow-down-a"></span></li>
+                        <li class="ui-button js-active">截止时间&nbsp;<span class="ion-arrow-down-a"></span></li>
+                        <li class="ui-button" >价格&nbsp;<span class="ion-arrow-up-a"></span></li>
+                        <li class="ui-button" >参与人数&nbsp;<span class="ion-arrow-down-a"></span><li>
+                 </ul>
+                <li class="ui-item"> <span class="ui-right"><span class="ui-red"></span></span></li>
                 <%if(items.length){%>
                 <%items.forEach(function(value){%>
                 <li class="ui-item ui-ignore-space  arrow-right"><a href="/web/test?type=<%=type_id%>&id=1212">
