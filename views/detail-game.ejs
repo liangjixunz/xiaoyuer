@@ -2,14 +2,14 @@
 <html>
 <head>
     <meta charset='utf-8'>
-    <title>服务详情</title>
+    <title>大赛详情</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" type="text/css" href="/stylesheets/pro.css?embed" />
     <link rel="stylesheet" type="text/css" href="/vendor/ionicons/css/ionicons.css" />
     <link rel="stylesheet" type="text/css" href = "/stylesheets/head.css">
-     <script src="/js/zepto.min.js"></script>
+    <script src="/js/zepto.min.js"></script>
     <script src="/js/zepto-touch.min.js"></script>
     <style>
 
@@ -28,7 +28,6 @@
             background: linear-gradient(to bottom, #fbfbfb, #e1e1e1);
             display: inline-block;
             vertical-align: middle;
-            *vertical-align: auto;
             *zoom: 1;
             *display: inline;
             border: 1px solid #d4d4d4;
@@ -76,7 +75,7 @@
             background: #666;
             text-shadow: none; }
         .my-item-right {
-            margin-left: 8px;
+            margin-left: 14px;
         }
         .my-item-right1{
             float:right;
@@ -138,45 +137,55 @@
     <div class="ui-tab page1 js-active">
         <div class="header" id="header">
             <a class="back" href="javascript:history.back();"></a>
-            <span class="headline"><%=title%></span>
+            <span class="headline">大赛详情</span>
             <button class="my-item-right1  button button-border-primary button-rounded">收藏</button>
         </div>
     </div>
 </div>
 
-<div class="ui-page-content" >
+<div class="ui-page-content">
     <!-- 主体内容 -->
-
     <ul class="ui-list ">
 
+        <img src="/images/bac6.jpg" width="100%" height="60px">
 
-        <img src="/images/bac6.jpg" width="100%" height="50px">
+        <%if(code==0){%>
         <li class="ui-item">
-            <button disabled class="ui-button">&nbsp;&nbsp;提供者&nbsp;&nbsp;</button>
-            <span class = "my-item-right ui-gray"><%=offer%></span>
+            <button disabled class="ui-button">基本描述</button>
+            <span class = "my-item-right "> <%-gameTitle%></span>
+            <p></p>
+
+            <button disabled class="ui-button">截止时间</button>
+            <span class = "my-item-right ui-gray"> <%-apllayEndTime%></span>
+            <p></p>
+            <button disabled class="ui-button">鱼食总数</button>
+            <span class = "my-item-right ui-red"> <%=payFishfoodCount%></span>
+            <p></p>
+            <button disabled class="ui-button">最小人数</button>
+            <span class="my-item-right ui-gray"><span class="ui-red"><%-apllayMinNum%></span></span>
+            <p></p>
 
         </li>
         <li class="ui-item">
-            <button disabled class="ui-button">&nbsp;&nbsp;已售出&nbsp;&nbsp;</button>
-            <span class="my-item-right ui-red"><%=sold%></span>
 
-            <p></p>
-            <button disabled class="ui-button">上架时间</button>
-            <span class = "my-item-right ui-gray"> <%=generation%></span>
-            <p></p>
-            <button disabled class="ui-button">&nbsp;&nbsp;&nbsp;&nbsp;售价&nbsp;&nbsp;&nbsp;&nbsp;</button>
-            <span class = "my-item-right ui-red"> ￥<%=price%></span>
+            <button disabled class="ui-button">附加要求</button>
+            <span class = "my-item-right ui-gray"> <%-serverHasLabel?serverHasLabel+"&nbsp;":""%><%-isSameCity?"要求同城&nbsp;":""%>
+                <%-sceneServe?"线下":"线上"%>
+            </span>
         </li>
 
         <li  class="ui-item">
             <button disabled class="ui-button">详细信息</button>
-            <div ><%=description%>
+            <div ><%-gameDes.replace(/<\/p>/g,"</p><p>&nbsp;</p>")%>
             </div>
         </li>
         <p>
-            &nbsp:
+            &nbsp;
         </p>
-
+        <%}%>
+        <%if(code!=0){%>
+        <img src="/images/bac5.jpg">
+        <%}%>
     </ul>
 
 </div>

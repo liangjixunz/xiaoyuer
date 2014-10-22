@@ -2,6 +2,7 @@ var userInfo = require("xiaoyuer/userInfo"),
     order = require("xiaoyuer/order"),
     hire = require("xiaoyuer/hire")
     fs = require("fs"),
+    seek = require("xiaoyuer/seek");
     request = require("request"),
     pic_cache = require("xiaoyuer/pic-cache");
     EventEmitter = require('events').EventEmitter,
@@ -196,6 +197,53 @@ exports.seek = (function(){
             services:[]
         });
     }
+    /*
+    *发现-大赛
+     */
+    function game(){
+        return{
+            index : function(req,res){
+                seek.seek.games("1","1",function(result){
+                    if(result.code == 0){
+                        var resObj = [];
+                        var temp = {};
+                        result.lst.forEach(function(value){
+                            temp = JSON.parse(value);
+                            var uri = temp.gameImageAtt.match(/files\/[\s\S]+/)[0];
+                            temp.gameImageAtt = "/images/"+ pic_cache.cache(uri);
+                            resObj[resObj.length] = temp;
+
+                        })
+                        res.render("seek-game",{
+                            the_type:"缤纷大赛",
+                            new_items:2,
+                            type_id :"game",
+                            items:resObj
+                        })
+                    }
+                })
+            },
+            info:  function(req,res){
+                seek.info("game",req.query.id,function(result){
+                    try{
+                        var resObj = JSON.parse(result);
+                        resObj.code = 0;
+                        resObj.gameFinishTime= new Date(resObj.gameFinishTime).Format("20yy年MM月dd日 hh:mm:ss");
+                        resObj.requireFinishTime = new Date(resObj.requireFinishTime).Format("20yy年MM月dd日 hh:mm:ss");
+                        resObj.requireDes = html_decode(resObj.gameDes);
+                        res.render('detail-game',resObj);
+                    }
+                    catch (e){
+                        console.log(e);
+                        res.send(404);
+                    }
+
+
+
+                })
+            }
+        }
+    }
      /*
      *发现-公益
       */
@@ -206,23 +254,35 @@ exports.seek = (function(){
         var classify = area_class.welfare_calssify.get();
         return{
             index: function(req,res) {
-                res.render('seek', {
-                    the_type:"乐活公益",
-                    new_items:2,
-                    type_id :"welfare",
-                    items:[
-                        {
-                            title:"修电脑",
-                            provider:"愚吉",
-                            price:"公益服务，免费"
-                        },
-                        {
-                            title:"剪草坪",
-                            provider:"愚吉",
-                            price:"公益服务，免费"
-                        }
-                    ]
+                seek.seek.wel_require("0","1",function(result){
+                    if(result.code ==0){
+                       var resObj = [];
+                       var temp = {};
+                       result.lst.forEach(function(value){
+                           temp = JSON.parse(value);
+                           var uri = temp.attCoverStore.match(/files\/[\s\S]+/)[0];
+                           temp.attCoverStore = "/images/" + pic_cache.cache(uri);
+                           resObj[resObj.length] = temp;
+                       })
+                        res.render("seek-welfare",{
+                            the_type:"乐活公益",
+                            new_items:2,
+                            type_id :"welfare",
+                            items:resObj
+                        })
+
+
+                    }
+                    else{
+                        res.render("seek-welfare",{
+                            the_type:"乐活公益",
+                            new_items:2,
+                            type_id :"welfare",
+                            items:[]
+                        })
+                    }
                 })
+
             },
             the_class : function(req,res){
                 res.render('seek_class',{
@@ -258,23 +318,42 @@ exports.seek = (function(){
         var classify = area_class.classify.get();
         return{
             index:function(req,res) {
-                res.render('seek', {
-                    the_type:"四海服务",
-                    new_items:2,
-                    type_id :"service",
-                    items:[
-                        {
-                            title:"微信公众平台",
-                            provider:"愚吉",
-                            price:"￥500/次"
-                        },
-                        {
-                            title:"剪草坪",
-                            provider:"愚吉",
-                            price:"￥4000"
-                        }
-                    ]
+                seek.seek.service("1","1",function(result){
+                    var resObj = [];
+                    var temp = {};
+                    /*
+                    *给的根本不是json
+                     */
+                    if(result.code == 0){
+                        result.lst.forEach(function(value){
+                            temp  =  JSON.parse(value);
+
+                            var uri = temp.serviceImageAtt.match(/service\/[\s\S]+/)[0];
+                            if(!temp.serviceImageAtt.match(/files\/[\s\S]+/)){
+                                uri = "files/" + uri;
+                            }
+                            temp.serviceImageAtt = "/images/"+ pic_cache.cache(uri);
+                            resObj[resObj.length] = temp;
+                        })
+                        res.render('seek-service',{
+                            the_type:"四海服务",
+                            new_items:2,
+                            type_id :"service",
+                            items:resObj
+                        })
+                    }
+                    else{
+                        res.render('seek', {
+                            the_type:"四海服务",
+                            new_items:2,
+                            type_id :"service",
+                            items:[
+
+                            ]
+                        })
+                    }
                 })
+
             },
             the_class: function(req,res){
                 res.render("seek_class",{
@@ -284,24 +363,60 @@ exports.seek = (function(){
                 })
 
             } ,
+            class_info:function(req,res){
+                seek.seek.service(req.query.class,"1",function(result){
+                    var resObj = [];
+                    var temp = {};
+                    /*
+                     *给的根本不是json
+                     */
+                    if(result.code == 0){
+                        result.lst.forEach(function(value){
+                            temp  =  JSON.parse(value);
+
+                            var uri = temp.serviceImageAtt.match(/service\/[\s\S]+/)[0];
+                            if(!temp.serviceImageAtt.match(/files\/[\s\S]+/)){
+                                uri = "files/" + uri;
+                            }
+                            temp.serviceImageAtt = "/images/"+ pic_cache.cache(uri);
+                            resObj[resObj.length] = temp;
+                        })
+                        res.render('seek-service',{
+                            the_type:"四海服务",
+                            new_items:2,
+                            type_id :"service",
+                            items:resObj
+                        })
+                    }
+                    else{
+                        res.render('seek', {
+                            the_type:"四海服务",
+                            new_items:2,
+                            type_id :"service",
+                            items:[
+
+                            ]
+                        })
+                    }
+                })
+            },
             info:function(req,res){
-                res.render('seek_by_class', {
-                    the_type:"四海服务",
-                    new_items:2,
-                    type_id :"service",
-                    class_name:area_class.classify.get_name_by_id(req.query.id),
-                    items:[
-                        {
-                            title:"微信公众平台",
-                            provider:"愚吉",
-                            price:"￥500/次"
-                        },
-                        {
-                            title:"剪草坪",
-                            provider:"愚吉",
-                            price:"￥4000"
+                seek.info("service",req.query.id,function(result){
+                    try{
+                       var  resObj = JSON.parse(result);
+                        var uri = resObj.serviceImageAtt.match(/service\/[\s\S]+/)[0];
+                        if(!resObj.serviceImageAtt.match(/files\//)){
+                            uri = "files/" + uri;
                         }
-                    ]
+                        resObj.serviceImageAtt = "/images/"+ pic_cache.cache(uri);
+                        resObj.servDes = html_decode(resObj.servDes);
+                        res.render('detail-service',resObj);
+                    }
+                    catch (e){
+                        console.log(e);
+                        res.send(404);
+                    }
+
                 })
             }
 
@@ -312,28 +427,38 @@ exports.seek = (function(){
         var classify = area_class.classify.get();
         return{
             index:function(req,res) {
-                res.render('seek', {
-                    the_type:"四海需求",
-                    new_items:2,
-                    type_id :"require",
-                    items:[
-                        {
-                            title:"微信公众平台",
-                            provider:"愚吉",
-                            price:"上限￥5000"
-                        },
-                        {
-                            title:"剪草坪",
-                            provider:"愚吉",
-                            price:"￥15/小时"
-                        },
-                        {
-                            title:"剪草坪",
-                            provider:"愚吉",
-                            price:"￥15/小时"
-                        }
-                    ]
+                seek.seek.require("1","1",function(result){
+                    var resObj = [];
+                    var temp = {};
+                    /*
+                     *给的根本不是json
+                     */
+                    if(result.code == 0){
+                        result.lst.forEach(function(value){
+                            temp  =  JSON.parse(value);
+                            var uri = temp.requireImageAtt.match(/files\/[\s\S]+/)[0];
+                            temp.requireImageAtt = "/images/"+ pic_cache.cache(uri);
+                            resObj[resObj.length] = temp;
+                        })
+                        res.render('seek-require',{
+                            the_type:"四海需求",
+                            new_items:2,
+                            type_id :"require",
+                            items:resObj
+                        })
+                    }
+                    else{
+                        res.render('seek', {
+                            the_type:"四海需求",
+                            new_items:2,
+                            type_id :"require",
+                            items:[
+
+                            ]
+                        })
+                    }
                 })
+
             },
             the_class: function(req,res){
                 res.render("seek_class",{
@@ -343,25 +468,59 @@ exports.seek = (function(){
                 })
 
             },
-            info:function(req,res){
-                res.render('seek_by_class', {
-                    the_type:"四海需求",
-                    new_items:2,
-                    class_name:area_class.classify.get_name_by_id(req.query.id),
-                    type_id :"require",
-                    items:[
-                        {
-                            title:"微信公众平台",
-                            provider:"愚吉",
-                            price:"上限￥5000"
-                        },
-                        {
-                            title:"剪草坪",
-                            provider:"愚吉",
-                            price:"￥15/小时"
-                        }
-                    ]
+            class_info:function(req,res) {
+                seek.seek.require(req.query.class,"1",function(result){
+                    var resObj = [];
+                    var temp = {};
+                    /*
+                     *给的根本不是json
+                     */
+                    if(result.code == 0){
+                        result.lst.forEach(function(value){
+                            temp  =  JSON.parse(value);
+                            var uri = temp.requireImageAtt.match(/files\/[\s\S]+/)[0];
+                            temp.requireImageAtt = "/images/"+ pic_cache.cache(uri);
+                            resObj[resObj.length] = temp;
+                        })
+                        res.render('seek-require',{
+                            the_type:"四海需求",
+                            new_items:2,
+                            type_id :"require",
+                            items:resObj
+                        })
+                    }
+                    else{
+                        res.render('seek', {
+                            the_type:"四海需求",
+                            new_items:2,
+                            type_id :"require",
+                            items:[
+
+                            ]
+                        })
+                    }
                 })
+
+            },
+            info:function(req,res){
+                seek.info("require",req.query.id,function(result){
+                   var resObj = result;
+                    try{
+                        resObj = JSON.parse(result);
+                        resObj.releaseTime = new Date(resObj.releaseTime).Format("20yy年MM月dd日 hh:mm:ss");
+                        resObj.requireFinishTime = new Date(resObj.requireFinishTime).Format("20yy年MM月dd日 hh:mm:ss");
+                        resObj.requireDes = html_decode( resObj.requireDes)
+                        res.render('detail-require',resObj);
+                    }
+                    catch (e){
+                        console.log(e);
+                        res.send(404);
+                    }
+
+
+
+                })
+
             }
 
         }
@@ -369,7 +528,8 @@ exports.seek = (function(){
     return{
         welfare:welfare(),
         service:service(),
-        require:requires()
+        require:requires(),
+        game:game()
     }
 })();
  /*
@@ -541,3 +701,34 @@ exports.set_session_link = (function(){
 
     }
 })() ;
+
+Date.prototype.Format = function (fmt) { //author: meizz
+    var o = {
+        "M+": this.getMonth() + 1, //月份
+        "d+": this.getDate(), //日
+        "h+": this.getHours(), //小时
+        "m+": this.getMinutes(), //分
+        "s+": this.getSeconds(), //秒
+        "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+        "S": this.getMilliseconds() //毫秒
+    };
+    if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    for (var k in o)
+        if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+    return fmt;
+}
+
+
+function html_decode(str)
+{
+    var s = "";
+    if (str.length == 0) return "";
+    s = str.replace(/&gt;/g, "&");
+    s = s.replace(/&lt;/g, "<");
+    s = s.replace(/&gt;/g, ">");
+    s = s.replace(/&nbsp;/g, " ");
+    s = s.replace(/&#39;/g, "\'");
+    s = s.replace(/&quot;/g, "\"");
+    s = s.replace(/<br>/g, "\n");
+    return s;
+}

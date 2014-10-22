@@ -72,12 +72,16 @@ app.get('/seek/welfare/class/info',routes.user.seek.welfare.info);
 
 app.get('/seek/service/index', routes.user.seek.service.index);
 app.get('/seek/service/class', routes.user.seek.service.the_class);
-app.get('/seek/service/class/info',routes.user.seek.service.info);
+app.get('/seek/service/class/info',routes.user.seek.service.class_info);
+app.get('/seek/service/info',routes.user.seek.service.info);
 
 app.get('/seek/require/index', routes.user.seek.require.index);
 app.get('/seek/require/class', routes.user.seek.require.the_class);
-app.get('/seek/require/class/info',routes.user.seek.require.info);
+app.get('/seek/require/class/info',routes.user.seek.require.class_info);
+app.get('/seek/require/info',routes.user.seek.require.info);
 
+app.get('/seek/game/index', routes.user.seek.game.index);
+app.get('/seek/game/info', routes.user.seek.game.info);
 app.get('/test1',function(req,res){
     res.render("info",{
         title:"微信公众号开发",
@@ -257,7 +261,7 @@ function admin_check(req,res,next){
     }
 }
 
-process.on('uncaughtException', function (err) {
+/*process.on('uncaughtException', function (err) {
     console.log('Caught Exception:' + err);//直接捕获method()未定义函数，Node进程未被退出。
-});
+});*/
 module.exports = app;

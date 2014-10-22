@@ -8,10 +8,7 @@
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" type="text/css" href="/stylesheets/pro.css?embed" />
     <link rel="stylesheet" type="text/css" href="/vendor/ionicons/css/ionicons.css" />
-    <link rel="stylesheet" type="text/css" href="/stylesheets/buttons.css" />
     <link href="/stylesheets/head.css" rel="stylesheet" type="text/css" />
-    <script src="/js/zepto.min.js"></script>
-    <script src="/js/zepto-touch.min.js"></script>
     <script>
         function onBridgeReady(){
             WeixinJSBridge.call('hideOptionMenu');
@@ -29,11 +26,6 @@
             onBridgeReady();
 
         }
-        $().ready(function(){
-            $(".ui-page-content").swipeRight(function(){
-                history.back();
-            })
-        })
 
     </script>
     <style>
@@ -57,9 +49,9 @@
 
         .my-item-left{
             position: absolute;
-            border: 1px solid #ccc;
+            border: 0px solid #ccc;
             border-radius: 4px;
-            background: #eee;
+            background: #fff;
             height: 60px;
             width: 60px;
             padding: 8px 6px;
@@ -67,10 +59,6 @@
             line-height: 12px;
         }
 
-        .my-item-count {
-            font-size: 30px;
-            line-height: 30px;
-        }
 
         .my-item-right {
             margin-left: 70px;
@@ -112,38 +100,68 @@
 
 <div class="ui-top-bar js-no-bounce">
 
-
-    <div class="ui-tab page2 js-active">
+    <div class="ui-tab page1 js-active">
         <div class="header" id="header">
-            <a class="back" href="javascript:history.back();"></a>
-            <span class="headline"><%=type%>分类</span>
+            <span class="headline"><%=the_type%></span>
         </div>
+
     </div>
+
 
 </div>
 
+<div class="ui-bottom-bar js-no-bounce" role="toolbar"> <!-- tabindex="0" 在android上会触发一个高亮边框 -->
+    <!-- 尾部内容 -->
+    <a class="ui-bottom-bar-button js-active" role="button" data-toggle="tab" href="/web/seek/<%=type_id%>/class">
+        <span class="ui-icon ion-ios7-search-strong"></span>
+        <span class="ui-label">分类查看</span>
+    </a>
 
+    <!-- /尾部内容-->
+</div>
 
+<!-- 一个App可以多个page -->
+<div class="ui-page page1 js-active">
 
-
-<div class="ui-page page2 js-active">
     <div class="ui-page-content">
+        <!-- 主体内容 -->
 
-        <div class="ui-tab js-active" id="page2-tab1" role="tabpanel">
-
+        <div class="ui-tab js-active " id="page1-tab1" role="tabpanel">
             <ul class="ui-list">
-                <%if(classify.length){%>
-                <%classify.forEach(function(value){%>
-                <li class="ui-title-item"><%=value.character%></li>
-                <%value.items.forEach(function(value1){%>
-                <li class="ui-item"><a href="/web/seek/<%=type_id%>/class/info?class=<%=value1.id%>"><%=value1.name%></a></li>
-                <%})})}%>
 
+                <li class="ui-item"><a>随机推荐</a></li>
+                <%if(items.length){%>
+                <%items.forEach(function(value){%>
+                <li class="ui-item ui-ignore-space  arrow-right"><a href="/web/seek/require/info?id=<%=value.id%>">
+                        <div class="my-item-left">
+                            <img src ="<%=value.requireImageAtt%>" width="100%">
+                        </div>
+                        <div class="my-item-right ">
+                            <p class="ui-no-wrap"><%=value.requireTitle%><span class="ui-right ui-gray">申请<%=value.apllayCount%>/<%=value.apllayMaxNum%></span></p>
+                            <p class="ui-gray" id = "the-code">截止：<%=value._apllayEndTime%></p>
+                            <%if(!value.requireFixedPrice){%>
+                            <p class="ui-red">价格：<%=value.requireFromPrice%>—<%=value.requireToPrice%><span class="ui-right ui-red"><%=value.dealedCount%></span></p>
+                            <%}%>
+                            <%if(value.requireFixedPrice){%>
+                            <p class="ui-red">价格：<%=value.requireFixedPrice%><span class="ui-right ui-red">已选<%=value.chooseUserCount%></span></p>
+                            <%}%>
+
+                        </div>
+                    </a>
+                </li>
+                <%})}%>
+                <%if(!items.length){%>
+                <img src="/images/1.jpg">
+                <%}%>
             </ul>
         </div>
+        <!-- /主体内容-->
     </div>
+
 </div>
+
 </div>
+
 
 </body>
 </html>
