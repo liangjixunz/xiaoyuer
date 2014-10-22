@@ -25,7 +25,7 @@ exports.event_info= function(req,res){
 
 exports.event_index = function(req,res){
     if(!req.session.openid){
-        res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=http://" + mybaseUrl +"/web/event/fromwe&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
+        res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=" + mybaseUrl +"/event/fromwe&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
     }
     else {
         db.new_user(req.session.openid,function(res2){
@@ -55,7 +55,8 @@ exports.event_index = function(req,res){
                         res.render("gift_list", obj);
                     })
                 }
-                res.send(500);
+                else
+                    res.send(500);
 
             })
         })

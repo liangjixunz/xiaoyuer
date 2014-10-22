@@ -90,7 +90,7 @@
         openid =data;
     })
     WeixinApi.ready(function(Api) {
-
+        Api.hideToolbar();
         var is_over = window.location.search.slice(1);
         is_over = (is_over.match(/&over=\d/)?is_over.match(/&over=\d/):[0])[0].slice(-1);
          if(is_over==1)
