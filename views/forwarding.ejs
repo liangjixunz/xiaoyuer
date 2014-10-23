@@ -8,6 +8,7 @@
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" type="text/css" href="/stylesheets/pro.css?embed" />
     <link rel="stylesheet" type="text/css" href="/vendor/ionicons/css/ionicons.css" />
+    <link href="/stylesheets/head.css" rel="stylesheet" type="text/css" />
     <style>
         .my-banner {
             margin-bottom: 20px;
@@ -132,6 +133,14 @@
 
 <body class="ui-app">
 <!-- 一个App可以多个page -->
+<div class="ui-top-bar js-no-bounce">
+    <div class="ui-tab page1 js-active">
+        <div class="header" id="header">
+            <a class="back" href="javascript:history.back();"></a>
+            <span class="headline"><%=event_title%></span>
+        </div>
+    </div>
+</div>
 <div class="ui-page page1 js-active">
 
     <div class="ui-page-content">
@@ -156,9 +165,7 @@
                         </div>
                     </div>
                 </li>
-                <li class="ui-item ">
-                    <a><%=event_title%><span class="ui-right"></span> </a>
-                  </li>
+
                 <li  class="ui-item ">
                     <a class="ui-gray">提供：创客汇南京<span class="ui-right"></span> </a>
                     <a class="ui-red">库存：10<span class="ui-right"></span> </a>

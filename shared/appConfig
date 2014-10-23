@@ -5,7 +5,7 @@
 "token":"xye",
 "mybaseUrl":"http://ber.chinacloudapp.cn/web",
 "pic_base":"http://wj.xiaoyuer.com/",
-"pic_roots":"/home/aesop/html/images/",
+"pic_roots":"C:/Users/XXL/Desktop/nginx-1.7.6/html/images/",
 "email":{
 "hr_email":"Service@xiaoyuer.com"
  }

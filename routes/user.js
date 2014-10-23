@@ -1,5 +1,5 @@
 var userInfo = require("xiaoyuer/userInfo"),
-    order = require("xiaoyuer/order"),
+    orders = require("xiaoyuer/order"),
     hire = require("xiaoyuer/hire")
     fs = require("fs"),
     seek = require("xiaoyuer/seek");
@@ -21,37 +21,65 @@ exports.util = function(req,res){
 * 以为非阻塞，所以使用了事件保证两件事都完成
  */
 exports.order = (function(){
-
     var AppID = JSON.parse(fs.readFileSync(__dirname+"/../shared/appConfig")).AppID;
     var AppSecret = JSON.parse(fs.readFileSync(__dirname+"/../shared/appConfig")).AppSecret;
     function index(req,res){
         user_info(req,res,function(result){
-            if(result==-1){
-
+            console.log(result);
+            if(result == -1){
+                  ;
             }
             else{
                 var  render_obj = {};
                 var count = 0;
-                render_obj.user_info = result;
-                order.get_require_order(req.session.openid,1,function(result1){
-                    noteReady.emit("req_ready");
-                    render_obj.require = result1;
-                })
-                order.get_service_order(req.session.openid,1,function(result2){
-                    noteReady.emit("ser_ready");
-                    render_obj.service = result2;
-                })
-                noteReady.on("req_ready",function(){
+                render_obj.user = result;
+                for(var value in orders.get_order_list){
+                    (function(){
+                        var value1 = value;
+                        orders.get_order_list[value1](req.session.openid,1,function(result1){
+                            if(result1.coder == '0'){
+                               var temp = [];
+                                var temp1 ={};
+                               result1.forEach(function(values){
+                                   temp1 = JSON.parse(values);
+                                   try{
+                                       temp1.suserpic = "/images/"+pic_cache.cache(temp1.suserpic.match(/files\/[\s\S]+]/));
+                                   }
+                                   catch (e){
+                                       console.log(e);
+                                   }
+                                   try{
+                                       temp1.ruserpic = "/images/"+pic_cache.cache(temp1.ruserpic.match(/files\/[\s\S]+]/));
+                                   }
+                                   catch (e){
+                                       console.log(e);
+                                   }
+                                   try{
+                                       temp1.userpic = "/images/"+pic_cache.cache(temp1.userpic.match(/files\/[\s\S]+]/));
+                                   }
+                                   catch (e){
+                                       console.log(e);
+                                   }
+                                   temp[temp.length] = temp1;
+                               });
+                                render_obj[value1]= temp;
+                            }
+                            else{
+                                render_obj[value1]= [];
+                            }
+                            noteReady.emit("ready");
+
+                        });
+                    })();
+                }
+                noteReady.on("ready",function(){
                     count +=1;
-                    if(count == 2){
+                    if(count == 10){
+                        console.log(render_obj);
                         res.render("orderlist",render_obj);
+                        count = 0;
                     }
-                })
-                noteReady.on("ser_ready",function(){
-                    count +=1;
-                    if(count == 2){
-                        res.render("orderlist",render_obj);
-                    }
+
                 })
             }
         })
@@ -59,20 +87,30 @@ exports.order = (function(){
     /*
     *分页获取服务单信息
      */
-    function service(req,res){
-        order.get_service_order(req.session.openid,req.query.page,function(result){
+    function service1(req,res){
+        orders.get_order_list.service1(req.session.openid,req.query.page,function(result){
+            res.send(result);
+        })
+    }
+    function service2(req,res){
+        orders.get_order_list.service2(req.session.openid,req.query.page,function(result){
             res.send(result);
         })
     }
     /*
      *分页获取需求单信息
      */
-    function require(req,res){
-        order.get_require_order(req.session.openid,req.query.page,function(result){
+    function require1(req,res){
+        orders.get_order_list.require1(req.session.openid,req.query.page,function(result){
             res.send(result);
         })
     }
 
+    function require2(req,res){
+        orders.get_order_list.service2(req.session.openid,req.query.page,function(result){
+            res.send(result);
+        })
+    }
     /*
     *获取用户信息
     * 若不存在openid的session则跳转
@@ -84,7 +122,8 @@ exports.order = (function(){
                 switch(result.code){
                     case '0':
                         if(result.photo){
-                            result.photo = "/images/"+pic_cache(result.phto);
+                            var uri =  result.photo.match(/files\/[\S\s]+/)[0];
+                            result.photo = "/images/"+pic_cache.cache(result.phto);
                         }
                         callback(result);
                         break;
@@ -97,6 +136,7 @@ exports.order = (function(){
             })
         }
         else{
+            callback(-1);
             res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=" + mybaseUrl +"/order/fromwe&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
 
         }
@@ -137,54 +177,14 @@ exports.order = (function(){
     }
     return {
         index:index,
-        service:service,
-        require:require,
+        service1:service1,
+        require1:require1,
+        service2:service2,
+        require1:require2,
         set_session:set_session,
         info:info
     }
 })();
-
-exports.order_test = function(req,res){
-    res.render('orderlist',{
-        username:"愚吉",
-        credit:"三星",
-        page1:{
-            order_list:[{
-                id:31244444434,
-                price:"5000/次",
-                generate_time:"Tue Sep 30 2014 09:10:38 GMT+0800"
-            },
-                {
-                    id:31244444434,
-                    price:"5000/次",
-                    generate_time:"Tue Sep 30 2014 09:10:38 GMT+0800"
-                },
-                {
-                    id:31244444434,
-                    price:"5000/次",
-                    generate_time:"Tue Sep 30 2014 09:10:38 GMT+0800"
-                }]
-        },
-        page2:{
-            order_list:[{
-                id:31244444434,
-                price:"1000/次",
-                generate_time:"Tue Sep 30 2014 09:10:38 GMT+0800"
-            },
-                {
-                    id:31244444434,
-                    price:"51000/次",
-                    generate_time:"Tue Sep 30 2014 09:10:38 GMT+0800"
-                },
-                {
-                    id:31244444434,
-                    price:"1000/次",
-                    generate_time:"Tue Sep 30 2014 09:10:38 GMT+0800"
-                }]
-        }
-
-    });
-}
 
 /*
  *发现
@@ -547,7 +547,7 @@ exports.kf = (function(){
     return {
         user_info :user_info,
         order_require: function(req,res){
-            order.get_require_order(req.query.openid,req.query.page,function(result){
+            orders.get_require_order(req.query.openid,req.query.page,function(result){
                 res.send(result);
             })
         },
@@ -556,7 +556,7 @@ exports.kf = (function(){
          *获取用户服务订单列表
          */
         order_service:  function(req,res){
-            order.get_service_order(req.query.openid,req.query.page,function(result){
+            orders.get_service_order(req.query.openid,req.query.page,function(result){
                 res.send(result);
             })
         }
@@ -594,11 +594,13 @@ exports.login = function(req,res){
 *检测用户名
  */
 exports.check_username = function(req,res){
-    var username = req.query.username;
+    var username = decodeURI(req.query.username);
     userInfo.check_nick(username,function(result){
          switch (result){
              case '0':
+                 req.session.username = username;
                  res.send(JSON.stringify({code:0,info:"可用"}));
+
                  break;
              case '-3':
                  res.send(JSON.stringify({code:-1,info:"已被注册"}));
@@ -617,7 +619,9 @@ exports.check_mobile = function(req,res){
     userInfo.check_mobile(phone_number,function(result){
         switch (result){
             case '0':
+                req.session.mobile = phone_number;
                 res.send(JSON.stringify({code:0,info:"可用"}));
+
                 break;
             case '-3':
                 res.send(JSON.stringify({code:-1,info:"已被注册"}));
@@ -664,7 +668,8 @@ exports.check_cert = function(req,res){
  */
 exports.register = function(req,res){
     var body = req.body;
-    userInfo.register(req.session.openid,body.user_name,body.password,body.mobile_num,function(result){
+    console.log(body);
+    userInfo.register(req.session.openid,req.session.username,body.password,req.session.mobile,function(result){
           if(result.code=='0')
             res.redirect("/user/reg_success.html")
     })

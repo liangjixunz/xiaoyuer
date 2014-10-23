@@ -8,6 +8,7 @@
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" type="text/css" href="/stylesheets/pro.css?embed" />
     <link rel="stylesheet" type="text/css" href="/vendor/ionicons/css/ionicons.css" />
+
     <style>
         .my-banner {
             margin-bottom: 20px;
@@ -153,7 +154,7 @@
                             <img width="100%" src = "/images/1.jpg">
                         </div>
                         <div class="my-item-right"><span class="ui-right ui-gray">还可转<span class="ui-red"><%=value.left_time%></span>次</span>
-                            <p class="ui-no-wrap">活动名称：<%=value.event_name%></p>
+                            <p class="ui-no-wrap"><%=value.event_name%></p>
                             <p class="ui-red">可用</p>
                             <p class="ui-gray">截止日期:<%=new Date(value.event_finish).Format("yyyy-MM-dd hh:mm:ss")%></p>
                         </div>

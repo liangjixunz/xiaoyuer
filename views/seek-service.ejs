@@ -134,12 +134,14 @@
                 <%items.forEach(function(value){%>
                 <li class="ui-item ui-ignore-space  arrow-right"><a href="/web/seek/<%=type_id%>/info?id=<%=value.id%>">
                         <div class="my-item-left">
-                            <img src ="<%=value.serviceImageAtt%>" width="100%">
+                            <img src ="<%=value.serviceImageAtt%>" width="100%" height="100%">
                         </div>
                         <div class="my-item-right ">
-                            <p class="ui-no-wrap"><%=value.servTitle%><span class="ui-right ui-red"><img src="/images/thums-up.png"> <%=value.recommendCount%></span></p>
-                            <p class="ui-gray" id = "the-code">提供：<%=value.releaseUsername%></p>
-                            <p class="ui-red">单价：<%=value.perPrice%><span class="ui-right ui-red"><img src="/images/hand-shake.png"><%=value.dealedCount%></span></p>
+                            <p class="ui-no-wrap"><%=value.servTitle%></p>
+                            <p class="ui-gray" >提供：<%=value.releaseUsername%></p>
+                            <p class="ui-red">单价：<%=value.perPrice%></p>
+                            <p class="ui-gray">推荐：<%=value.recommendCount%></p>
+                            <p class="ui-gray" >成交：<%=value.dealedCount%></p>
                         </div>
                     </a>
                 </li>

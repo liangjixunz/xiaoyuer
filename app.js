@@ -58,9 +58,9 @@ app.get('/kf/order/require',routes.user.kf.order_require)
 /*
 *用户的订单列表
  */
-app.get('/order/index', routes.user.order_test);
-app.get('/order/service',routes.user.order.service);
-app.get('/order/require',routes.user.order.require);
+app.get('/order/index', routes.user.order.index);
+app.get('/order/service1',routes.user.order.service1);
+app.get('/order/require1',routes.user.order.require1);
 app.get('/order/fromwe',routes.user.order.set_session);
 app.get('/order/info',routes.user.order.info)
 /*

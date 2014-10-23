@@ -138,9 +138,10 @@
                         </div>
                         <div class="my-item-right ">
                             <p class="ui-no-wrap"><%=value.welfareProjectTitle%></p>
-                            <p class="ui-gray" id = "the-code">发布者：<span class="ui-red"><%=value.releaseUserName%></span><span class="ui-right"><%=value.province%>  <%=value.city%></span></p>
-                            <p class="ui-no-wrap ui-gray"> 截止：<%=value.apllayEndTime%><span class="ui-right ui-red">已报名:<%=value.apllayCount%>/<%=value.chooseUserCount%></span></p>
-                        </div>
+                            <p class="ui-gray" id = "the-code">发布者：<span class="ui-red"><%=value.releaseUserName%></span></p>
+                            <p class="ui-no-wrap ui-gray"> 截止：<%=value.apllayEndTime%></p>
+                            <p class="ui-no-wrap ui-gray">城市： &nbsp;<span><%=value.province%><%=value.city%></span></p>
+                            <p class="ui-no-wrap"><span class=" ui-red">已报名:<%=value.apllayCount%>/<%=value.chooseUserCount%></span></p></div>
                     </a>
                 </li>
                 <%})}%>

@@ -207,12 +207,56 @@
 <div class="ui-top-bar js-no-bounce">
     <div class="ui-tab page1 js-active">
         <ul class="ui-groupbutton" role="tablist">
-            <li class="ui-button js-active" data-toggle="tab" data-target="#page1-tab1" aria-controls="tab1" role="tab">需求</li>
-            <li class="ui-button" data-toggle="tab" data-target="#page1-tab2" aria-controls="tab2" role="tab">服务</li>
-            <li class="ui-button " data-toggle="tab" data-target="#page1-tab3" aria-controls="tab1" role="tab">大赛</li>
-            <li class="ui-button" data-toggle="tab" data-target="#page1-tab4" aria-controls="tab2" role="tab">公益</li>
+            <li class="ui-button js-active" data-toggle="tab" data-target="#page1-tab1" aria-controls="tab1" role="tab">我发布的</li>
+            <li class="ui-button" data-toggle="tab" data-target="#page1-tab2" aria-controls="tab2" role="tab">我参与的</li>
         </ul>
     </div>
+    <div class="ui-tab page2">
+        <ul class="ui-groupbutton" role="tablist">
+            <li class="ui-button js-active" data-toggle="tab" data-target="#page2-tab1" aria-controls="tab1" role="tab">我发布的</li>
+            <li class="ui-button" data-toggle="tab" data-target="#page2-tab2" aria-controls="tab2" role="tab">我参与的</li>
+        </ul>
+    </div>
+    <div class="ui-tab page3">
+        <ul class="ui-groupbutton" role="tablist">
+            <li class="ui-button js-active" data-toggle="tab" data-target="#page3-tab1" aria-controls="tab1" role="tab">我发布的</li>
+            <li class="ui-button" data-toggle="tab" data-target="#page3-tab2" aria-controls="tab2" role="tab">我参与的</li>
+        </ul>
+    </div>
+    <div class="ui-tab page4">
+        <ul class="ui-groupbutton" role="tablist">
+            <li class="ui-button js-active" data-toggle="tab" data-target="#page4-tab1" aria-controls="tab1" role="tab">我发布的</li>
+            <li class="ui-button" data-toggle="tab" data-target="#page4-tab2" aria-controls="tab2" role="tab">我参与的</li>
+        </ul>
+    </div>
+    <div class="ui-tab page5">
+        <ul class="ui-groupbutton" role="tablist">
+            <li class="ui-button js-active" data-toggle="tab" data-target="#page5-tab1" aria-controls="tab1" role="tab">我发布的</li>
+            <li class="ui-button" data-toggle="tab" data-target="#page5-tab2" aria-controls="tab2" role="tab">我参与的</li>
+        </ul>
+    </div>
+</div>
+<div class="ui-bottom-bar js-no-bounce" role="toolbar"> <!-- tabindex="0" 在android上会触发一个高亮边框 -->
+    <a class="ui-bottom-bar-button js-active" role="button" data-toggle="tab" data-target=".page1">
+        <span class="ui-icon ion-ios7-camera-outline"></span>
+        <span class="ui-label">服务</span>
+    </a>
+    <a class="ui-bottom-bar-button" role="button" data-toggle="tab" data-target=".page2">
+        <span class="ui-icon ion-ios7-stopwatch-outline"></span>
+        <span class="ui-label">需求</span>
+    </a>
+    <a class="ui-bottom-bar-button" role="button" data-toggle="tab" data-target=".page3">
+        <span class="ui-icon ion-ios7-star-outline"></span>
+        <span class="ui-label">大赛</span>
+    </a>
+    <a class="ui-bottom-bar-button" role="button" data-toggle="tab" data-target=".page4">
+        <span class="ui-icon ion-ios7-gear-outline"></span>
+        <span class="ui-label">公益需求</span>
+    </a>
+    <a class="ui-bottom-bar-button" role="button" data-toggle="tab" data-target=".page4">
+        <span class="ui-icon ion-ios7-gear-outline"></span>
+        <span class="ui-label">公益服务</span>
+    </a>
 </div>
 
 <!-- 一个App可以多个page -->
@@ -225,68 +269,221 @@
 
              
             <ul class="ui-list" >
-               
+
                 <li class="ui-item ui-ignore-space"><a href="#">
-                    <div class="my-item-left">
-                       <img src = "/images/1.jpg" width="100%">
-                    </div>
-                    <div class="my-item-right">
-                         <p class="ui-no-wrap">愚吉</p>
-                        <p class="ui-grey" id = "the-code">积分: 88888888</p>
-                        <p class="ui-red">我的信誉：<%=credit%></p>
-                    </div>
-                </a></li>
-            </ul>
-            <ul class="ui-list arrow-right" id = "order-list">
-			<%if(page1.order_list.length){%>
-			<%page1.order_list.forEach(function(value){%>
-                <li class="ui-item"><a href="info?id=<%=value.id%>">订单号：<%=value.id%><span class="ui-right">状态：<span class="ui-red"> 待商定</span></span>
                         <div class="my-item-left">
-                            <img src = "/images/1.jpg" width="100%">
+                            <img src = "<%=user.photo?user.phpto:"/images/1.jpg"%>" width="100%" height="100%">
                         </div>
                         <div class="my-item-right">
-					<p class="ui-no-wrap">微信公众号开发</p>
-					<p class="ui-red">￥: <%=value.price%></p>
-					<p class="ui-gray">生成日期：<%=new Date(value.generate_time).Format("yyyy-MM-dd hh:mm:ss")%></p>
+                            <p class="ui-no-wrap"><%=user.nickName%></p>
+                            <p class="ui-grey" >靠谱度:<%=user.kaopu%></p>
+                            <p class="ui-red">给力度：<%=user.geili%></p>
+                        </div>
+                    </a></li>
+            </ul>
+            <%if(require1.length){%>
+            <ul class="ui-list arrow-right" id = "order-list">
+
+			<%require1.forEach(function(value){%>
+                <li class="ui-item"><a href="info?id=<%=value.id%>&type=require"><%=value.title%><span class="ui-right">状态：<span class="ui-red"> <%=value.status%></span></span>
+                        <div class="my-item-left">
+                            <img src = "<%=value.userpic%>" width="100%">
+                        </div>
+                        <div class="my-item-right">
+					<p class="ui-no-wrap">订单流水：<%=value.ordersn%></p>
+					<p class="ui-gray">生成日期：<%=starttime%></p>
+                    <p class="ui-gray">截止日期：<%=finishtime%></p>
+                    <p class="ui-red">价格： <%=value.orderPrice%></p>
 				</div>
 				</a></li>
+            </ul>
 			<%})}%>
 
-            </ul>
-            <p align="center" id="show-more-orderA" style=""><a id= "more-orderA" class="ui-gray">  点击加载更多……</a></p>
-            <p class="ui-panel" id="show-load-orderA"  style="display:none;position:relative; height: 50px;">
-                <span data-spinner data-color="0,0,0"> </span>
-            </p>
+
+            <%if(require1.length==6){%>
+            <p align="center" id="show-more-items" style="" ><span id= "more-items" class="ui-gray" > 点击加载更多……</span></p>
+            <div  id="show-load-items"  style="display:none;">
+                <div id="load"></div>
+            </div>
+
+            <%}%>
 
            </div>
-        <div class="ui-tab" id="page1-tab2" role="tabpane1">
+
+        <div class="ui-tab" id="page1-tab2" role="tabpanel">
 
 
             <ul class="ui-list" >
 
                 <li class="ui-item ui-ignore-space"><a href="#">
                         <div class="my-item-left">
-                            <img src = "/images/1.jpg" width="100%">
+                            <img src = "<%=user.photo?user.phpto:"/images/1.jpg"%>" width="100%" height="100%">
                         </div>
                         <div class="my-item-right">
-                            <p class="ui-no-wrap">笨笨</p>
-                            <p class="ui-grey" id = "the-code">积分: 88888888</p>
-                            <p class="ui-red">我的信誉：<%=credit%></p>
+                            <p class="ui-no-wrap"><%=user.nickName%></p>
+                            <p class="ui-grey" >靠谱度:<%=user.kaopu%></p>
+                            <p class="ui-red">给力度：<%=user.geili%></p>
                         </div>
                     </a></li>
             </ul>
+            <%if(require2.length){%>
             <ul class="ui-list arrow-right" id = "order-list">
-                <%if(page2.order_list.length){%>
-                <%page2.order_list.forEach(function(value){%>
 
-                <li class="ui-item"><a href="info?id=<%=value.id%>">订单号：<%=value.id%><span class="ui-right">状态：<span class="ui-red"> 待商定</span></span>
+                <%require2.forEach(function(value){%>
+                <li class="ui-item"><a href="info?id=<%=value.id%>&type=require"><%=value.title%><span class="ui-right">状态：<span class="ui-red"> <%=value.status%></span></span>
                         <div class="my-item-left">
-                            <img src = "/images/1.jpg" width="100%">
+                            <img src = "<%=value.userpic%>" width="100%">
                         </div>
                         <div class="my-item-right">
-                            <p class="ui-no-wrap">微信公众号开发</p>
-                            <p class="ui-red">￥: <%=value.price%></p>
-                            <p class="ui-gray">生成日期：<%=new Date(value.generate_time).Format("yyyy-MM-dd hh:mm:ss")%></p>
+                            <p class="ui-no-wrap">订单流水：<%=value.ordersn%></p>
+                            <p class="ui-gray">生成日期：<%=starttime%></p>
+                            <p class="ui-gray">截止日期：<%=finishtime%></p>
+                            <p class="ui-red">价格： <%=value.orderPrice%></p>
+                        </div>
+                    </a></li>
+            </ul>
+                <%})}%>
+
+
+            <%if(require2.length==6){%>
+            <p align="center" id="show-more-items" style="" ><span id= "more-items" class="ui-gray" > 点击加载更多……</span></p>
+            <div  id="show-load-items"  style="display:none;">
+                <div id="load"></div>
+            </div>
+
+            <%}%>
+
+        </div>
+
+</div>
+
+
+</div>
+
+
+<div class="ui-page page2">
+
+    <div class="ui-page-content">
+        <div class="ui-tab js-active" id="page2-tab1" role="tabpane1">
+
+            <ul class="ui-list" >
+
+                <li class="ui-item ui-ignore-space"><a href="#">
+                        <div class="my-item-left">
+                            <img src = "<%=user.photo?user.phpto:"/images/1.jpg"%>" width="100%" height="100%">
+                        </div>
+                        <div class="my-item-right">
+                            <p class="ui-no-wrap"><%=user.nickName%></p>
+                            <p class="ui-grey" >靠谱度:<%=user.kaopu%></p>
+                            <p class="ui-red">给力度：<%=user.geili%></p>
+                        </div>
+                    </a></li>
+            </ul>
+            <%if(service1.length){%>
+            <ul class="ui-list arrow-right" id = "order-list">
+
+                <%service1.forEach(function(value){%>
+
+                <li class="ui-item"><a href="info?id=<%=value.id%>&type=service"><span class="ui-red"><%=value.title%></span><span class="ui-right">状态：<span class="ui-red"> <%=value.status%></span></span>
+                        <div class="my-item-left">
+                            <img src = "<%=value.suserpic%>" width="100%" height="100%">
+                        </div>
+                        <div class="my-item-right">
+                            <p class="ui-no-wrap">订单流水：<%=value.ordersn%></p>
+                            <p class="ui-gray">生成日期：<%=value.starttime%></p>
+                            <p class="ui-gray">提供者：<%=value.snickName%></p>
+                            <p class="ui-red">价格： <%=value.orderPrice%></p>
+                        </div>
+                    </a></li>
+
+                <%})}%>
+                <%if(service1.length==6){%>
+                <p align="center" id="show-more-items" style="" ><span id= "more-items" class="ui-gray" > 点击加载更多……</span></p>
+                <div  id="show-load-items"  style="display:none;">
+                    <div id="load"></div>
+                </div>
+            </ul>
+                <%}%>
+
+        </div>
+        <div class="ui-tab" id="page2-tab2" role="tabpane2">
+
+
+            <ul class="ui-list" >
+
+                <li class="ui-item ui-ignore-space"><a href="#">
+                        <div class="my-item-left">
+                            <img src = "<%=user.photo?user.phpto:"/images/1.jpg"%>" width="100%" height="100%">
+                        </div>
+                        <div class="my-item-right">
+                            <p class="ui-no-wrap"><%=user.nickName%></p>
+                            <p class="ui-grey" >靠谱度:<%=user.kaopu%></p>
+                            <p class="ui-red">给力度：<%=user.geili%></p>
+                        </div>
+                    </a></li>
+            </ul>
+            <%if(service2.length){%>
+            <ul class="ui-list arrow-right" id = "order-list">
+
+                <%service2.forEach(function(value){%>
+
+                <li class="ui-item"><a href="info?id=<%=value.id%>&type=service"><span class="ui-red"><%=value.title%></span><span class="ui-right">状态：<span class="ui-red"> <%=value.status%></span></span>
+                        <div class="my-item-left">
+                            <img src = "<%=value.suserpic%>" width="100%" height="100%">
+                        </div>
+                        <div class="my-item-right">
+                            <p class="ui-no-wrap">订单流水：<%=value.ordersn%></p>
+                            <p class="ui-gray">生成日期：<%=value.starttime%></p>
+                            <p class="ui-gray">提供者：<%=value.snickName%></p>
+                            <p class="ui-red">价格： <%=value.orderPrice%></p>
+                        </div>
+                    </a></li>
+
+                <%})}%>
+                <%if(service2.length==6){%>
+                <p align="center" id="show-more-items" style="" ><span id= "more-items" class="ui-gray" > 点击加载更多……</span></p>
+                <div  id="show-load-items"  style="display:none;">
+                    <div id="load"></div>
+                </div>
+            </ul>
+                <%}%>
+        </div>
+        </div>
+
+    </div>
+<div class="ui-page page3">
+
+    <div class="ui-page-content">
+        <div class="ui-tab js-active" id="page3-tab1" role="tabpane1">
+
+
+            <ul class="ui-list" >
+
+                <li class="ui-item ui-ignore-space"><a href="#">
+                        <div class="my-item-left">
+                            <img src = "<%=user.photo?user.phpto:"/images/1.jpg"%>" width="100%" height="100%">
+                        </div>
+                        <div class="my-item-right">
+                            <p class="ui-no-wrap"><%=user.nickName%></p>
+                            <p class="ui-grey" >靠谱度:<%=user.kaopu%></p>
+                            <p class="ui-red">给力度：<%=user.geili%></p>
+                        </div>
+                    </a></li>
+            </ul>
+            <%if(game1.length){%>
+            <ul class="ui-list arrow-right" id = "order-list">
+
+                <%game1.forEach(function(value){%>
+
+                <li class="ui-item"><a href="info?id=<%=value.id%>&type=game"><%=value.title%><span class="ui-right">状态：<span class="ui-red"> 待商定</span></span>
+                        <div class="my-item-left">
+                            <img src = "<%=value.userpic%>" width="100%" height="100%">
+                        </div>
+                        <div class="my-item-right">
+                            <p class="ui-no-wrap">订单流水:<%=value.ordersn%></p>
+                            <p class="ui-gray">生成日期：<%=starttime%></p>
+                            <p class="ui-gray">截止日期：<%=finishtime%></p>
+                            <p class="ui-red">价格： <%=value.orderPrice%></p>
                         </div>
                     </a></li>
 
@@ -295,19 +492,248 @@
 
             </ul>
 
-            <p align="center" id="show-more-items" style=""><a id= "more-items" class="ui-gray"> 上拉加载更多……</a></p>
+            <%if(game1.length==6){%>
+            <p align="center" id="show-more-items" style="" ><span id= "more-items" class="ui-gray" > 点击加载更多……</span></p>
             <div  id="show-load-items"  style="display:none;">
                 <div id="load"></div>
             </div>
 
+            <%}%>
         </div>
-</div>
+        <div class="ui-tab" id="page3-tab2" role="tabpane2">
 
 
-</div>
+            <ul class="ui-list" >
 
-        <!-- 主体内容 -->
+                <li class="ui-item ui-ignore-space"><a href="#">
+                        <div class="my-item-left">
+                            <img src = "<%=user.photo?user.phpto:"/images/1.jpg"%>" width="100%" height="100%">
+                        </div>
+                        <div class="my-item-right">
+                            <p class="ui-no-wrap"><%=user.nickName%></p>
+                            <p class="ui-grey" >靠谱度:<%=user.kaopu%></p>
+                            <p class="ui-red">给力度：<%=user.geili%></p>
+                        </div>
+                    </a></li>
+            </ul>
+            <ul class="ui-list arrow-right" id = "order-list">
+                <%if(game2.length){%>
+                <%game2.forEach(function(value){%>
 
+                <li class="ui-item"><a href="info?id=<%=value.id%>&type=game"><%=value.title%><span class="ui-right">状态：<span class="ui-red"> 待商定</span></span>
+                        <div class="my-item-left">
+                            <img src = "<%=value.userpic%>" width="100%" height="100%">
+                        </div>
+                        <div class="my-item-right">
+                            <p class="ui-no-wrap">订单流水:<%=value.ordersn%></p>
+                            <p class="ui-gray">生成日期：<%=starttime%></p>
+                            <p class="ui-gray">截止日期：<%=finishtime%></p>
+                            <p class="ui-red">价格： <%=value.orderPrice%></p>
+                        </div>
+                    </a></li>
+            </ul>
+            <%})}%>
+            <%if(game2.length==6){%>
+            <p align="center" id="show-more-items" style="" ><span id= "more-items" class="ui-gray" > 点击加载更多……</span></p>
+            <div  id="show-load-items"  style="display:none;">
+                <div id="load"></div>
+            </div>
+
+            <%}%>
+        </div>
+    </div>
+    </div>
+
+<div class="ui-page page4">
+    <div class="ui-page-content">
+        <div class="ui-tab js-active" id="page4-tab1" role="tabpane1">
+
+
+            <ul class="ui-list" >
+
+                <li class="ui-item ui-ignore-space"><a href="#">
+                        <div class="my-item-left">
+                            <img src = "<%=user.photo?user.phpto:"/images/1.jpg"%>" width="100%" height="100%">
+                        </div>
+                        <div class="my-item-right">
+                            <p class="ui-no-wrap"><%=user.nickName%></p>
+                            <p class="ui-grey" >靠谱度:<%=user.kaopu%></p>
+                            <p class="ui-red">给力度：<%=user.geili%></p>
+                        </div>
+                    </a></li>
+            </ul>
+            <%if(wrequire1.length){%>
+            <ul class="ui-list arrow-right" id = "order-list">
+
+                <%wrequire1.forEach(function(value){%>
+
+                <li class="ui-item"><a href="info?id=<%=value.id%>&type=wrequire"><%=value.title%>
+                        <div class="my-item-left">
+                            <img src = "<%=value.userpic%>" width="100%" height="100%">
+                        </div>
+                        <div class="my-item-right">
+                            <p class="ui-no-wrap">订单流水：<%=value.ordersn%></p>
+                            <p class="ui-gray">生成日期：<%=value.starttime%></p>
+                            <p class="ui-gray">截止日期：<%=value.finishtime%></p>
+                            <p class="ui-gray">价格：<span class="ui-red"><%=value.orderPrice%></span></p>
+                            <p class="ui-no-wrap"><span class="ui-gray">状态：<span class="ui-red"><%=value.orderStatus%></span> </span></p>
+                        </div>
+                    </a></li>
+            </ul>
+                <%})}%>
+
+            <%if(wrequire1.length==6){%>
+            <p align="center" id="show-more-items" style="" ><span id= "more-items" class="ui-gray" > 点击加载更多……</span></p>
+            <div  id="show-load-items"  style="display:none;">
+                <div id="load"></div>
+            </div>
+
+            <%}%>
+
+        </div>
+        <div class="ui-tab" id="page4-tab2" role="tabpane2">
+
+
+            <ul class="ui-list" >
+
+                <li class="ui-item ui-ignore-space"><a href="#">
+                        <div class="my-item-left">
+                            <img src = "<%=user.photo?user.phpto:"/images/1.jpg"%>" width="100%" height="100%">
+                        </div>
+                        <div class="my-item-right">
+                            <p class="ui-no-wrap"><%=user.nickName%></p>
+                            <p class="ui-grey" >靠谱度:<%=user.kaopu%></p>
+                            <p class="ui-red">给力度：<%=user.geili%></p>
+                        </div>
+                    </a></li>
+            </ul>
+            <ul class="ui-list arrow-right" id = "order-list">
+                <%if(wrequire2.length){%>
+                <%wrequire2.forEach(function(value){%>
+
+                <li class="ui-item"><a href="info?id=<%=value.id%>&type=wrequire"><%=value.title%>
+                        <div class="my-item-left">
+                            <img src = "<%=value.userpic%>" width="100%" height="100%">
+                        </div>
+                        <div class="my-item-right">
+                            <p class="ui-no-wrap">订单流水：<%=value.ordersn%></p>
+                            <p class="ui-gray">生成日期：<%=value.starttime%></p>
+                            <p class="ui-gray">截止日期：<%=value.finishtime%></p>
+                            <p class="ui-gray">价格：<span class="ui-red"><%=value.orderPrice%></span></p>
+                            <p class="ui-no-wrap"><span class="ui-gray">状态：<span class="ui-red"><%=value.orderStatus%></span> </span></p>
+                        </div>
+                    </a></li>
+
+                <%})}%>
+
+
+
+            </ul>
+
+            <%if(wrequire2.length==6){%>
+            <p align="center" id="show-more-items" style="" ><span id= "more-items" class="ui-gray" > 点击加载更多……</span></p>
+            <div  id="show-load-items"  style="display:none;">
+                <div id="load"></div>
+            </div>
+
+            <%}%>
+
+        </div>
+        </div>
+    </div>
+<div class="ui-page page5">
+    <div class="ui-page-content">
+        <div class="ui-tab js-active" id="page5-tab1" role="tabpane1">
+
+
+            <ul class="ui-list" >
+
+                <li class="ui-item ui-ignore-space"><a href="#">
+                        <div class="my-item-left">
+                            <img src = "<%=user.photo?user.phpto:"/images/1.jpg"%>" width="100%" height="100%">
+                        </div>
+                        <div class="my-item-right">
+                            <p class="ui-no-wrap"><%=user.nickName%></p>
+                            <p class="ui-grey" >靠谱度:<%=user.kaopu%></p>
+                            <p class="ui-red">给力度：<%=user.geili%></p>
+                        </div>
+                    </a></li>
+            </ul>
+            <%if(wservice1.length){%>
+            <ul class="ui-list arrow-right" id = "order-list">
+                <%wservice1.forEach(function(value){%>
+
+                <li class="ui-item"><a href="info?id=<%=value.id%>&type=wservice"><%=value.title%>
+                        <div class="my-item-left">
+                            <img src = "<%=value.userpic%>" width="100%" height="100%">
+                        </div>
+                        <div class="my-item-right">
+                            <p class="ui-no-wrap">订单流水：<%=value.ordersn%></p>
+                            <p class="ui-gray">生成日期：<%=value.starttime%></p>
+                            <p class="ui-gray">截止日期：<%=value.finishtime%></p>
+                            <p class="ui-gray">价格：<span class="ui-red"><%=value.orderPrice%></span></p>
+                            <p class="ui-no-wrap"><span class="ui-gray">状态：<span class="ui-red"><%=value.orderStatus%></span> </span></p>
+                        </div>
+                    </a></li>
+            </ul>
+                <%})}%>
+
+         <%if(wservice1.length==6){%>
+            <p align="center" id="show-more-items" style="" ><span id= "more-items" class="ui-gray" > 点击加载更多……</span></p>
+            <div  id="show-load-items"  style="display:none;">
+                <div id="load"></div>
+            </div>
+
+            <%}%>
+
+        </div>
+        <div class="ui-tab" id="page5-tab2" role="tabpane2">
+
+
+            <ul class="ui-list" >
+
+                <li class="ui-item ui-ignore-space"><a href="#">
+                        <div class="my-item-left">
+                            <img src = "<%=user.photo?user.phpto:"/images/1.jpg"%>" width="100%" height="100%">
+                        </div>
+                        <div class="my-item-right">
+                            <p class="ui-no-wrap"><%=user.nickName%></p>
+                            <p class="ui-grey" >靠谱度:<%=user.kaopu%></p>
+                            <p class="ui-red">给力度：<%=user.geili%></p>
+                        </div>
+                    </a></li>
+            </ul>
+            <%if(wservice2.length){%>
+            <ul class="ui-list arrow-right" id = "order-list">
+
+                <%wservice2.forEach(function(value){%>
+
+                <li class="ui-item"><a href="info?id=<%=value.id%>&type=wservice"><%=value.title%>
+                        <div class="my-item-left">
+                            <img src = "<%=value.userpic%>" width="100%" height="100%">
+                        </div>
+                        <div class="my-item-right">
+                            <p class="ui-no-wrap">订单流水：<%=value.ordersn%></p>
+                            <p class="ui-gray">生成日期：<%=value.starttime%></p>
+                            <p class="ui-gray">截止日期：<%=value.finishtime%></p>
+                            <p class="ui-gray">价格：<span class="ui-red"><%=value.orderPrice%></span></p>
+                            <p class="ui-no-wrap"><span class="ui-gray">状态：<span class="ui-red"><%=value.orderStatus%></span> </span></p>
+                        </div>
+                    </a></li>
+            </ul>
+                <%})}%>
+
+            <%if(wservice2.length==6){%>
+            <p align="center" id="show-more-items" style="" ><span id= "more-items" class="ui-gray" > 点击加载更多……</span></p>
+            <div  id="show-load-items"  style="display:none;">
+                <div id="load"></div>
+            </div>
+
+            <%}%>
+
+        </div>
+        </div>
+    </div>
 
 
 <script data-main="/js/mobile" src="/js/require.js"></script>

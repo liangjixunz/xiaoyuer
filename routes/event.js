@@ -72,14 +72,14 @@ exports.event_index = function(req,res){
 exports.set_session = (function(req,res){
 
     var app_conf = JSON.parse(fs.readFileSync(__dirname + "/../shared/appConfig"));
-    var url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=";
-    url += app_conf.AppID;
-    url += "&secret=";
-    url += app_conf.AppSecret;
-    url += "&code=";
 
     return function(req,res){
         var code = req.query.code;
+        var url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=";
+        url += app_conf.AppID;
+        url += "&secret=";
+        url += app_conf.AppSecret;
+        url += "&code=";
         url += code;
         url += "&grant_type=authorization_code";
         request(url,function(err,response,body){
@@ -96,12 +96,10 @@ exports.set_session = (function(req,res){
                     console.log(result);
                 })
                 res.redirect("/web/event/index");
+
             }
         })
-        url += app_conf.AppID;
-        url += "&secret=";
-        url += app_conf.AppSecret;
-        url += "&code=";
+
     }
 
 })();
