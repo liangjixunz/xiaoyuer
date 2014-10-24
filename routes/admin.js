@@ -129,7 +129,7 @@ exports.class_update = function(req,res){
     catch (e){
         console.log(e);
     }
-    res.send(area_class.area.update(content));;
+    res.send(area_class.classify.update(content));;
 }
 /*
 *更新公益分类表

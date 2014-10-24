@@ -10,10 +10,13 @@ var fs = require("fs")
 var routes = require('./routes');
 var app = express();
 var signature_check = (function(){
+
     var token = JSON.parse(fs.readFileSync(__dirname+"/shared/appConfig")).token;
-    var sha1 = crypto.createHash('sha1')
-    sha1.update(token);
+
     return function(req,res,next){
+        console.log("hi");
+        var sha1 = crypto.createHash('sha1')
+        sha1.update(token);
         if(req.query.timestamp&&req.query.check){
             sha1.update(req.query.timestamp);
             if(req.query.check==sha1.digest('hex')){
@@ -21,8 +24,6 @@ var signature_check = (function(){
             }
             else
                 res.send(JSON.stringify({code:"-10","err":"permission denied"}))
-            sha1 = crypto.createHash('sha1')
-            sha1.update(token);
         }
         else
             res.send(JSON.stringify({code:"-10","err":"permission denied"}))
