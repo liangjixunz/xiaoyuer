@@ -8,7 +8,7 @@ var userInfo = require("xiaoyuer/userInfo"),
     EventEmitter = require('events').EventEmitter,
     area_class = require("xiaoyuer/area_class");
 
-var noteReady = new EventEmitter();
+
 var sprintf = require("sprintf").sprintf;
 
 var mybaseUrl = JSON.parse(fs.readFileSync(__dirname+"/../shared/appConfig")).mybaseUrl;
@@ -19,6 +19,7 @@ exports.util = function(req,res){
 /*
 *订单相关api
 * 以为非阻塞，所以使用了事件保证两件事都完成
+* 坑爹的垃圾回收
  */
 exports.order = (function(){
     var AppID = JSON.parse(fs.readFileSync(__dirname+"/../shared/appConfig")).AppID;
@@ -26,61 +27,48 @@ exports.order = (function(){
     function index(req,res){
         user_info(req,res,function(result){
             console.log(result);
-            if(result == -1){
+            if(result == '-1'){
                   ;
             }
             else{
-                var  render_obj = {};
-                var count = 0;
-                render_obj.user = result;
-                for(var value in orders.get_order_list){
-                    (function(){
-                        var value1 = value;
-                        orders.get_order_list[value1](req.session.openid,1,function(result1){
-                            if(result1.coder == '0'){
-                               var temp = [];
-                                var temp1 ={};
-                               result1.forEach(function(values){
-                                   temp1 = JSON.parse(values);
-                                   try{
-                                       temp1.suserpic = "/images/"+pic_cache.cache(temp1.suserpic.match(/files\/[\s\S]+]/));
-                                   }
-                                   catch (e){
-                                       console.log(e);
-                                   }
-                                   try{
-                                       temp1.ruserpic = "/images/"+pic_cache.cache(temp1.ruserpic.match(/files\/[\s\S]+]/));
-                                   }
-                                   catch (e){
-                                       console.log(e);
-                                   }
-                                   try{
-                                       temp1.userpic = "/images/"+pic_cache.cache(temp1.userpic.match(/files\/[\s\S]+]/));
-                                   }
-                                   catch (e){
-                                       console.log(e);
-                                   }
-                                   temp[temp.length] = temp1;
-                               });
-                                render_obj[value1]= temp;
-                            }
-                            else{
-                                render_obj[value1]= [];
-                            }
-                            noteReady.emit("ready");
+                (function(){
+                    var noteReady = new EventEmitter();
+                    var  render_obj = {};
+                    var count = 0;
+                    render_obj.user = result;
+                    for(var value in orders.get_order_list){
+                        (function(){
+                            var value1 = value;
+                            orders.get_order_list[value1](req.session.openid,1,function(result1){
+                                if(result1.coder == '0'){
+                                    var temp = [];
+                                    var temp1 ={};
+                                    result1.forEach(function(values){
+                                        temp1 = JSON.parse(values);
 
-                        });
-                    })();
-                }
-                noteReady.on("ready",function(){
-                    count +=1;
-                    if(count == 10){
-                        console.log(render_obj);
-                        res.render("orderlist",render_obj);
-                        count = 0;
+                                        temp[temp.length] = temp1;
+                                    });
+                                    render_obj[value1]= temp;
+                                }
+                                else{
+                                    render_obj[value1]= [];
+                                }
+                                noteReady.emit("ready");
+
+                            });
+                        })();
                     }
+                    noteReady.on("ready",function(){
+                        count +=1;
+                        if(count == 10){
+                            console.log(render_obj);
+                            res.render("orderlist",render_obj);
+                            count = 0;
+                        }
 
-                })
+                    })
+                }) ();
+
             }
         })
     }
@@ -131,12 +119,15 @@ exports.order = (function(){
                         res.redirect("/user/tologin.html");
                         callback(-1);
                         break;
-
+                    default:
+                        res.redirect("/user/tologin.html");
+                        callback(-1);
+                        break;
                 }
             })
         }
         else{
-            callback(-1);
+            callback('-1');
             res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=" + mybaseUrl +"/order/fromwe&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
 
         }
@@ -209,8 +200,7 @@ exports.seek = (function(){
                         var temp = {};
                         result.lst.forEach(function(value){
                             temp = JSON.parse(value);
-                            var uri = temp.gameImageAtt.match(/files\/[\s\S]+/)[0];
-                            temp.gameImageAtt = "/images/"+ pic_cache.cache(uri);
+                            temp.apllayEndTime = new Date(temp.apllayEndTime).Format("20yy年MM月dd日 hh:mm:ss")
                             resObj[resObj.length] = temp;
 
                         })
@@ -229,8 +219,8 @@ exports.seek = (function(){
                         var resObj = JSON.parse(result);
                         resObj.code = 0;
                         resObj.gameFinishTime= new Date(resObj.gameFinishTime).Format("20yy年MM月dd日 hh:mm:ss");
-                        resObj.requireFinishTime = new Date(resObj.requireFinishTime).Format("20yy年MM月dd日 hh:mm:ss");
-                        resObj.requireDes = html_decode(resObj.gameDes);
+                        resObj.apllayEndTime = new Date(resObj.apllayEndTime).Format("20yy年MM月dd日 hh:mm:ss");
+                        resObj.gameDes = html_decode(resObj.gameDes);
                         res.render('detail-game',resObj);
                     }
                     catch (e){
@@ -244,14 +234,77 @@ exports.seek = (function(){
             }
         }
     }
+    /*
+     *发现-公益服务
+     */
+    function wservice(){
+
+        return{
+            index: function(req,res) {
+                seek.seek.wel_service("0","1",function(result){
+                    if(result.code ==0){
+                        var resObj = [];
+                        var temp = {};
+                        result.lst.forEach(function(value){
+                            temp = JSON.parse(value);
+                            resObj[resObj.length] = temp;
+                        })
+                        res.render("seek-wservice",{
+                            the_type:"乐活公益",
+                            new_items:2,
+                            type_id :"wservice",
+                            items:resObj
+                        })
+
+
+                    }
+                    else{
+                        res.render("wservice",{
+                            the_type:"公益服务",
+                            new_items:2,
+                            type_id :"wservice",
+                            items:[]
+                        })
+                    }
+                })
+
+            },
+            the_class : function(req,res){
+                var classify = area_class.welfare_calssify.get();
+                res.render('seek_class',{
+                    type:"公益服务",
+                    type_id :"wservice",
+                    classify:classify
+                })
+            },
+            info :function(req,res){
+                seek.info("wservice",req.query.id,function(result){
+                    try{
+                        var  resObj = JSON.parse(result);
+                        var  uri;
+
+
+                        resObj.servDes = html_decode(resObj.servDes);
+                        resObj.endDate = new Date(resObj.endDate).Format("20yy年MM月dd日 hh:mm:ss")
+                        res.render('detail-wservice',resObj);
+                    }
+                    catch (e){
+                        console.log(e);
+                        res.send(404);
+                    }
+                })
+
+            }
+        }
+    }
      /*
-     *发现-公益
+     *发现-公益需求
       */
-    function welfare(){
+    function wrequire(){
         /*
         *获取公益分类表
          */
-        var classify = area_class.welfare_calssify.get();
+
         return{
             index: function(req,res) {
                 seek.seek.wel_require("0","1",function(result){
@@ -260,24 +313,23 @@ exports.seek = (function(){
                        var temp = {};
                        result.lst.forEach(function(value){
                            temp = JSON.parse(value);
-                           var uri = temp.attCoverStore.match(/files\/[\s\S]+/)[0];
-                           temp.attCoverStore = "/images/" + pic_cache.cache(uri);
+
                            resObj[resObj.length] = temp;
                        })
-                        res.render("seek-welfare",{
-                            the_type:"乐活公益",
+                        res.render("seek-wrequire",{
+                            the_type:"公益需求",
                             new_items:2,
-                            type_id :"welfare",
+                            type_id :"wrequire",
                             items:resObj
                         })
 
 
                     }
                     else{
-                        res.render("seek-welfare",{
-                            the_type:"乐活公益",
+                        res.render("seek-wrequire",{
+                            the_type:"公益需求",
                             new_items:2,
-                            type_id :"welfare",
+                            type_id :"wrequire",
                             items:[]
                         })
                     }
@@ -285,6 +337,7 @@ exports.seek = (function(){
 
             },
             the_class : function(req,res){
+                var classify = area_class.welfare_calssify.get();
                 res.render('seek_class',{
                        type:"公益",
                        type_id :"welfare",
@@ -292,23 +345,21 @@ exports.seek = (function(){
                 })
             },
             info :function(req,res){
-                res.render('seek_by_class', {
-                    the_type:"乐活公益",
-                    new_items:2,
-                    class_name:area_class.welfare_calssify.get_name_by_id(req.query.id),
-                    type_id :"welfare",
-                    items:[
-                        {
-                            title:"修电脑",
-                            provider:"愚吉",
-                            price:"公益服务，免费"
-                        },
-                        {
-                            title:"剪草坪",
-                            provider:"愚吉",
-                            price:"公益服务，免费"
-                        }
-                    ]
+                seek.info("wrequire",req.query.id,function(result){
+                    var resObj = result;
+                    try{
+                        resObj = JSON.parse(result);
+                        resObj.releaseTime = new Date(resObj.releaseTime).Format("20yy年MM月dd日 hh:mm:ss");
+                        resObj.requireFinishTime = new Date(resObj.requireFinishTime).Format("20yy年MM月dd日 hh:mm:ss");
+                        resObj.welfareProjectDes = html_decode( resObj.welfareProjectDes)  ;
+
+                        res.render('detail-wrequire',resObj);
+                    }
+                    catch (e){
+                        console.log(e);
+                        res.send(404);
+                    }
+
                 })
             }
          }
@@ -328,11 +379,6 @@ exports.seek = (function(){
                         result.lst.forEach(function(value){
                             temp  =  JSON.parse(value);
 
-                            var uri = temp.serviceImageAtt.match(/service\/[\s\S]+/)[0];
-                            if(!temp.serviceImageAtt.match(/files\/[\s\S]+/)){
-                                uri = "files/" + uri;
-                            }
-                            temp.serviceImageAtt = "/images/"+ pic_cache.cache(uri);
                             resObj[resObj.length] = temp;
                         })
                         res.render('seek-service',{
@@ -374,11 +420,7 @@ exports.seek = (function(){
                         result.lst.forEach(function(value){
                             temp  =  JSON.parse(value);
 
-                            var uri = temp.serviceImageAtt.match(/service\/[\s\S]+/)[0];
-                            if(!temp.serviceImageAtt.match(/files\/[\s\S]+/)){
-                                uri = "files/" + uri;
-                            }
-                            temp.serviceImageAtt = "/images/"+ pic_cache.cache(uri);
+
                             resObj[resObj.length] = temp;
                         })
                         res.render('seek-service',{
@@ -404,11 +446,7 @@ exports.seek = (function(){
                 seek.info("service",req.query.id,function(result){
                     try{
                        var  resObj = JSON.parse(result);
-                        var uri = resObj.serviceImageAtt.match(/service\/[\s\S]+/)[0];
-                        if(!resObj.serviceImageAtt.match(/files\//)){
-                            uri = "files/" + uri;
-                        }
-                        resObj.serviceImageAtt = "/images/"+ pic_cache.cache(uri);
+
                         resObj.servDes = html_decode(resObj.servDes);
                         res.render('detail-service',resObj);
                     }
@@ -429,15 +467,15 @@ exports.seek = (function(){
             index:function(req,res) {
                 seek.seek.require("1","1",function(result){
                     var resObj = [];
-                    var temp = {};
+
                     /*
                      *给的根本不是json
                      */
                     if(result.code == 0){
                         result.lst.forEach(function(value){
-                            temp  =  JSON.parse(value);
-                            var uri = temp.requireImageAtt.match(/files\/[\s\S]+/)[0];
-                            temp.requireImageAtt = "/images/"+ pic_cache.cache(uri);
+                            var temp = {};
+                            temp  =  JSON.parse(value)
+
                             resObj[resObj.length] = temp;
                         })
                         res.render('seek-require',{
@@ -470,6 +508,7 @@ exports.seek = (function(){
             },
             class_info:function(req,res) {
                 seek.seek.require(req.query.class,"1",function(result){
+                    console.log(result);
                     var resObj = [];
                     var temp = {};
                     /*
@@ -478,11 +517,10 @@ exports.seek = (function(){
                     if(result.code == 0){
                         result.lst.forEach(function(value){
                             temp  =  JSON.parse(value);
-                            var uri = temp.requireImageAtt.match(/files\/[\s\S]+/)[0];
-                            temp.requireImageAtt = "/images/"+ pic_cache.cache(uri);
+
                             resObj[resObj.length] = temp;
                         })
-                        res.render('seek-require',{
+                        res.render('seek-class-require',{
                             the_type:"四海需求",
                             new_items:2,
                             type_id :"require",
@@ -490,7 +528,7 @@ exports.seek = (function(){
                         })
                     }
                     else{
-                        res.render('seek', {
+                        res.render('seek-class-require', {
                             the_type:"四海需求",
                             new_items:2,
                             type_id :"require",
@@ -526,10 +564,11 @@ exports.seek = (function(){
         }
     }
     return{
-        welfare:welfare(),
-        service:service(),
         require:requires(),
-        game:game()
+        service:service(),
+        wrequire:wrequire(),
+        game:game(),
+        wservice:wservice()
     }
 })();
  /*
@@ -572,12 +611,11 @@ exports.kf = (function(){
  */
 exports.login = function(req,res){
     var body = req.body;
-    req.session.openid = 1;
-    console.log(body);
+    console.log(req.session.openid);
      userInfo.login(req.session.openid,body.password,body.username,function(result){
          switch (result){
              case '0':
-                 res.redirect("/user/success_login.html");
+                 res.redirect("/user/login_success.html");
                  break;
              case '-5':
                  res.redirect("/user/tologin.html");

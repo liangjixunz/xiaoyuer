@@ -132,16 +132,21 @@
                 <li class="ui-item"><a>随机推荐</a></li>
                 <%if(items.length){%>
                 <%items.forEach(function(value){%>
-                <li class="ui-item ui-ignore-space  arrow-right"><a href="/web/seek/welfare/info?type=<%=type_id%>&id=<%=value.id%>">
+                <li class="ui-item ui-ignore-space  arrow-right"><a href="/web/seek/<%=type_id%>/info?id=<%=value.id%>">
                         <div class="my-item-left">
-                            <img src ="<%=value.attCoverStore%>" width="100%" height="100%">
+                            <img src ="<%=value.serviceImageAtt%>" width="100%" height="100%">
                         </div>
                         <div class="my-item-right ">
-                            <p class="ui-no-wrap"><%=value.welfareProjectTitle%></p>
-                            <p class="ui-gray" id = "the-code">发布者：<span class="ui-red"><%=value.releaseUserName%></span></p>
-                            <p class="ui-no-wrap ui-gray"> 截止：<%=value.apllayEndTime%></p>
-                            <p class="ui-no-wrap ui-gray">城市： &nbsp;<span><%=value.province%><%=value.city%></span></p>
-                            <p class="ui-no-wrap"><span class=" ui-red">已报名:<%=value.apllayCount%>/<%=value.chooseUserCount%></span></p></div>
+                            <p class="ui-no-wrap"><%=value.servTitle%></p>
+                            <p class="ui-gray" >提供：<%=value.releaseUsername%></p>
+                            <p class="ui-gray">免费：<%=value.isFreed?"是":"否"%></p>
+                            <%if(!value.isFreed){%>
+                            <p class="ui-red">单价：<%=value.perPrice%>元<%=value.cashUint%></p>
+                            <%}%>
+                            <p class="ui-gray">推荐：<%=value.recommendCount%></p>
+                            <p class="ui-gray" >成交：<%=value.dealedCount%></p>
+                            <p class="ui-gray">地区：<%=value.city%></p>
+                        </div>
                     </a>
                 </li>
                 <%})}%>

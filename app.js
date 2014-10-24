@@ -66,9 +66,13 @@ app.get('/order/info',routes.user.order.info)
 /*
 *发现
  */
-app.get('/seek/welfare/index', routes.user.seek.welfare.index);
-app.get('/seek/welfare/class', routes.user.seek.welfare.the_class);
-app.get('/seek/welfare/class/info',routes.user.seek.welfare.info);
+app.get('/seek/wrequire/index', routes.user.seek.wrequire.index);
+app.get('/seek/wrequire/class', routes.user.seek.wrequire.the_class);
+app.get('/seek/wrequire/info',routes.user.seek.wrequire.info);
+
+app.get('/seek/wservice/index', routes.user.seek.wservice.index);
+app.get('/seek/wservice/class', routes.user.seek.wservice.the_class);
+app.get('/seek/wservice/info',routes.user.seek.wservice.info);
 
 app.get('/seek/service/index', routes.user.seek.service.index);
 app.get('/seek/service/class', routes.user.seek.service.the_class);

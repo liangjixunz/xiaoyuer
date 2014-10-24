@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset='utf-8'>
-    <title>服务详情</title>
+    <title>公益服务详情</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
@@ -137,7 +137,7 @@
     <div class="ui-tab page1 js-active">
         <div class="header" id="header">
             <a class="back" href="javascript:history.back();"></a>
-            <span class="headline">服务详情</span>
+            <span class="headline">公益服务详情</span>
             <button class="my-item-right1  button button-border-primary button-rounded">收藏</button>
         </div>
     </div>
@@ -156,40 +156,47 @@
         </li>
 
         <li class="ui-item">
-
+            <button disabled class="ui-button">截止时间</button>
+            <span class = "my-item-right ui-gray"> <%-endDate%></span>
             <p></p>
+            <button disabled class="ui-button">具体位置</button>
+            <span class = "my-item-right ui-gray"> <%-address%></span>
+            <p></p>
+            <button disabled class="ui-button">是否免费</button>
+            <span class = "my-item-right ui-gray"> <%=isFreeService?"是":"否"%></span>
+            <p></p>
+            <%if(!isFreeService){%>
+            <button disabled class="ui-button">服务单价</button>
+            <span class = "my-item-right ui-red"><%-perPrice%>元<%=cashUint%></span>
+            <p></p>
+             <%}%>
+
+        </li>
+        <li class="ui-item">
             <button disabled class="ui-button">当前状态</button>
             <span class = "my-item-right ui-gray"><%-status%></span>
             <p></p>
             <button disabled class="ui-button">成交次数</button>
             <span class = "my-item-right ui-red"><%-dealedCount%></span>
             <p></p>
-            <button disabled class="ui-button">收藏次数</button>
+            <button disabled class="ui-button">浏览次数</button>
             <span class = "my-item-right ui-red"><%-collectionCount%></span>
             <p></p>
-            <button disabled class="ui-button">自动接收</button>
-            <span class = "my-item-right ui-gray"><%-isAtuoAccpt?"是":"否"%></span>
+            <button disabled class="ui-button">收藏次数</button>
+            <span class = "my-item-right ui-red"><%-browserCount%></span>
             <p></p>
-            <button disabled class="ui-button">服务单价</button>
-            <span class = "my-item-right ui-red"><%-perPrice%> 元 <%-selfCashUint?"/"+selfCashUint:(cashUint-1? cashUint:"")%></span>
+            <button disabled class="ui-button">评价次数</button>
+            <span class = "my-item-right ui-red"><%-commentCount%></span>
             <p></p>
             <button disabled class="ui-button">其他须知</button>
-            <span class = "my-item-right ui-gray"> <%-isSameCity?"同城&nbsp;":""%><%-isOndoorService?"上门服务":""%>
-               <%-isserviceoutline?"线下":"线上"%>
+            <span class = "my-item-right ui-gray"> <%-isOndoorServices?"线下":"线上"%>
             </span>
-            <p></p>
-            <button disabled class="ui-button">截止时间</button>
-            <span class = "my-item-right ui-gray"> <%-endDate%></span>
-            <p></p>
-            <button disabled class="ui-button">发布时间</button>
-            <span class = "my-item-right ui-gray"> <%-dateInsert%></span>
-            <p></p>
         </li>
 
         <li  class="ui-item">
             <button disabled class="ui-button">详细信息</button>
             <div >
-                <img src="<%-serviceImageAtt%>" width="96%" align="middle">
+                <img src="<%=serviceImageAtt%>" width="90%" align="middle">
                 <p>&nbsp;</p>
                 <%- servDes.replace(/<\/p>/g,"</p><p>&nbsp;</p>")%>
             </div>
