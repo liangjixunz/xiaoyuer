@@ -246,6 +246,7 @@ exports.seek = (function(){
                         resObj.gameFinishTime= new Date(resObj.gameFinishTime).Format("20yy年MM月dd日 hh:mm:ss");
                         resObj.apllayEndTime = new Date(resObj.apllayEndTime).Format("20yy年MM月dd日 hh:mm:ss");
                         resObj.gameDes = html_decode(resObj.gameDes);
+                        resObj.apllayMinNum = resObj.apllayMinNum ||"无要求";
                         res.render('detail-game',resObj);
                     }
                     catch (e){
@@ -255,6 +256,11 @@ exports.seek = (function(){
 
 
 
+                })
+            },
+            page_class: function(req,res){
+                seek.seek.games("1",req.query.page,function(result){
+                    res.send(result);
                 })
             }
         }
@@ -328,7 +334,7 @@ exports.seek = (function(){
                         res.render("seek-class-wservice",{
                             the_type:"乐活公益",
                             new_items:2,
-                            class_name:area_class.classify.get_name_by_id(req.query.class),
+                            class_name:area_class.welfare_calssify.get_name_by_id(req.query.class),
                             type_id :"wservice",
                             items:resObj
                         })
@@ -339,7 +345,7 @@ exports.seek = (function(){
                         res.render("seek-class-wservice",{
                             the_type:"公益服务",
                             new_items:2,
-                            class_name:area_class.classify.get_name_by_id(req.query.class),
+                            class_name:area_class.welfare_calssify.get_name_by_id(req.query.class),
                             type_id :"wservice",
                             items:[]
                         })
@@ -376,6 +382,11 @@ exports.seek = (function(){
                     }
                 })
 
+            } ,
+            page_class: function(req,res){
+                seek.seek.wel_service(req.query.class,req.query.page,function(result){
+                    res.send(result);
+                })
             }
         }
     }
@@ -449,7 +460,7 @@ exports.seek = (function(){
                         res.render("seek-class-wrequire",{
                             the_type:"公益需求",
                             new_items:2,
-                            class_name:area_class.classify.get_name_by_id(req.query.class),
+                            class_name:area_class.welfare_calssify.get_name_by_id(req.query.class),
                             type_id :"wrequire",
                             items:resObj
                         })
@@ -461,7 +472,7 @@ exports.seek = (function(){
                             the_type:"公益需求",
                             new_items:2,
                             type_id :"wrequire",
-                            class_name:area_class.classify.get_name_by_id(req.query.class),
+                            class_name:area_class.welfare_calssify.get_name_by_id(req.query.class),
                             items:[]
                         })
                     }
@@ -497,6 +508,12 @@ exports.seek = (function(){
                         res.send(404);
                     }
 
+                })
+            } ,
+            page_class: function(req,res){
+
+                seek.seek.wel_require(req.query.class,req.query.page,function(result){
+                    res.send(result);
                 })
             }
          }
@@ -616,8 +633,12 @@ exports.seek = (function(){
                     }
 
                 })
+            },
+            page_class: function(req,res){
+                seek.seek.service(req.query.class,req.query.page,function(result){
+                    res.send(result);
+                })
             }
-
         }
     }
 
@@ -625,7 +646,6 @@ exports.seek = (function(){
         var classify = area_class.classify.get();
         return{
             index:function(req,res) {
-                console.log("aa");
                 seek.seek.require("1","1",function(result){
                     var resObj = [];
 
@@ -736,8 +756,13 @@ exports.seek = (function(){
 
                 })
 
-            }
+            },
+            page_class: function(req,res){
 
+                seek.seek.require(req.query.class,req.query.page,function(result){
+                    res.send(result);
+                })
+            }
         }
     }
     return{

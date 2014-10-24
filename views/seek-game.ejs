@@ -11,6 +11,7 @@
     <link href="/stylesheets/head.css" rel="stylesheet" type="text/css" />
     <script src="/js/zepto.min.js"></script>
     <script src="/js/zepto-touch.min.js"></script>
+    <script src="/js/sprintf.js"></script>
     <style>
         .my-banner {
             margin-bottom: 20px;
@@ -104,7 +105,7 @@
         <!-- 主体内容 -->
 
         <div class="ui-tab js-active " id="page1-tab1" role="tabpanel">
-            <ul class="ui-list">
+            <ul class="ui-list" id = "the-list">
                 <%if(items.length){%>
                 <%items.forEach(function(value){%>
                 <li class="ui-item ui-ignore-space  arrow-right"><a href="/web/seek/game/info?id=<%=value.id%>">
@@ -140,6 +141,7 @@
 </div>
 
 <script>
+    var page = 2;
     $().ready(function(){
         $(".ui-page-content").swipeRight(function(){
             history.back();
@@ -150,13 +152,43 @@
         $("#more-items").tap(function(){
             $("#show-load-items").attr("style","");
             $("#show-more-items").attr("style","display:none");
-            /*
-             $.get("/",function(data){
-             $("#show-more-items").attr("style","");
-             $("#show-load-items").attr("style","display:none");
-             var str = ''
-             $("ul").append();
-             }) */
+             $.get("/web/seek/game/more?page="+page+"",function(data){
+                 page +=1;
+                $("#show-load-items").attr("style","display:none");
+             try{
+                 var obj = JSON.parse(data);
+             }
+             catch (e){
+                 console.log(e);
+                 var obj = data;
+
+             }
+             if(obj.code=='0'){
+                 if(obj.lst.length==6)
+                     $("#show-more-items").attr("style","");
+                 var str= '<li class="ui-item ui-ignore-space arrow-right"><a href="/web/seek/game/info?id=%s">' +
+                         ' <div class="my-item-left">' +
+                         '<img src ="%s" %s>' +
+                         '</div>' +
+                         '<div class="my-item-right ">' +
+                         '<p class="ui-no-wrap">%s</p>' +
+                         '<p class="ui-gray" id = "the-code">报名截止：%s</p>' +
+                         ' <p class="ui-red">总奖金：%s</p> <p class="ui-red">报名：%s</p> </div> </a></li>';
+                 obj.lst.forEach(function(value){
+                     try{
+                         var temp = JSON.parse(value);
+                     }
+                     catch (e){
+                         console.log(e);
+                         temp = value;
+                     }
+                     window.str = str;
+                     $("#the-list").append(sprintf(str,temp.id,temp.gameImageAtt,'width="100%" height="100%"',temp.gameTitle,temp.apllayEndTime,temp.gameFixedPrice,temp.apllayCount));
+                 })
+
+             }
+
+             })
         })
     })
     function onBridgeReady(){

@@ -71,24 +71,30 @@ app.get('/seek/wrequire/index', routes.user.seek.wrequire.index);
 app.get('/seek/wrequire/class', routes.user.seek.wrequire.the_class);
 app.get('/seek/wrequire/info',routes.user.seek.wrequire.info);
 app.get('/seek/wrequire/class/info',routes.user.seek.wrequire.class_info);
+app.get('/seek/wrequire/more',routes.user.seek.wrequire.page_class);
 
 app.get('/seek/wservice/index', routes.user.seek.wservice.index);
 app.get('/seek/wservice/class', routes.user.seek.wservice.the_class);
 app.get('/seek/wservice/info',routes.user.seek.wservice.info);
 app.get('/seek/wservice/class/info',routes.user.seek.wservice.class_info);
+app.get('/seek/wservice/more',routes.user.seek.wservice.page_class);
 
 app.get('/seek/service/index', routes.user.seek.service.index);
 app.get('/seek/service/class/info',routes.user.seek.service.class_info);
 app.get('/seek/service/class', routes.user.seek.service.the_class);
 app.get('/seek/service/info',routes.user.seek.service.info);
+app.get('/seek/service/more',routes.user.seek.service.page_class);
 
 app.get('/seek/require/index', routes.user.seek.require.index);
 app.get('/seek/require/class/info',routes.user.seek.require.class_info);
 app.get('/seek/require/class', routes.user.seek.require.the_class);
 app.get('/seek/require/info',routes.user.seek.require.info);
+app.get('/seek/require/more',routes.user.seek.require.page_class);
 
 app.get('/seek/game/index', routes.user.seek.game.index);
 app.get('/seek/game/info', routes.user.seek.game.info);
+app.get('/seek/game/more',routes.user.seek.game.page_class);
+
 app.get('/test1',function(req,res){
     res.render("info",{
         title:"微信公众号开发",
