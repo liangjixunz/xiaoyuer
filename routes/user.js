@@ -45,7 +45,24 @@ exports.order = (function(){
                                     var temp1 ={};
                                     result1.forEach(function(values){
                                         temp1 = JSON.parse(values);
-
+                                        try{
+                                            temp1.suserpic = "/images/"+pic_cache.cache(temp1.suserpic.match(/files\/[\s\S]+]/));
+                                        }
+                                        catch (e){
+                                            console.log(e);
+                                        }
+                                        try{
+                                            temp1.ruserpic = "/images/"+pic_cache.cache(temp1.ruserpic.match(/files\/[\s\S]+]/));
+                                        }
+                                        catch (e){
+                                            console.log(e);
+                                        }
+                                        try{
+                                            temp1.userpic = "/images/"+pic_cache.cache(temp1.userpic.match(/files\/[\s\S]+]/));
+                                        }
+                                        catch (e){
+                                            console.log(e);
+                                        }
                                         temp[temp.length] = temp1;
                                     });
                                     render_obj[value1]= temp;
@@ -200,6 +217,14 @@ exports.seek = (function(){
                         var temp = {};
                         result.lst.forEach(function(value){
                             temp = JSON.parse(value);
+
+                            try{
+                                var uri = temp.gameImageAtt.match(/files\/[\s\S]+/)[0];
+                                temp.gameImageAtt = "/images/"+ pic_cache.cache(uri);
+                            }
+                           catch (e){
+                               console.log(e);
+                           }
                             temp.apllayEndTime = new Date(temp.apllayEndTime).Format("20yy年MM月dd日 hh:mm:ss")
                             resObj[resObj.length] = temp;
 
@@ -241,12 +266,19 @@ exports.seek = (function(){
 
         return{
             index: function(req,res) {
-                seek.seek.wel_service("0","1",function(result){
+                seek.seek.wel_service("","1",function(result){
                     if(result.code ==0){
                         var resObj = [];
                         var temp = {};
                         result.lst.forEach(function(value){
                             temp = JSON.parse(value);
+                            try{
+                                var uri = temp.serviceImageAtt.match(/files\/[\s\S]+/)[0];
+                                temp.serviceImageAtt = "/images/" + pic_cache.cache(uri);
+                            }
+                           catch (e){
+                               console.log(e);
+                           }
                             resObj[resObj.length] = temp;
                         })
                         res.render("seek-wservice",{
@@ -277,12 +309,62 @@ exports.seek = (function(){
                     classify:classify
                 })
             },
+            class_info: function(req,res) {
+                seek.seek.wel_service(req.query.class,"1",function(result){
+                    if(result.code ==0){
+                        var resObj = [];
+                        var temp = {};
+                        result.lst.forEach(function(value){
+                            temp = JSON.parse(value);
+                            try{
+                                var uri = temp.serviceImageAtt.match(/files\/[\s\S]+/)[0];
+                                temp.serviceImageAtt = "/images/" + pic_cache.cache(uri);
+                            }
+                            catch (e){
+                                console.log(e);
+                            }
+                            resObj[resObj.length] = temp;
+                        })
+                        res.render("seek-class-wservice",{
+                            the_type:"乐活公益",
+                            new_items:2,
+                            class_name:area_class.classify.get_name_by_id(req.query.class),
+                            type_id :"wservice",
+                            items:resObj
+                        })
+
+
+                    }
+                    else{
+                        res.render("seek-class-wservice",{
+                            the_type:"公益服务",
+                            new_items:2,
+                            class_name:area_class.classify.get_name_by_id(req.query.class),
+                            type_id :"wservice",
+                            items:[]
+                        })
+                    }
+                })
+
+            },
             info :function(req,res){
                 seek.info("wservice",req.query.id,function(result){
                     try{
                         var  resObj = JSON.parse(result);
                         var  uri;
-
+                        try{
+                            if(!resObj.serviceImageAtt.match(/files\//)){
+                                uri = "files/" ;
+                                uri += resObj.serviceImageAtt.match(/wservice\/[\s\S]+/)[0];
+                            }
+                            else{
+                                uri =  resObj.serviceImageAtt.match(/files\//)[0];
+                            }
+                            resObj.serviceImageAtt = "/images/"+ pic_cache.cache(uri);
+                        }
+                        catch (e){
+                            console.log(e);
+                        }
 
                         resObj.servDes = html_decode(resObj.servDes);
                         resObj.endDate = new Date(resObj.endDate).Format("20yy年MM月dd日 hh:mm:ss")
@@ -301,19 +383,23 @@ exports.seek = (function(){
      *发现-公益需求
       */
     function wrequire(){
-        /*
-        *获取公益分类表
-         */
+
 
         return{
             index: function(req,res) {
-                seek.seek.wel_require("0","1",function(result){
+                seek.seek.wel_require("","1",function(result){
                     if(result.code ==0){
                        var resObj = [];
                        var temp = {};
                        result.lst.forEach(function(value){
                            temp = JSON.parse(value);
-
+                           try{
+                               var uri = temp.attCoverStore.match(/files\/[\s\S]+/)[0];
+                               temp.attCoverStore = "/images/" + pic_cache.cache(uri);
+                           }
+                           catch (e){
+                               console.log(e);
+                           }
                            resObj[resObj.length] = temp;
                        })
                         res.render("seek-wrequire",{
@@ -339,10 +425,48 @@ exports.seek = (function(){
             the_class : function(req,res){
                 var classify = area_class.welfare_calssify.get();
                 res.render('seek_class',{
-                       type:"公益",
-                       type_id :"welfare",
+                       type:"公益需求",
+                       type_id :"wrequire",
                        classify:classify
                 })
+            },
+            class_info: function(req,res) {
+                seek.seek.wel_require("","1",function(result){
+                    if(result.code ==0){
+                        var resObj = [];
+                        var temp = {};
+                        result.lst.forEach(function(value){
+                            temp = JSON.parse(value);
+                            try{
+                                var uri = temp.attCoverStore.match(/files\/[\s\S]+/)[0];
+                                temp.attCoverStore = "/images/" + pic_cache.cache(uri);
+                            }
+                            catch (e){
+                                console.log(e);
+                            }
+                            resObj[resObj.length] = temp;
+                        })
+                        res.render("seek-class-wrequire",{
+                            the_type:"公益需求",
+                            new_items:2,
+                            class_name:area_class.classify.get_name_by_id(req.query.class),
+                            type_id :"wrequire",
+                            items:resObj
+                        })
+
+
+                    }
+                    else{
+                        res.render("seek-class-wrequire",{
+                            the_type:"公益需求",
+                            new_items:2,
+                            type_id :"wrequire",
+                            class_name:area_class.classify.get_name_by_id(req.query.class),
+                            items:[]
+                        })
+                    }
+                })
+
             },
             info :function(req,res){
                 seek.info("wrequire",req.query.id,function(result){
@@ -352,7 +476,20 @@ exports.seek = (function(){
                         resObj.releaseTime = new Date(resObj.releaseTime).Format("20yy年MM月dd日 hh:mm:ss");
                         resObj.requireFinishTime = new Date(resObj.requireFinishTime).Format("20yy年MM月dd日 hh:mm:ss");
                         resObj.welfareProjectDes = html_decode( resObj.welfareProjectDes)  ;
-
+                        var uri;
+                        try{
+                            if(!resObj.attCoverStore.match(/files\//)){
+                                uri = "files/" ;
+                                uri += resObj.attCoverStore.match(/game\/[\s\S]+/)[0];
+                            }
+                            else{
+                                uri =  resObj.attCoverStore.match(/game\//)[0];
+                            }
+                        }
+                        catch (e){
+                            console.log(e);
+                        }
+                        resObj.attCoverStore = "/images/" + pic_cache.cache(uri);
                         res.render('detail-wrequire',resObj);
                     }
                     catch (e){
@@ -378,7 +515,13 @@ exports.seek = (function(){
                     if(result.code == 0){
                         result.lst.forEach(function(value){
                             temp  =  JSON.parse(value);
-
+                            try{
+                                var uri = temp.serviceImageAtt.match(/files\/[\s\S]+/)[0];
+                                temp.serviceImageAtt = "/images/"+ pic_cache.cache(uri);
+                            }
+                             catch (e){
+                                 console.log(e);
+                             }
                             resObj[resObj.length] = temp;
                         })
                         res.render('seek-service',{
@@ -420,20 +563,28 @@ exports.seek = (function(){
                         result.lst.forEach(function(value){
                             temp  =  JSON.parse(value);
 
-
+                            try{
+                                var uri = temp.serviceImageAtt.match(/files\/[\s\S]+/)[0];
+                                temp.serviceImageAtt = "/images/"+ pic_cache.cache(uri);
+                            }
+                            catch (e){
+                                console.log(e);
+                            }
                             resObj[resObj.length] = temp;
                         })
-                        res.render('seek-service',{
+                        res.render('seek-class-service',{
                             the_type:"四海服务",
                             new_items:2,
+                            class_name:area_class.classify.get_name_by_id(req.query.class),
                             type_id :"service",
                             items:resObj
                         })
                     }
                     else{
-                        res.render('seek', {
+                        res.render('seek-class-service', {
                             the_type:"四海服务",
                             new_items:2,
+                            class_name:area_class.classify.get_name_by_id(req.query.class),
                             type_id :"service",
                             items:[
 
@@ -446,7 +597,16 @@ exports.seek = (function(){
                 seek.info("service",req.query.id,function(result){
                     try{
                        var  resObj = JSON.parse(result);
-
+                        try{
+                            var uri = resObj.serviceImageAtt.match(/service\/[\s\S]+/)[0];
+                            if(!resObj.serviceImageAtt.match(/files\//)){
+                                uri = "files/" + uri;
+                            }
+                            resObj.serviceImageAtt = "/images/"+ pic_cache.cache(uri);
+                        }
+                        catch (e){
+                            console.log(e);
+                        }
                         resObj.servDes = html_decode(resObj.servDes);
                         res.render('detail-service',resObj);
                     }
@@ -465,6 +625,7 @@ exports.seek = (function(){
         var classify = area_class.classify.get();
         return{
             index:function(req,res) {
+                console.log("aa");
                 seek.seek.require("1","1",function(result){
                     var resObj = [];
 
@@ -475,7 +636,13 @@ exports.seek = (function(){
                         result.lst.forEach(function(value){
                             var temp = {};
                             temp  =  JSON.parse(value)
-
+                            try{
+                                var uri = temp.requireImageAtt.match(/files\/[\s\S]+/)[0];
+                                temp.requireImageAtt = "/images/"+ pic_cache.cache(uri);
+                            }
+                            catch (e){
+                                console.log(e);
+                            }
                             resObj[resObj.length] = temp;
                         })
                         res.render('seek-require',{
@@ -507,6 +674,7 @@ exports.seek = (function(){
 
             },
             class_info:function(req,res) {
+
                 seek.seek.require(req.query.class,"1",function(result){
                     console.log(result);
                     var resObj = [];
@@ -517,13 +685,21 @@ exports.seek = (function(){
                     if(result.code == 0){
                         result.lst.forEach(function(value){
                             temp  =  JSON.parse(value);
-
+                            try{
+                                var uri = temp.requireImageAtt.match(/files\/[\s\S]+/)[0];
+                                temp.requireImageAtt = "/images/"+ pic_cache.cache(uri);
+                            }
+                            catch (e){
+                                console.log(e);
+                            }
                             resObj[resObj.length] = temp;
                         })
+                        console.log("a");
                         res.render('seek-class-require',{
                             the_type:"四海需求",
                             new_items:2,
                             type_id :"require",
+                            class_name:area_class.classify.get_name_by_id(req.query.class),
                             items:resObj
                         })
                     }
@@ -532,6 +708,7 @@ exports.seek = (function(){
                             the_type:"四海需求",
                             new_items:2,
                             type_id :"require",
+                            class_name:area_class.classify.get_name_by_id(req.query.class),
                             items:[
 
                             ]
