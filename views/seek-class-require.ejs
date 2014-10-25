@@ -10,7 +10,8 @@
     <link rel="stylesheet" type="text/css" href="/vendor/ionicons/css/ionicons.css" />
     <link href="/stylesheets/head.css" rel="stylesheet" type="text/css" />
     <script src="/js/zepto.min.js"></script>
-    <script src ="/js/zepto-touch.min.js"></script>
+    <script src="/js/zepto-touch.min.js"></script>
+    <script src="/js/sprintf.js"></script>
     <script>
         function onBridgeReady(){
             WeixinJSBridge.call('hideOptionMenu');
@@ -122,7 +123,7 @@
         <!-- 主体内容 -->
 
         <div class="ui-tab js-active " id="page1-tab1" role="tabpanel">
-            <ul class="ui-list">
+            <ul class="ui-list" id="the-list">
                 <%if(items.length){%>
                 <%items.forEach(function(value){%>
                 <li class="ui-item ui-ignore-space  arrow-right"><a href="/web/seek/require/info?id=<%=value.id%>">
@@ -133,12 +134,13 @@
                             <p class="ui-no-wrap"><%=value.requireTitle%></p>
                             <p class="ui-gray" id = "the-code">截止：<%=value._apllayEndTime%></p>
                             <%if(!value.requireFixedPrice){%>
-                            <p class="ui-red">价格：<%=value.requireFromPrice%>—<%=value.requireToPrice%><span class="ui-right ui-red"><%=value.dealedCount%></span></p>
+                            <p class="ui-red">价格：<%=value.requireFromPrice%>—<%=value.requireToPrice%>yuan元</p>
                             <%}%>
                             <%if(value.requireFixedPrice){%>
-                            <p class="ui-red">价格：<%=value.requireFixedPrice%><span class="ui-right ui-red"></span></p>
+                            <p class="ui-red">价格：<%=value.requireFixedPrice%>元<span class="ui-right ui-red"></span></p>
                             <%}%>
-                            <p class="ui-red">申请：<%=value.apllayCount%>/<%=value.apllayMaxNum%></p>
+
+                            <p class="ui-red">申请：<%=value.apllayCount%></p>
                             <p class="ui-red">已选：<%=value.chooseUserCount%></p>
                         </div>
                     </a>
@@ -155,6 +157,10 @@
             </div>
 
             <%}%>
+            <%if(items.length<6){%>
+            <p align="center" id="show-more-items" style="" ><span id= "more-items" class="ui-gray" > 无更多</span></p>
+
+            <%}%>
             <p>&nbsp;</p>
             <p>&nbsp;</p>
             <p>&nbsp;</p>
@@ -165,27 +171,86 @@
 </div>
 
 </div>
- <script>
-     $().ready(function(){
-         $(".ui-page-content").swipeRight(function(){
-             history.back();
-         })
-         $("#the-refresh").tap(function(){
-             location.reload(true);
-         })
-         $("#more-items").tap(function(){
-             $("#show-load-items").attr("style","");
-             $("#show-more-items").attr("style","display:none");
-              $.get("/",function(data){
+<script>
+    var page = 2;
+    var the_class = window.location.href.match(/\?class[\s\S]+/)[0].slice(7);
+    $().ready(function(){
+        $(".ui-page-content").swipeRight(function(){
+            history.back();
+        })
+        $("#the-refresh").tap(function(){
+            location.reload(true);
+        })
+        $("#more-items").tap(function(){
+            $("#show-load-items").attr("style","");
+            $("#show-more-items").attr("style","display:none");
+            $.get("/web/seek/require/more?page="+page+"&class=" +the_class,function(data){
+                page +=1;
+                $("#show-load-items").attr("style","display:none");
+                try{
+                    var obj = JSON.parse(data);
+                }
+                catch (e){
+                    console.log(e);
+                    var obj = data;
 
-              $("#show-more-items").attr("style","");
-              $("#show-load-items").attr("style","display:none");
-              var str = ''
-              $("ul").append();
-              })
-         })
-     })
- </script>
+                }
+                if(obj.code=='0'){
+                    if(obj.lst.length==6)
+                        $("#show-more-items").attr("style","");
+                    var str= ' <li class="ui-item ui-ignore-space  arrow-right"><a href="/web/seek/require/info?type=wrequire&id=%s">'+
+                            '<div class="my-item-left">'+
+                            '<img src ="%s"%s>'+
+                            '</div>'+
+                            '<div class="my-item-right ">'+
+                            '<p class="ui-no-wrap">%s</p>'+
+                            '<p class="ui-no-wrap ui-gray"> 截止：%s</p>'+
+                            '<p class="ui-red">价格：%s 元 </p>'+
+                            '<p class="ui-no-wrap"><span class=" ui-red">申请:%s</span></p>'+
+                            '<p class="ui-red">已选：%s</p></div>'+
+                            '</a></li>';
+                    obj.lst.forEach(function(value){
+                        try{
+                            var temp = JSON.parse(value);
+                        }
+                        catch (e){
+                            console.log(e);
+                            temp = value;
+                        }
+                        window.str = str;
+                        $("#the-list").append(sprintf(str,temp.id,temp.requireImageAtt,'width="100%" height="100%"',
+                                        temp.requireTitle,new Date(temp._apllayEndTime).Format("20yy年MM月dd日 hh:mm:ss"),
+                                (temp.requireFixedPrice?temp.requireFixedPrice:(temp.requireFromPrice+"—"+temp.requireToPrice)),temp.apllayCount,temp.chooseUserCount)
+                        );
+                    })
+
+                }
+                if(obj.code==!'0'||obj.lst.length<6) {
+
+                    $("#show-more-items").attr("style","");
+                    $("#more-items").text("无更多");
+                    $("#more-items").unbind("tap");
+                }
+            })
+        })
+    })
+    Date.prototype.Format = function (fmt) { //author: meizz
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+
+</script>
 
 </body>
 </html>

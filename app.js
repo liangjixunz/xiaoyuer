@@ -90,6 +90,7 @@ app.get('/seek/require/class/info',routes.user.seek.require.class_info);
 app.get('/seek/require/class', routes.user.seek.require.the_class);
 app.get('/seek/require/info',routes.user.seek.require.info);
 app.get('/seek/require/more',routes.user.seek.require.page_class);
+app.get(/\/seek\/require\/collect\/[^\/]+/,routes.user.seek.require.collet)
 
 app.get('/seek/game/index', routes.user.seek.game.index);
 app.get('/seek/game/info', routes.user.seek.game.info);

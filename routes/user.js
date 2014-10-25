@@ -199,6 +199,8 @@ exports.order = (function(){
  * 利用req.session.openid
  */
 exports.seek = (function(){
+    var AppID = JSON.parse(fs.readFileSync(__dirname+"/../shared/appConfig")).AppID;
+    var AppSecret = JSON.parse(fs.readFileSync(__dirname+"/../shared/appConfig")).AppSecret;
     function index(req,res){
         res.render('seek',{
             new_items:10,
@@ -638,6 +640,24 @@ exports.seek = (function(){
                 seek.seek.service(req.query.class,req.query.page,function(result){
                     res.send(result);
                 })
+            },
+            collect:function(req,res){
+                var code = req.query.code;
+                var url_temp = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code";
+                var url = sprintf(url_temp,AppID,AppSecret,code);
+                request(url,function(err,response,body){
+
+                    if (!err &&response.statusCode == 200) {
+                        var openid_obj = JSON.parse(body) ;
+                        if(openid_obj.openid){
+                            var the_id = req.query.path.match(/collect\/[^\/]+/)[0].slice(8);
+                            seek.collet(the_id,openid_obj.openid,"service",function(result){
+                                callback(result)
+                            })
+                        }
+
+                    }
+                })
             }
         }
     }
@@ -762,6 +782,9 @@ exports.seek = (function(){
                 seek.seek.require(req.query.class,req.query.page,function(result){
                     res.send(result);
                 })
+            },
+            collect:function(req,res){
+
             }
         }
     }

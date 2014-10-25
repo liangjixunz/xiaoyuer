@@ -10,7 +10,8 @@
     <link rel="stylesheet" type="text/css" href="/vendor/ionicons/css/ionicons.css" />
     <link href="/stylesheets/head.css" rel="stylesheet" type="text/css" />
     <script src="/js/zepto.min.js"></script>
-    <script src ="/js/zepto-touch.min.js"></script>
+    <script src="/js/zepto-touch.min.js"></script>
+    <script src="/js/sprintf.js"></script>
     <script>
         function onBridgeReady(){
             WeixinJSBridge.call('hideOptionMenu');
@@ -122,7 +123,7 @@
         <!-- 主体内容 -->
 
         <div class="ui-tab js-active " id="page1-tab1" role="tabpanel">
-            <ul class="ui-list">
+            <ul class="ui-list" id="the-list">
 
                 <%if(items.length){%>
                 <%items.forEach(function(value){%>
@@ -151,6 +152,10 @@
             </div>
 
             <%}%>
+            <%if(items.length<6){%>
+            <p align="center" id="show-more-items" style="" ><span id= "more-items" class="ui-gray" > 无更多</span></p>
+
+            <%}%>
             <p>&nbsp;</p>
             <p>&nbsp;</p>
             <p>&nbsp;</p>
@@ -162,6 +167,8 @@
 
 </div>
 <script>
+    var page = 2;
+    var the_class = window.location.href.match(/\?class[\s\S]+/)[0].slice(7);
     $().ready(function(){
         $(".ui-page-content").swipeRight(function(){
             history.back();
@@ -172,15 +179,72 @@
         $("#more-items").tap(function(){
             $("#show-load-items").attr("style","");
             $("#show-more-items").attr("style","display:none");
-            $.get("/",function(data){
-
-                $("#show-more-items").attr("style","");
+            $.get("/web/seek/service/more?class="+the_class+"&page="+page+"",function(data){
+                page +=1;
                 $("#show-load-items").attr("style","display:none");
-                var str = ''
-                $("ul").append();
+                try{
+                    var obj = JSON.parse(data);
+                }
+                catch (e){
+                    console.log(e);
+                    var obj = data;
+
+                }
+                if(obj.code=='0'){
+                    if(obj.lst.length==6)
+                        $("#show-more-items").attr("style","");
+                    var str= ' <li class="ui-item ui-ignore-space  arrow-right"><a href="/web/seek/service/info?id=%s">' +
+                            '<div class="my-item-left">' +
+                            '<img src ="%s" %s>' +
+                            '</div>' +
+                            '<div class="my-item-right ">' +
+                            '<p class="ui-no-wrap">%s</p>'+
+                            '<p class="ui-gray" >提供：%s</p>'+
+                            '<p class="ui-red">单价:%s</p>'+
+                            '<p class="ui-gray">推荐： %s</p> '+
+                            '<p class="ui-gray" >成交：%s</p>'+
+                            '</div>'+
+                            '</a>'+
+                            '</li>';
+                    obj.lst.forEach(function(value){
+                        try{
+                            var temp = JSON.parse(value);
+                        }
+                        catch (e){
+                            console.log(e);
+                            temp = value;
+                        }
+                        window.str = str;
+                        $("#the-list").append(sprintf(str,temp.id,temp.serviceImageAtt,'width="100%" height="100%"',temp.servTitle,temp.releaseUsername,
+                                temp.perPrice+"元",temp.recommendCount,temp.dealedCount+""));
+                    })
+
+                }
+                if(obj.code==!'0'||obj.lst.length<6) {
+
+                    $("#show-more-items").attr("style","");
+                    $("#more-items").text("无更多");
+                    $("#more-items").unbind("tap");
+                }
             })
         })
     })
+    Date.prototype.Format = function (fmt) { //author: meizz
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+
 </script>
 
 </body>
