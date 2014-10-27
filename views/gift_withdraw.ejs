@@ -9,8 +9,8 @@
     <link rel="stylesheet" type="text/css" href="/stylesheets/pro.css?embed" />
     <link rel="stylesheet" type="text/css" href="/vendor/ionicons/css/ionicons.css" />
     <link rel="stylesheet" type="text/css" href = "/stylesheets/head.css">
-    <link href="/stylesheets/pgwmodal.min.css" rel="stylesheet">
-    <script src="/js/pgwmodal.min.js"></script>
+
+
     <script src="/js/zepto.min.js"></script>
     <script src="/js/zepto-touch.min.js"></script>
     <style>
@@ -84,7 +84,8 @@
 
     </style>
     <script src = "/js/WeixinApi.js"></script>
-
+    <link href="/stylesheets/pgwmodal.min.css" rel="stylesheet">
+    <script src="/js/pgwmodal.min.js"></script>
     <script>
         WeixinApi.ready(function(Api) {
 
@@ -107,17 +108,15 @@
             return fmt;
         };
         $().ready(function(){
-            alert("hi!");
+
             $("#show-rule").tap(function(){
-                alert("hi");
                 $.pgwModal({
                     target: '#modalContent',
-                    title: '提现规则',
+                    title: '红包提现规则',
                     maxWidth: 800
                 });
             }) ;
             $("#new-with").tap(function(){
-                alert("hi!");
                 $.get("/web/event/withdraw/new?cash=1&mobile=15851810378",function(data){
                     alert(data);
                 })
