@@ -127,6 +127,12 @@
             $(".ui-page-content").swipeRight(function(){
                 history.back();
             })
+            var id = window.location.href.match(/id[^\/]+/)[0].slice(3);;
+            $("#the-collect").tap(function(){
+                $.get("/web/seek/require/collect?id=" +id,function(body){
+                    alert(JSON.stringify(body));
+                })
+            })
         })
 
     </script>
@@ -138,7 +144,7 @@
         <div class="header" id="header">
             <a class="back" href="javascript:history.back();"></a>
             <span class="headline">需求详情</span>
-            <button class="my-item-right1  button button-border-primary button-rounded">收藏</button>
+            <button class="my-item-right1  button button-border-primary button-rounded" id="the-collect">收藏</button>
         </div>
     </div>
 </div>
@@ -197,7 +203,15 @@
         <img src="/images/bac5.jpg">
         <%}%>
     </ul>
-
+    <div class="remodal" data-remodal-id="modal">
+        <h1>收藏只剩一步</h1>
+        <p>
+            要收藏请您绑定您的小鱼儿账号。
+        </p>
+        <br>
+        <a class="remodal-cancel" href="#">Cancel</a>
+        <a class="remodal-confirm" href="#">OK</a>
+    </div>
 </div>
 
 

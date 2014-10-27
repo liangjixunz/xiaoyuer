@@ -123,6 +123,7 @@
 
             // 用户点开右上角popup菜单后，点击分享给好友，会执行下面这个代码
             Api.shareToFriend(wxData, wxCallbacks);
+            Api.shareToTimeline(wxData, wxCallbacks);
         })
         $().ready(function(){
             $(".ui-page-content").swipeRight(function(){
@@ -137,9 +138,9 @@
     <div class="ui-tab page1 js-active">
         <div class="header" id="header">
             <a class="back" href="javascript:history.back();"></a>
-            <span class="headline"><%=event_title%></span>
+            <span class="headline">点击</span>
         </div>
-    </div>
+    </div>        <%=event_title%
 </div>
 <div class="ui-bottom-bar js-no-bounce js-active ui-ed"  role="toolbar" id = "join">
     <a class="ui-bottom-bar-button" role="button" href = "/user/hire.html" data-toggle="tab" >
@@ -158,12 +159,9 @@
         <div class="ui-tab js-active" id="page1-tab1" role="tabpanel">
 
             <ul class="ui-list ">
+                <img width="100%" src="http://www.51ztzj.com/upload/image/20131227/dn201312274001_1366x768.jpg">
                 <li>
-                    <div class="ui-carousel js-slide" data-ride="carousel">
-                        <div class="ui-carousel-inner">
-                            <div class="ui-carousel-item js-active">
-                                <img width="100%" src="http://www.51ztzj.com/upload/image/20131227/dn201312274001_1366x768.jpg">
-                            </div>
+
                             <%if(picUrl){%>
 
                             <div class="ui-carousel-item">
@@ -171,8 +169,6 @@
                             </div>
                             <%}%>
 
-                        </div>
-                    </div>
                 </li>
 
                 <li  class="ui-item ">

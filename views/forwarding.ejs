@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset='utf-8'>
-    <title>转发送红包</title>
+    <title><%event_title%></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
@@ -122,6 +122,7 @@
 
         // 用户点开右上角popup菜单后，点击分享给好友，会执行下面这个代码
         Api.shareToFriend(wxData, wxCallbacks);
+        Api.shareToTimeline(wxData, wxCallbacks);
     })
     $().ready(function(){
         $(".ui-page-content").swipeRight(function(){
@@ -137,7 +138,7 @@
     <div class="ui-tab page1 js-active">
         <div class="header" id="header">
             <a class="back" href="javascript:history.back();"></a>
-            <span class="headline"><%=event_title%></span>
+            <span class="headline"><span class="headline">点击右上角分享到朋友圈<span style="float: right;margin-top: 4px"> <img src="/images/jt.png"></span></span></span>
         </div>
     </div>
 </div>

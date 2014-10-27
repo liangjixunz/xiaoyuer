@@ -12,9 +12,38 @@ var userInfo = require("xiaoyuer/userInfo"),
 var sprintf = require("sprintf").sprintf;
 
 var mybaseUrl = JSON.parse(fs.readFileSync(__dirname+"/../shared/appConfig")).mybaseUrl;
+var AppID = JSON.parse(fs.readFileSync(__dirname+"/../shared/appConfig")).AppID;
+var AppSecret = JSON.parse(fs.readFileSync(__dirname+"/../shared/appConfig")).AppSecret;
 
 exports.util = function(req,res){
     res.render('util',{});
+}
+
+function set_session(redirect_add_success,redirect_add_fail){
+    this.set_session = function(req,res){
+        var code = req.query.code;
+        var url_temp = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code";
+        var url = sprintf(url_temp,AppID,AppSecret,code);
+        request(url,function(err,response,body){
+            console.log(body);
+            if (!err &&response.statusCode == 200) {
+                var openid_obj = JSON.parse(body) ;
+                if(openid_obj.openid){
+                    req.session.openid = openid_obj.openid;
+                    res.redirect(redirect_add_success);
+                }
+                else{
+                    res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=" + mybaseUrl +redirect_add_fail+"&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
+
+                }
+            }
+        })
+    }
+    this.force = function(req,res){
+        res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=" + mybaseUrl +redirect_add_fail+"&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
+    }
+
+
 }
 /*
 *订单相关api
@@ -22,8 +51,7 @@ exports.util = function(req,res){
 * 坑爹的垃圾回收
  */
 exports.order = (function(){
-    var AppID = JSON.parse(fs.readFileSync(__dirname+"/../shared/appConfig")).AppID;
-    var AppSecret = JSON.parse(fs.readFileSync(__dirname+"/../shared/appConfig")).AppSecret;
+
     function index(req,res){
         user_info(req,res,function(result){
             console.log(result);
@@ -116,6 +144,42 @@ exports.order = (function(){
             res.send(result);
         })
     }
+
+    function game1(req,res) {
+        orders.get_order_list.game1(req.session.openid,req.query.page,function(result){
+            res.send(result);
+        })
+    }
+    function game2(req,res) {
+        orders.get_order_list.game1(req.session.openid,req.query.page,function(result){
+            res.send(result);
+        })
+    }
+
+    function wservice1(req,res){
+        orders.get_order_list.wservice1(req.session.openid,req.query.page,function(result){
+            res.send(result);
+        })
+    }
+    function wservice2(req,res){
+        orders.get_order_list.wservice2(req.session.openid,req.query.page,function(result){
+            res.send(result);
+        })
+    }
+    /*
+     *分页获取需求单信息
+     */
+    function wrequire1(req,res){
+        orders.get_order_list.wrequire1(req.session.openid,req.query.page,function(result){
+            res.send(result);
+        })
+    }
+
+    function wrequire2(req,res){
+        orders.get_order_list.wservice2(req.session.openid,req.query.page,function(result){
+            res.send(result);
+        })
+    }
     /*
     *获取用户信息
     * 若不存在openid的session则跳转
@@ -146,30 +210,14 @@ exports.order = (function(){
         else{
             callback('-1');
             res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=" + mybaseUrl +"/order/fromwe&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
-
         }
 
     }
-
-    function set_session(req,res){
-         var code = req.query.code;
-         var url_temp = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code";
-         var url = sprintf(url_temp,AppID,AppSecret,code);
-         request(url,function(err,response,body){
-
-             if (!err &&response.statusCode == 200) {
-                  var openid_obj = JSON.parse(body) ;
-                  if(openid_obj.openid){
-                      req.session.openid = openid_obj.openid;
-                      res.redirect("/web/order/index");
-                  }
-                  else{
-                      res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=" + mybaseUrl +"/order/fromwe&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
-
-                  }
-                }
-         })
-
+   /*
+   *命名会导致循环引用
+    */
+    function set_session1(req,res){
+        new set_session("/web/order/index","/order/fromwe").set_session(req,res);
     }
 
     function info(req,res){
@@ -188,8 +236,14 @@ exports.order = (function(){
         service1:service1,
         require1:require1,
         service2:service2,
-        require1:require2,
-        set_session:set_session,
+        require2:require2,
+        wservice1:wservice1,
+        wservice2:wservice2,
+        wrequire1:wrequire1,
+        wrequire2:wrequire2,
+        game1:game1,
+        game2:game2,
+        set_session:set_session1,
         info:info
     }
 })();
@@ -199,8 +253,7 @@ exports.order = (function(){
  * 利用req.session.openid
  */
 exports.seek = (function(){
-    var AppID = JSON.parse(fs.readFileSync(__dirname+"/../shared/appConfig")).AppID;
-    var AppSecret = JSON.parse(fs.readFileSync(__dirname+"/../shared/appConfig")).AppSecret;
+
     function index(req,res){
         res.render('seek',{
             new_items:10,
@@ -211,9 +264,11 @@ exports.seek = (function(){
     *发现-大赛
      */
     function game(){
+        var the_session = new set_session("/web/seek/game/index","/seek/game/fromwe");
         return{
             index : function(req,res){
-                seek.seek.games("1","1",function(result){
+                if(req.session.openid)
+                    seek.seek.games(" ","1",function(result){
                     if(result.code == 0){
                         var resObj = [];
                         var temp = {};
@@ -238,7 +293,11 @@ exports.seek = (function(){
                             items:resObj
                         })
                     }
-                })
+                });
+                else{
+                    the_session.force(req,res);
+                }
+
             },
             info:  function(req,res){
                 seek.info("game",req.query.id,function(result){
@@ -264,7 +323,14 @@ exports.seek = (function(){
                 seek.seek.games("1",req.query.page,function(result){
                     res.send(result);
                 })
-            }
+            } ,
+            collect:function(req,res){
+               seek.collet(req.query.id,req.session.openid,"game",function(result){
+                   res.send(result);
+               })
+            },
+            set_session: the_session.set_session
+
         }
     }
     /*
@@ -397,7 +463,6 @@ exports.seek = (function(){
       */
     function wrequire(){
 
-
         return{
             index: function(req,res) {
                 seek.seek.wel_require("","1",function(result){
@@ -523,9 +588,11 @@ exports.seek = (function(){
 
     function service(){
         var classify = area_class.classify.get();
+        var the_session = new set_session("/web/seek/service/index","/seek/service/fromwe");
         return{
             index:function(req,res) {
-                seek.seek.service("1","1",function(result){
+                if(req.session.openid)
+                    seek.seek.service("","1",function(result){
                     var resObj = [];
                     var temp = {};
                     /*
@@ -560,7 +627,9 @@ exports.seek = (function(){
                             ]
                         })
                     }
-                })
+                });
+                else
+                    the_session.force(req,res);
 
             },
             the_class: function(req,res){
@@ -642,31 +711,22 @@ exports.seek = (function(){
                 })
             },
             collect:function(req,res){
-                var code = req.query.code;
-                var url_temp = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code";
-                var url = sprintf(url_temp,AppID,AppSecret,code);
-                request(url,function(err,response,body){
-
-                    if (!err &&response.statusCode == 200) {
-                        var openid_obj = JSON.parse(body) ;
-                        if(openid_obj.openid){
-                            var the_id = req.query.path.match(/collect\/[^\/]+/)[0].slice(8);
-                            seek.collet(the_id,openid_obj.openid,"service",function(result){
-                                callback(result)
-                            })
-                        }
-
-                    }
+                seek.collet(req.query.id,req.session.openid,"service",function(result){
+                                res.send(result);
                 })
-            }
+            } ,
+            set_session:the_session.set_session
         }
     }
 
     function requires(){
         var classify = area_class.classify.get();
+        var the_session = new set_session("/web/seek/require/index","/seek/require/fromwe");
+        console.log(the_session);
         return{
             index:function(req,res) {
-                seek.seek.require("1","1",function(result){
+                if(req.session.openid)
+                    seek.seek.require("1","1",function(result){
                     var resObj = [];
 
                     /*
@@ -703,6 +763,10 @@ exports.seek = (function(){
                         })
                     }
                 })
+                else{
+                    console.log("aa");
+                    the_session.force(req,res);
+                }
 
             },
             the_class: function(req,res){
@@ -783,9 +847,13 @@ exports.seek = (function(){
                     res.send(result);
                 })
             },
-            collect:function(req,res){
+            collect: function(req,res){
+            seek.collet(req.query.id,req.session.openid,"require",function(result){
+                res.send(result);
+            })
+            },
+            set_session:the_session.set_session
 
-            }
         }
     }
     return{
