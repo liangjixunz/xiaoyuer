@@ -329,6 +329,11 @@ exports.seek = (function(){
                    res.send(result);
                })
             },
+            is_collect:function(req,res){
+                seek.is_collect(req.query.id,req.session.openid,"game",function(result){
+                    res.send(result);
+                })
+            },
             set_session: the_session.set_session
 
         }
@@ -705,6 +710,30 @@ exports.seek = (function(){
 
                 })
             },
+            des:function(req,res){
+                seek.info("service",req.query.id,function(result){
+                    try{
+                        var  resObj = JSON.parse(result);
+                        try{
+                            var uri = resObj.serviceImageAtt.match(/service\/[\s\S]+/)[0];
+                            if(!resObj.serviceImageAtt.match(/files\//)){
+                                uri = "files/" + uri;
+                            }
+                            resObj.serviceImageAtt = "/images/"+ pic_cache.cache(uri);
+                        }
+                        catch (e){
+                            console.log(e);
+                        }
+                        resObj.servDes = html_decode(resObj.servDes);
+                        res.render('detail-service-des',resObj);
+                    }
+                    catch (e){
+                        console.log(e);
+                        res.send(404);
+                    }
+
+                })
+            },
             page_class: function(req,res){
                 seek.seek.service(req.query.class,req.query.page,function(result){
                     res.send(result);
@@ -715,6 +744,11 @@ exports.seek = (function(){
                                 res.send(result);
                 })
             } ,
+            is_collect:function(req,res){
+                seek.is_collect(req.query.id,req.session.openid,"service",function(result){
+                    res.send(result);
+                })
+            },
             set_session:the_session.set_session
         }
     }
@@ -851,6 +885,11 @@ exports.seek = (function(){
             seek.collet(req.query.id,req.session.openid,"require",function(result){
                 res.send(result);
             })
+            },
+            is_collect: function(req,res){
+                seek.is_collect(req.query.id,req.session.openid,"require",function(result){
+                    res.send(result);
+                })
             },
             set_session:the_session.set_session
 

@@ -9,10 +9,10 @@
     <link rel="stylesheet" type="text/css" href="/stylesheets/pro.css?embed" />
     <link rel="stylesheet" type="text/css" href="/vendor/ionicons/css/ionicons.css" />
     <link rel="stylesheet" type="text/css" href = "/stylesheets/head.css">
-    <link rel="stylesheet" type="text/css" href = "/stylesheets/jquery.remodal.css">
+
     <script src="/js/zepto.min.js"></script>
     <script src="/js/zepto-touch.min.js"></script>
-    <script src = "/js/jquery.remodal.js"></script>
+
     <style>
 
         .button-rounded {
@@ -127,19 +127,20 @@
 
         }
         $().ready(function(){
+
             $(".ui-page-content").swipeRight(function(){
                 history.back();
             })
             var id = window.location.href.match(/id[^\/]+/)[0].slice(3);
+            $.get("/web/seek/game/iscollect?id="+id,function(body){
+                alert(JSON.stringify(body));
+            })
             $("#the-collect").tap(function(){
                 $.get("/web/seek/game/collect?id="+id,function(body){
                     alert(JSON.stringify(body));
-                    window.location.href = "#modal";
                 })
             })
-           $(".remodal-confirm").tap(function(){
-               window.location.href = "/web/seek/game/index"
-           })
+
         })
 
     </script>

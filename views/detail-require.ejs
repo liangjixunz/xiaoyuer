@@ -9,8 +9,10 @@
     <link rel="stylesheet" type="text/css" href="/stylesheets/pro.css?embed" />
     <link rel="stylesheet" type="text/css" href="/vendor/ionicons/css/ionicons.css" />
     <link rel="stylesheet" type="text/css" href = "/stylesheets/head.css">
+    <link rel="stylesheet" type="text/css" href = "/stylesheets/simplegrid.css">
     <script src="/js/zepto.min.js"></script>
     <script src="/js/zepto-touch.min.js"></script>
+
     <style>
 
         .button-rounded {
@@ -128,7 +130,10 @@
             $(".ui-page-content").swipeRight(function(){
                 history.back();
             })
-            var id = window.location.href.match(/id[^\/]+/)[0].slice(3);;
+            var id = window.location.href.match(/id[^\/]+/)[0].slice(3);
+            $.get("/web/seek/require/iscollect?id=" +id,function(body){
+                alert(JSON.stringify(body));
+            })
             $("#the-collect").tap(function(){
                 $.get("/web/seek/require/collect?id=" +id,function(body){
                     alert(JSON.stringify(body));

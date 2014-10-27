@@ -7,12 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" type="text/css" href="/stylesheets/pro.css?embed" />
-    <link rel="stylesheet" type="text/css" href="/vendor/ionicons/css/ionicons.css" />
     <link rel="stylesheet" type="text/css" href = "/stylesheets/head.css">
-    <link rel="stylesheet" type="text/css" href = "/stylesheets/jquery.remodal.css">
+    <link rel="stylesheet" type="text/css" href = "/stylesheets/simplegrid.css">
     <script src="/js/zepto.min.js"></script>
     <script src="/js/zepto-touch.min.js"></script>
-    <script src = "/js/jquery.remodal.js"></script>
+
     <style>
 
         .button-rounded {
@@ -33,15 +32,15 @@
             *zoom: 1;
             *display: inline;
             border: 1px solid #d4d4d4;
-            height: 32px;
-            line-height: 30px;
-            padding: 0px 25.6px;
+            height: 55px;
+            line-height: 55px;
+            padding: 0px 10%;
             font-weight: 300;
             font-size: 14px;
             font-family: "Helvetica Neue Light", "Helvetica Neue", "Helvetica", "Arial", "Lucida Grande", sans-serif;
             color: #666;
             text-shadow: 0 1px 1px white;
-            margin-top: 7px;
+            margin-top: 0px;
             text-decoration: none;
             text-align: center; }
         .button-border-primary {
@@ -57,8 +56,8 @@
             -webkit-transition-duration: 0.3s;
             transition-duration: 0.3s;
             color: #ffffff;
-            border: 2px solid #FFFFFF;
-            background: none;
+            border: 2px solid orange;
+            background: orange;
             text-shadow: none; }
         .button-border-pro {
             -moz-box-shadow: none;
@@ -81,7 +80,7 @@
         }
         .my-item-right1{
             float:right;
-            margin-right: 8px;
+            margin-right: 0;
         }
 
         .my-item-right p {
@@ -90,13 +89,11 @@
         button.button:disabled {
             -moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
             -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
-            box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
             filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
-            opacity: 0.8;
-            background: #EEE;
-            border: 1px solid #DDD;
-            text-shadow: 0 1px 1px white;
-            color: #CCC;
+            opacity: 1;
+            background: gray;
+            border: 1px solid gray;
+            color: #fff;
             cursor: default;
             -webkit-appearance: none; }
         [data-lazy] {
@@ -105,6 +102,12 @@
             height: 120px;
             width: 240px;
             border: 1px solid #eee;
+        }
+        .lines{
+            border-left: 1px solid #B7D0E4;
+            display: inline-block;
+            margin-left: -1px;
+            padding: 0px 0px 0px 3px;
         }
 
     </style>
@@ -134,10 +137,38 @@
                 history.back();
             })
             var id = window.location.href.match(/id[^\/]+/)[0].slice(3);
+            $.get("/web/seek/service/iscollect?id="+id,function(body){
+                switch (body.code){
+                    case '0':
+                        break;
+                    case '-1':
+                        $("#the-collect").attr("disabled","");
+                        $("#the-collect").text("还未绑定账号")
+                        break;
+                    case '-3':
+                        $("#the-collect").attr("disabled","");
+                        $("#the-collect").text("不能收藏自己的")
+                        break;
+                    case '-4':
+                        $("#the-collect").attr("disabled","");
+                        $("#the-collect").text("已收藏") ;
+                        break;
+                    default :
+                        $("#the-collect").attr("disabled","");
+                        $("#the-collect").text("收藏不可用") ;
+                }
+            })
             $("#the-collect").tap(function(){
                 $.get("/web/seek/service/collect?id="+id,function(body){
-                    alert(JSON.stringify(body));
+                   if(body.code=='0'){
+                       $("#the-collect").attr("disabled","");
+                       $("#the-collect").text("已收藏") ;
+                   }
+
                 })
+            })
+            $("#to-des").tap(function(){
+                window.location.href = "/web/seek/service/des?id="+id;
             })
         })
     </script>
@@ -149,6 +180,10 @@
         <div class="header" id="header">
             <a class="back" href="javascript:history.back();"></a>
             <span class="headline">服务详情</span>
+        </div>
+        <div class="the-bottom" id="the-bottom">
+            <a class="back" href="javascript:history.back();"></a>
+            <span class="ui-left">￥<%-perPrice%> <%-selfCashUint?("/"+selfCashUint):""%></span>
             <button class="my-item-right1  button button-border-primary button-rounded" id="the-collect">收藏</button>
         </div>
     </div>
@@ -158,61 +193,83 @@
     <!-- 主体内容 -->
     <ul class="ui-list ">
 
-        <img src="/images/bac6.jpg" width="100%" height="65px">
+        <img src="/images/bac6.jpg" width="100%" height="10px">
 
         <%if(code==0){%>
         <li class="ui-item">
-            <%-servTitle%>
-            <img src="/images/bac6.jpg" width="100%" height="10px">
+            <div class="grid grid-pad">
+                <div class="col-1-1">
+                    <div class="content">
+                        <h3><%-servTitle%></h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-pad">
+                <div class="col-1-3 mobile-col-1-3">
+                    <div class="content">
+                        成交次数: <span class="ui-red"> <%-dealedCount%> </span>
+                    </div>
+                </div>
+                <div class="col-1-3 mobile-col-1-3">
+                    <div class="content">
+                        收藏次数: <span class="ui-red"><%-collectionCount%></span>
+                    </div>
+                </div>
+                <div class="col-1-3 mobile-col-1-3">
+                    <div class="content">
+                        自动接收: <span class="ui-red"><%-isAtuoAccpt?"是":"否"%></span>
+                    </div>
+                </div>
+            </div>
         </li>
 
         <li class="ui-item">
+            <div class="grid grid-pad">
+                <div class="col-11-12 mobile-col-11-12">
+                    <div class="content">
+                        <p  class = "ui-gray">当前状态:&nbsp;<%-status%></p>
+                    </div>
+                </div>
+                <div class="col-11-12 mobile-col-11-12">
+                    <div class="content">
+                        <p  class = "ui-gray">截止时间:&nbsp;<%-endDate%></p>
+                    </div>
+                </div>
+                <div class="col-11-12 mobile-col-11-12">
+                    <div class="content">
+                        <p  class = "ui-gray">发布时间:&nbsp;<%-dateInsert%></p>
+                    </div>
+                </div>
 
-            <p></p>
-            <button disabled class="ui-button">当前状态</button>
-            <span class = "my-item-right ui-gray"><%-status%></span>
-            <p></p>
-            <button disabled class="ui-button">成交次数</button>
-            <span class = "my-item-right ui-red"><%-dealedCount%></span>
-            <p></p>
-            <button disabled class="ui-button">收藏次数</button>
-            <span class = "my-item-right ui-red"><%-collectionCount%></span>
-            <p></p>
-            <button disabled class="ui-button">自动接收</button>
-            <span class = "my-item-right ui-gray"><%-isAtuoAccpt?"是":"否"%></span>
-            <p></p>
-            <button disabled class="ui-button">服务单价</button>
-            <span class = "my-item-right ui-red"><%-perPrice%> 元 <%-selfCashUint?"/"+selfCashUint:(cashUint-1? cashUint:"")%></span>
-            <p></p>
-            <button disabled class="ui-button">其他须知</button>
-            <span class = "my-item-right ui-gray"> <%-isSameCity?"同城&nbsp;":""%><%-isOndoorService?"上门服务":""%>
-               <%-isserviceoutline?"线下":"线上"%>
-            </span>
-            <p></p>
-            <button disabled class="ui-button">截止时间</button>
-            <span class = "my-item-right ui-gray"> <%-endDate%></span>
-            <p></p>
-            <button disabled class="ui-button">发布时间</button>
-            <span class = "my-item-right ui-gray"> <%-dateInsert%></span>
-            <p></p>
-        </li>
 
-        <li  class="ui-item">
-            <button disabled class="ui-button">详细信息</button>
-            <div >
-                <img src="<%-serviceImageAtt%>" width="96%" align="middle">
-                <p>&nbsp;</p>
-                <%- servDes.replace(/<\/p>/g,"</p><p>&nbsp;</p>")%>
             </div>
         </li>
-        <p>
-            &nbsp;
-        </p>
-        <%}%>
-        <%if(code!=0){%>
-        <img src="/images/bac5.jpg">
-        <%}%>
+         <li class="ui-item">
+              <div class="grid grid-pad">
+                  <div class="col-11-12 mobile-col-11-12">
+                      <div class="content">
+                          <p  class = "ui-gray">其他须知:&nbsp; <%-isSameCity?"同城&nbsp;":""%><%-isOndoorService?"上门服务":""%>
+                              <%-isserviceoutline?"线下":"线上"%></p>
+                      </div>
+                  </div>
+              </div>
+         </li>
+        <img src="/images/bac6.jpg" width="100%" height="6px">
     </ul>
+
+    <ul class="ui-list  arrow-right">
+        <li class="ui-item"><a id="to-des">
+               &nbsp;&nbsp;&nbsp;&nbsp;服务描述
+        </a>
+
+        </li>
+    </ul>
+
+    <%}%>
+    <%if(code!=0){%>
+    <img src="/images/bac5.jpg">
+    <%}%>
 
 </div>
 
