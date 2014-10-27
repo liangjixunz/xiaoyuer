@@ -2,14 +2,17 @@
 <html>
 <head>
     <meta charset='utf-8'>
-    <title>转发送红包</title>
+    <title>红包提现</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" type="text/css" href="/stylesheets/pro.css?embed" />
     <link rel="stylesheet" type="text/css" href="/vendor/ionicons/css/ionicons.css" />
     <link rel="stylesheet" type="text/css" href = "/stylesheets/head.css">
-
+    <link href="/stylesheets/pgwmodal.min.css" rel="stylesheet">
+    <script src="/js/pgwmodal.min.js"></script>
+    <script src="/js/zepto.min.js"></script>
+    <script src="/js/zepto-touch.min.js"></script>
     <style>
         .my-banner {
             margin-bottom: 20px;
@@ -103,6 +106,23 @@
                 if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
             return fmt;
         };
+        $().ready(function(){
+            alert("hi!");
+            $("#show-rule").tap(function(){
+                alert("hi");
+                $.pgwModal({
+                    target: '#modalContent',
+                    title: '提现规则',
+                    maxWidth: 800
+                });
+            }) ;
+            $("#new-with").tap(function(){
+                alert("hi!");
+                $.get("/web/event/withdraw/new?cash=1&mobile=15851810378",function(data){
+                    alert(data);
+                })
+            })
+        })
     </script>
 </head>
 <body class="ui-app">
@@ -110,7 +130,8 @@
 
 <div class="ui-tab page1 js-active">
     <div class="header" id="header">
-        <span class="headline">红包任务</span>
+        <a class="back" href="javascript:history.back();"></a>
+        <span class="headline">提现</span>
 
     </div>
 </div>
@@ -131,31 +152,47 @@
                         <div class="my-item-left">
                             <img width="100%" src = "/images/1.jpg">
                         </div>
-                        <div class="my-item-right"><span class="ui-right"><span class="ui-red">提现</span></span>
+                        <div class="my-item-right">
                             <p class="ui-no-wrap"><%=username%></p>
-                            <p class="ui-red">余额：<%=user_banlance%></p>
-                            <p class="ui-gray">已提现:<%=withdraw%></p>
+                            <p class="ui-gray">余额：<span class="ui-red"><%=user_banlance%></span>
+                            <p class="ui-no-wrap ui-gray"> 10元起提现</p>
+
+
                         </div>
+
                     </a>
 
                 </li>
+
             </ul>
+             <ul class="ui-list">
+                 <li class="ui-item ui-ignore-space">
+                     <a class="my-deletable" >
+
+                         <p><a id="show-rule">查看提现规则</a>&nbsp;<span class="ui-right"> <button class="ui-button" id="new-with">提现</button></span></p>
+                         <p>&nbsp;</p>
+                     </a>
+
+                 </li>
+             </ul>
 
             <ul class="ui-list">
-                <li class="ui-item "><a>还在进行中的活动<span class="ui-right"></span> </a></li>
-                <% if(event_effect.length){%>
-                <% event_effect.forEach(function(value){%>
-                <li class="ui-item ui-ignore-space arrow-right">
-                    <a class="my-deletable" href="info?event_id=<%= value.event_id%>&over=0">
+                <li class="ui-item "><a>提现历史<span class="ui-right"> 已提现:<span class="ui-red"><%=withdraw%></span></span> </a></li>
+                <% if(withdraw_his.length){%>
+                <% withdraw_his.forEach(function(value){%>
+                <li class="ui-item ui-ignore-space">
+                    <a class="my-deletable"  href="withdraw">
                         <div class="my-item-left">
                             <img width="100%" src = "/images/1.jpg">
                         </div>
-                        <div class="my-item-right"><span class="ui-right ui-gray">还可获得<span class="ui-red"><%=value.left_time%></span>次红包</span>
-                            <p class="ui-no-wrap"><%=value.event_name%></p>
-                            <p class="ui-red">可用</p>
-                            <p class="ui-gray">截止日期:<%=new Date(value.event_finish).Format("yyyy-MM-dd hh:mm:ss")%></p>
+                        <div class="my-item-right"><span class="ui-right"><span class="ui-red"><%=value.withdraw_is_over?"已完成":"处理中"%></span></span>
+                            <p class="ui-no-wrap ui-gray">流水号：<%=value.withdraw_id%></p>
+                            <p class="ui-no-wrap">金额：<%=value.money%>元</p>
+                            <p class="ui-red">手机号：<%=value.mobile%></p>
+                            <p class="ui-gray">提现日期:<%=value.withdraw_generate%></p>
                         </div>
                     </a>
+
                 </li>
                 <%})}%>
             </ul>
@@ -170,7 +207,35 @@
 
 </div>
 
+<div id="modalContent" style="display: none;">
+    <ul class="ui-list">
+        <li class="ui-item ui-ignore-space">
+            <a class="my-deletable" >
+                1.10元起可申请提现
+            </a>
 
+        </li>
+
+        <li class="ui-item ui-ignore-space">
+            <a class="my-deletable" >
+                2.提现金额以话费形式充值到手机
+            </a>
+
+        </li>
+        <li class="ui-item ui-ignore-space">
+            <a class="my-deletable" >
+                3.移动到账约十分钟，联通电信三到五个工作日
+            </a>
+
+        </li>
+        <li class="ui-item ui-ignore-space">
+            <a class="my-deletable" >
+                4.活动解释权归“创客汇小鱼儿”所有
+            </a>
+
+        </li>
+    </ul>
+</div>
 
 
 

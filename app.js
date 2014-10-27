@@ -143,16 +143,14 @@ app.get('/test/oneservice',function(req,res){
 /*
 *送红包的路由处理
  */
-app.get('/event/whoisme',function(req,res){
 
-    res.send(req.session.openid);
-})
 /*
 *招聘
  */
 app.post("/user/job",routes.user.job)
 
-
+app.get("/event/withdraw",routes.event.event_withdraw)
+app.get("/event/withdraw/new",routes.event.new_withdraw)
 app.get('/event/whoisme',function(req,res){
 
     res.send(req.session.openid);

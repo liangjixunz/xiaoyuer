@@ -63,7 +63,52 @@ exports.event_index = function(req,res){
 
     }
 }
+exports.new_withdraw = function(req,res){
+    if(!req.session.openid){
+        res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=" + mybaseUrl +"/event/fromwe&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
+    }
+    else{
 
+       db.new_withdraw(req.session.openid,req.query.cash,req.query.mobile,function(id){
+           console.log(id);
+           res.send(id);
+       });
+
+    }
+}
+exports.event_withdraw = function(req,res){
+    if(!req.session.openid){
+        res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=" + mybaseUrl +"/event/fromwe&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
+    }
+    else{
+        try{
+            db.new_user(req.session.openid,function(res2){
+                var obj = {
+                    username: "愚吉",
+                    user_banlance: "",
+                    withdraw: "" ,
+                    withdraw_his:[]
+                };
+                db.get_with_draw_openid(req.session.openid,function(result){
+                    result.forEach(function(value){
+                        value.withdraw_generate = new Date(value.withdraw_generate).Format("20yy年MM月dd日 hh:mm:ss");
+                    })
+                    obj.withdraw_his = result;
+                    db.user_info(req.session.openid, function (result1) {
+                        obj.user_banlance = result1.user_balance;
+                        obj.withdraw = result1.withdraw;
+                        res.render("gift_withdraw", obj);
+                    })
+                })
+            })
+        }
+        catch (e){
+            console.log(e);
+            res.send(500);
+        }
+
+    }
+}
 /*
 *用户试图访问活动列表时
 * 首先获得用户openid
