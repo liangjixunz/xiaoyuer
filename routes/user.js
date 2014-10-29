@@ -68,6 +68,7 @@ exports.order = (function(){
                         (function(){
                             var value1 = value;
                             orders.get_order_list[value1](req.session.openid,1,function(result1){
+                                result1.coder =   result1.coder||result1.code;
                                 if(result1.coder == '0'){
                                     var temp = [];
                                     var temp1 ={};
@@ -862,7 +863,9 @@ exports.seek = (function(){
                         resObj = JSON.parse(result);
                         resObj.releaseTime = new Date(resObj.releaseTime).Format("20yy年MM月dd日 hh:mm:ss");
                         resObj.requireFinishTime = new Date(resObj.requireFinishTime).Format("20yy年MM月dd日 hh:mm:ss");
-                        resObj.requireDes = html_decode( resObj.requireDes)
+                        resObj.requireDes = html_decode( resObj.requireDes) ;
+                        resObj.requireAddress = resObj.requireAddress||"";
+                        resObj.apllayMaxNum = resObj.apllayMaxNum ||"";
                         res.render('detail-require',resObj);
                     }
                     catch (e){
@@ -912,6 +915,7 @@ exports.kf = (function(){
 
     function  user_info (req,res){
         userInfo.getUserInfo(req.query.openid,function(result){
+            console.log(result);
             res.send(result);
         })
     }
@@ -1052,7 +1056,7 @@ exports.register = function(req,res){
 exports.job = function(req,res){
     var body = req.body;
     hire.job_remind(body.name,body.mobile,body.email,body.job);
-    res.redirect("/user/test.html");
+    res.redirect("/user/hire_success.html");
 }
 /*
 *从链接登录

@@ -2,12 +2,85 @@
 <html>
 <head>
     <meta charset='utf-8'>
-    <title>测试用</title>
+    <title>我的订单</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
-    <link rel="stylesheet" type="text/css" href="stylesheets/pro.css?embed" />
-    <link rel="stylesheet" type="text/css" href="vendor/ionicons/css/ionicons.css" />
+    <link rel="stylesheet" type="text/css" href="/stylesheets/pro.css?embed" />
+    <link rel="stylesheet" type="text/css" href="/vendor/ionicons/css/ionicons.css" />
+    <link href="/stylesheets/head.css" rel="stylesheet" type="text/css" />
+    <style>
+        #load{
+            margin:auto;
+            left:0px;
+            right:0px;
+            width:40px;
+            height:40px;
+            -moz-animation:spin 2s linear 0s infinite;
+            border-radius:100%;
+            -webkit-animation:spin 2s linear 0s infinite;
+            animation:spin 2s linear 0s infinite;
+            box-shadow:0px 2px 1px #0000FF,
+            0px -2px 1px #FFE000,
+            -2px 0px 1px #00FF00,
+            2px 0px 1px #FF0000;
+        }
+        @keyframes spin{
+            from{
+                -moz-transform:rotate(0deg);
+                -webkit-transform:rotate(0deg);
+                transform:rotate(0deg);
+            }
+            to{
+                -moz-transform:rotate(360deg);
+                -webkit-transform:rotate(360deg);
+                transform:rotate(360deg);
+            }
+        }@-webkit-keyframes spin{
+             from{
+                 -moz-transform:rotate(0deg);
+                 -webkit-transform:rotate(0deg);
+                 transform:rotate(0deg);
+             }
+             to{
+                 -moz-transform:rotate(360deg);
+                 -webkit-transform:rotate(360deg);
+                 transform:rotate(360deg);
+             }
+         }
+
+
+        .my-item-right {
+            margin-left: 8px;
+        }
+
+
+        .my-item-right p {
+            font-size: 14px;
+        }
+
+
+        .my-item-left{
+            position: absolute;
+            border: 1px solid #fff;
+            border-radius: 4px;
+            background: #fff;
+            height: 60px;
+            width: 60px;
+            font-size: 12px;
+            line-height: 12px;
+        }
+
+        .my-item-right {
+            margin-left: 70px;
+        }
+
+        .my-item-right p {
+            font-size: 14px;
+        }
+
+
+    </style>
     <style>
         .my-item-right {
             margin-left: 70px;
@@ -26,107 +99,97 @@
         }
 
     </style>
-	<script src="js/jquery.min.js">	</script>
-	<script>
-	
-var ticket = getUrlParam('ticket');
-var workerAccouont = '';
-document.getElementById("radio1").checked = true;
-setmsg(1);
+    <script src="/js/jquery.min.js">	</script>
+    <script>
 
-$.getScript('http://crm1.dkf.qq.com/php/index.php/thirdapp/appdemo/get_workeraccount_by_sessionkey?callback=wokeraccountCallback&ticket='+ticket);
+        var ticket = getUrlParam('ticket');
+        var workerAccouont = '';
+        document.getElementById("radio1").checked = true;
+        setmsg(1);
 
-function wokeraccountCallback(data){
-	document.getElementById('area').value += '您现在登录的帐号是：' +  $xss(data.workeraccount,"html") + '\n';
-	document.getElementById('workeraccount').innerHTML =  $xss(data.workeraccount,"html");
-}
-function MCS_ClientNotify(EventData) {
-	EventData = strToJson(EventData);
-	switch(EventData['event']){
-		case 'OnUserChange':{
-			OnUserChange(EventData);
-			break;
-		}
-		case 'OnMapMsgClick':{
-			OnMapMsgClick(EventData);
-			break;
-		}
-	}
-}
+        $.getScript('http://crm1.dkf.qq.com/php/index.php/thirdapp/appdemo/get_workeraccount_by_sessionkey?callback=wokeraccountCallback&ticket='+ticket);
 
-	function OnUserChange(data){
-	
-		$.get('/web/kf/info?openid='+data['userid'],function(data1,status){
-		$("#order-list").html("");
-		    alert(data1);
-			$("#user-name").html(data1.usr_name);
-			$("#credit").html(data1.credit);
-			$("#the-code").html(data1.the_code);
-		});
-		
-		$.get("/web/kf/orderlist?openid="+data['userid'],function(data1,status){
-			data1.forEach(function(value,index){
-			    var html_element = '';
-                html_element +=	'<ul class="ui-list arrow-right"> <li class="ui-item"> <a href="/orderinfo?orderid=';
-				html_element += value.orderid;
-				html_element += '">订单号：';
-				html_element += value.orderid;
-				html_element += '<span class="ui-right">状态：<span class="ui-red">';
-				html_element += value.status;
-				html_element += '/span></span><div class="my-item-right"><p class="ui-no-wrap">';
-				html_element += value.title;
-				html_element += '</p><p class="ui-red">商户：';
-				html_element += value.provider;
-				html_element += '</p>lass="ui-gray">生成日期：';
-				html_element += value.date;
-				html_element += '</p></div>	</a></li></ul>';
-				
-				$("#order-list").append(html_element);
-			})
-		})
-	}
+        function wokeraccountCallback(data){
+            document.getElementById('area').value += '您现在登录的帐号是：' +  $xss(data.workeraccount,"html") + '\n';
+            document.getElementById('workeraccount').innerHTML =  $xss(data.workeraccount,"html");
+        }
+        function MCS_ClientNotify(EventData) {
+            EventData = strToJson(EventData);
+            switch(EventData['event']){
+                case 'OnUserChange':{
+                    OnUserChange(EventData);
+                    break;
+                }
+                case 'OnMapMsgClick':{
+                    OnMapMsgClick(EventData);
+                    break;
+                }
+            }
+        }
 
-	function strToJson(str){
-	var json = (new Function("return " + str))();
-	return json;
-}
-	</script>
-   </head>
+        function OnUserChange(data){
+
+            $.get('/web/kf/info?openid='+data['userid'],function(data1,status){
+                $("#nickname").text(data1.nickName);
+                $("#kaopu").text("靠谱度:"+data1.kaopu);
+                $("#geili").text("给力度："+data1.geili);
+                $("#balance").text("余额：" + data1.balance)
+            });
+
+
+        }
+
+        function strToJson(str){
+            var json = (new Function("return " + str))();
+            return json;
+        }
+    </script>
+</head>
 <body class="ui-app">
 
+<div class="ui-top-bar js-no-bounce">
+<div class="ui-tab page1 js-active">
+    <div class="header" id="header">
+        <span class="headline">用户信息</span>
+    </div>
 
-
+</div>
+ </div>
 
 <!-- 一个App可以多个page -->
 <div class="ui-page page1 js-active">
+
     <div class="ui-page-content">
         <!-- 主体内容 -->
 
         <div class="ui-tab js-active" id="page1-tab1" role="tabpanel">
 
-             
-            <ul class="ui-list">
-               
+
+            <ul class="ui-list" >
+
                 <li class="ui-item ui-ignore-space"><a href="#">
-                    
-                    <div class="my-item-right">
-                        <p class="ui-no-wrap" id ="user-name"></p>
-                        <p class="ui-grey" >积分: <span id = "the-code"></span></p>
-                        <p class="ui-red">信誉：<span id = "credit"></span></p>
-                    </div>
-                </a></li>
+                        <div class="my-item-left">
+                            <img id="the-img"src ="/images/1.jpg" width="100%" height="100%">
+                        </div>
+                        <div class="my-item-right">
+                            <p class="ui-no-wrap" id="nickname">昵称</p>
+                            <p class="ui-no-wrap" id="balance">余额：</p>
+                            <p class="ui-grey" id="kaopu" >靠谱度:</p>
+                            <p class="ui-red" id="geili">给力度：</p>
+                        </div>
+                    </a></li>
             </ul>
-			<button class="ui-button ui-block ui-info">最近订单</button>
-            <div id = "order-list">
-           	
-           </div>
-          <button class="ui-button ui-block ui-danger" id = "more-order">more</button>
+
+
         </div>
 
-</div>
+
+
+    </div>
 
 
 </div>
+
 
 </body>
 </html>

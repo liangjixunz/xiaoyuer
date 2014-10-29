@@ -53,8 +53,7 @@ app.get('/util', routes.user.util);
 *客服使用的API
  */
 app.get('/kf/info',routes.user.kf.user_info);
-app.get('/kf/order/service',routes.user.kf.order_service);
-app.get('/kf/order/require',routes.user.kf.order_require)
+
 
 /*
 *用户的订单列表
@@ -291,7 +290,7 @@ function admin_check(req,res,next){
     }
 }
 
-/*process.on('uncaughtException', function (err) {
+process.on('uncaughtException', function (err) {
     console.log('Caught Exception:' + err);//直接捕获method()未定义函数，Node进程未被退出。
-});*/
+});
 module.exports = app;

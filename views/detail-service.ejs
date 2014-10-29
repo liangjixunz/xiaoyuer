@@ -191,9 +191,10 @@
 
 <div class="ui-page-content">
     <!-- 主体内容 -->
+    <img src="/images/bac6.jpg" width="100%" height="20px">
     <ul class="ui-list ">
 
-        <img src="/images/bac6.jpg" width="100%" height="10px">
+
 
         <%if(code==0){%>
         <li class="ui-item">
@@ -208,17 +209,17 @@
             <div class="grid grid-pad">
                 <div class="col-1-3 mobile-col-1-3">
                     <div class="content">
-                        成交次数: <span class="ui-red"> <%-dealedCount%> </span>
+                        成交: <span class="ui-red"> <%-dealedCount%> </span>
                     </div>
                 </div>
                 <div class="col-1-3 mobile-col-1-3">
                     <div class="content">
-                        收藏次数: <span class="ui-red"><%-collectionCount%></span>
+                        收藏: <span class="ui-red"><%-collectionCount%></span>
                     </div>
                 </div>
                 <div class="col-1-3 mobile-col-1-3">
                     <div class="content">
-                        自动接收: <span class="ui-red"><%-isAtuoAccpt?"是":"否"%></span>
+                        评价: <span class="ui-red"><%-commentCount%></span>
                     </div>
                 </div>
             </div>
@@ -260,7 +261,7 @@
 
     <ul class="ui-list  arrow-right">
         <li class="ui-item"><a id="to-des">
-               &nbsp;&nbsp;&nbsp;&nbsp;服务描述
+               服务描述
         </a>
 
         </li>

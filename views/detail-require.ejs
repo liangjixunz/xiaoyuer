@@ -7,7 +7,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
     <link rel="stylesheet" type="text/css" href="/stylesheets/pro.css?embed" />
-    <link rel="stylesheet" type="text/css" href="/vendor/ionicons/css/ionicons.css" />
     <link rel="stylesheet" type="text/css" href = "/stylesheets/head.css">
     <link rel="stylesheet" type="text/css" href = "/stylesheets/simplegrid.css">
     <script src="/js/zepto.min.js"></script>
@@ -33,15 +32,15 @@
             *zoom: 1;
             *display: inline;
             border: 1px solid #d4d4d4;
-            height: 32px;
-            line-height: 30px;
-            padding: 0px 25.6px;
+            height: 55px;
+            line-height: 55px;
+            padding: 0px 10%;
             font-weight: 300;
             font-size: 14px;
             font-family: "Helvetica Neue Light", "Helvetica Neue", "Helvetica", "Arial", "Lucida Grande", sans-serif;
             color: #666;
             text-shadow: 0 1px 1px white;
-            margin-top: 7px;
+            margin-top: 0px;
             text-decoration: none;
             text-align: center; }
         .button-border-primary {
@@ -57,8 +56,8 @@
             -webkit-transition-duration: 0.3s;
             transition-duration: 0.3s;
             color: #ffffff;
-            border: 2px solid #FFFFFF;
-            background: none;
+            border: 2px solid orange;
+            background: orange;
             text-shadow: none; }
         .button-border-pro {
             -moz-box-shadow: none;
@@ -81,7 +80,7 @@
         }
         .my-item-right1{
             float:right;
-            margin-right: 8px;
+            margin-right: 0;
         }
 
         .my-item-right p {
@@ -90,13 +89,11 @@
         button.button:disabled {
             -moz-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
             -webkit-box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
-            box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
             filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
-            opacity: 0.8;
-            background: #EEE;
-            border: 1px solid #DDD;
-            text-shadow: 0 1px 1px white;
-            color: #CCC;
+            opacity: 1;
+            background: gray;
+            border: 1px solid gray;
+            color: #fff;
             cursor: default;
             -webkit-appearance: none; }
         [data-lazy] {
@@ -105,6 +102,12 @@
             height: 120px;
             width: 240px;
             border: 1px solid #eee;
+        }
+        .lines{
+            border-left: 1px solid #B7D0E4;
+            display: inline-block;
+            margin-left: -1px;
+            padding: 0px 0px 0px 3px;
         }
 
     </style>
@@ -126,21 +129,47 @@
             onBridgeReady();
 
         }
+
+    </script>
+    <script>
         $().ready(function(){
             $(".ui-page-content").swipeRight(function(){
                 history.back();
             })
             var id = window.location.href.match(/id[^\/]+/)[0].slice(3);
-            $.get("/web/seek/require/iscollect?id=" +id,function(body){
-                alert(JSON.stringify(body));
+            $.get("/web/seek/require/iscollect?id="+id,function(body){
+                switch (body.code){
+
+                    case '0':
+                        break;
+                    case '-1':
+                        $("#the-collect").attr("disabled","");
+                        $("#the-collect").text("还未绑定账号")
+                        break;
+                    case '-3':
+                        $("#the-collect").attr("disabled","");
+                        $("#the-collect").text("不能收藏自己的")
+                        break;
+                    case '-4':
+                        $("#the-collect").attr("disabled","");
+                        $("#the-collect").text("已收藏") ;
+                        break;
+                    default :
+                        $("#the-collect").attr("disabled","");
+                        $("#the-collect").text("收藏不可用") ;
+                }
             })
             $("#the-collect").tap(function(){
-                $.get("/web/seek/require/collect?id=" +id,function(body){
-                    alert(JSON.stringify(body));
+                $.get("/web/seek/require/collect?id="+id,function(body){
+                    if(body.code=='0'){
+                        $("#the-collect").attr("disabled","");
+                        $("#the-collect").text("已收藏") ;
+                    }
+
                 })
             })
-        })
 
+        })
     </script>
 </head>
 <body class="ui-app">
@@ -150,6 +179,10 @@
         <div class="header" id="header">
             <a class="back" href="javascript:history.back();"></a>
             <span class="headline">需求详情</span>
+        </div>
+        <div class="the-bottom" id="the-bottom">
+            <a class="back" href="javascript:history.back();"></a>
+            <span class="ui-left">￥<%-(requirePriceType-1)?(requireFromPrice+"-"+requireToPrice):requireFixedPrice%></span>
             <button class="my-item-right1  button button-border-primary button-rounded" id="the-collect">收藏</button>
         </div>
     </div>
@@ -157,58 +190,87 @@
 
 <div class="ui-page-content">
     <!-- 主体内容 -->
+    <img src="/images/bac6.jpg" width="100%" height="20px">
     <ul class="ui-list ">
 
-        <img src="/images/bac6.jpg" width="100%" height="60px">
+
 
         <%if(code==0){%>
         <li class="ui-item">
-            <%-requireTitle%>
-            <img src="/images/bac6.jpg" width="100%" height="10px">
+            <div class="grid grid-pad">
+                <div class="col-1-1">
+                    <div class="content">
+                        <h3><%-requireTitle%></h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-pad">
+                <div class="col-5-12 mobile-col-5-12">
+                    <div class="content">
+                        <span class="ui-gray"> <%-(typeof (serverProvideBill)!=undefined)?"":"不"%>需要发票 </span>
+                    </div>
+                </div>
+
+                <div class="col-11-12 mobile-col-11-12">
+                    <div class="content">
+                        地点:<%-requireAddress?requireAddres:"线上"%>
+                    </div></div>
+                <div class="col-1-3 mobile-col-1-3">
+                    <div class="content">
+                       报名: <span class="ui-red"><%-apllayCount%></span>
+                    </div>
+                </div>
+                <div class="col-1-3 mobile-col-1-3">
+                <div class="content">
+                    已选: <span class="ui-red"><%-chooseUserCount%></span>
+                </div>
+            </div>
+                <div class="col-1-3 mobile-col-1-3">
+                    <div class="content">
+                        浏览: <span class="ui-red"><%-viewCount%></span>
+                    </div>
+                </div>
+                <div class="col-1-1 mobile-col-1-1">
+                    <div class="content">
+                        <span class="ui-gray">  完成时间: <%-requireFinishTime%></span>
+                    </div>
+                </div>
+            </div>
+
         </li>
+
 
         <li class="ui-item">
-
-            <button disabled class="ui-button">发布时间</button>
-            <span class = "my-item-right ui-gray"> <%-releaseTime%></span>
-            <p></p>
-            <button disabled class="ui-button">截止时间</button>
-            <span class = "my-item-right ui-gray"> <%-requireFinishTime%></span>
-            <p></p>
-            <button disabled class="ui-button">提供赏金</button>
-            <span class = "my-item-right ui-red"> <%-(requirePriceType-1)?(requireFromPrice+"-"+requireToPrice):requireFixedPrice%>元</span>
-            <p></p>
-            <button disabled class="ui-button">已选人数</button>
-            <span class="my-item-right ui-gray"><span class="ui-red"><%-chooseUserCount%></span>&nbsp;/&nbsp;<%-serverOne?1:serverCount %></span>
-            <p></p>
-
+            <div class="grid grid-pad">
+                <div class="col-11-12 mobile-col-11-12">
+                    <div class="content">
+                        <p  class = "ui-gray">更多要求:&nbsp; <%-isSameCity?"同城&nbsp;":""%>
+                            <%-hasAchievement?"要求带作品":""%>   <%-apllayMaxNum?"报名上限:"+apllayMaxNum:""%>
+                    </div>
+                </div>
+            </div>
         </li>
-        <li class="ui-item">
-            <button disabled class="ui-button">当前状态</button>
-            <span class = "my-item-right ui-gray"><%-requireStatus%></span>
-            <p></p>
-            <button disabled class="ui-button">浏览次数</button>
-            <span class = "my-item-right ui-gray"><%-viewCount%></span>
-            <p></p>
-            <button disabled class="ui-button">附加要求</button>
-            <span class = "my-item-right ui-gray"><%-hasAchievement?"要求带作品":""%>
-            <%-serverSex?((serverSex-1)?"男":"女"):""%>
-            </span>
-        </li>
+        <img src="/images/bac6.jpg" width="100%" height="6px">
+    </ul>
 
+    <ul class="ui-list ">
         <li  class="ui-item">
-            <button disabled class="ui-button">详细信息</button>
-            <div ><%-requireDes.replace(/<\/p>/g,"</p><p>&nbsp;</p>")%>
+           <a>需求描述</a>
+        </li>
+        <li  class="ui-item">
+                 <div ><%-requireDes.replace(/<\/p>/g,"</p><p>&nbsp;</p>")%>
             </div>
         </li>
         <p>
             &nbsp;
         </p>
-         <%}%>
-        <%if(code!=0){%>
-        <img src="/images/bac5.jpg">
-        <%}%>
     </ul>
+
+    <%}%>
+    <%if(code!=0){%>
+    <img src="/images/bac5.jpg">
+    <%}%>
 
 </div>
 

@@ -132,21 +132,21 @@
                 <li class="ui-item"><a>随机推荐</a></li>
                 <%if(items.length){%>
                 <%items.forEach(function(value){%>
-                <li class="ui-item ui-ignore-space  arrow-right"><a href="/web/seek/require/info?id=<%=value.id%>">
+                <li class="ui-item ui-ignore-space"><a href="/web/seek/require/info?id=<%=value.id%>">
                         <div class="my-item-left">
                             <img src ="<%=value.requireImageAtt%>" width="100%" height="100%">
                         </div>
                         <div class="my-item-right ">
-                            <p class="ui-no-wrap"><%=value.requireTitle%></p>
+                            <p style="color:cornflowerblue"><%=value.requireTitle%></p>
                             <p class="ui-gray" id = "the-code">截止：<%=value._apllayEndTime%></p>
-                            <%if(!value.requireFixedPrice){%>
-                            <p class="ui-red">价格：<%=value.requireFromPrice%>—<%=value.requireToPrice%><span class="ui-right ui-red"><%=value.dealedCount%></span></p>
-                            <%}%>
-                            <%if(value.requireFixedPrice){%>
-                            <p class="ui-red">价格：<%=value.requireFixedPrice%><span class="ui-right ui-red"></span></p>
-                            <%}%>
-                            <p class="ui-red">申请：<%=value.apllayCount%></p>
-                            <p class="ui-red">已选：<%=value.chooseUserCount%>/<%=value.serverCount%></p>
+
+                            <p >需要服务者：<%=value.serverCount%> <%if(!value.requireFixedPrice){%>
+                                <span class="ui-red ui-right">￥<%=value.requireFromPrice%>—<%=value.requireToPrice%></span>
+                                <%}%>
+                                <%if(value.requireFixedPrice){%>
+                                <span class="ui-red ui-right">￥<%=value.requireFixedPrice%></span>
+                                <%}%></p>
+
                         </div>
                     </a>
                 </li>

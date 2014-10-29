@@ -93,10 +93,9 @@
             box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.1);
             filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=80);
             opacity: 0.8;
-            background: #EEE;
+            background: none;
             border: 1px solid #DDD;
-            text-shadow: 0 1px 1px white;
-            color: #CCC;
+            color: #fff;
             cursor: default;
             -webkit-appearance: none; }
         [data-lazy] {
@@ -133,7 +132,26 @@
             })
             var id = window.location.href.match(/id[^\/]+/)[0].slice(3);
             $.get("/web/seek/game/iscollect?id="+id,function(body){
-                alert(JSON.stringify(body));
+                switch (body.code){
+
+                    case '0':
+                        break;
+                    case '-1':
+                        $("#the-collect").attr("disabled","");
+                        $("#the-collect").text("还未绑定账号")
+                        break;
+                    case '-3':
+                        $("#the-collect").attr("disabled","");
+                        $("#the-collect").text("不能收藏自己的")
+                        break;
+                    case '-4':
+                        $("#the-collect").attr("disabled","");
+                        $("#the-collect").text("已收藏") ;
+                        break;
+                    default :
+                        $("#the-collect").attr("disabled","");
+                        $("#the-collect").text("收藏不可用") ;
+                }
             })
             $("#the-collect").tap(function(){
                 $.get("/web/seek/game/collect?id="+id,function(body){

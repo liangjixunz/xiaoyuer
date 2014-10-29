@@ -133,22 +133,21 @@
             <ul class="ui-list" id="the-list">
                 <%if(items.length){%>
                 <%items.forEach(function(value){%>
-                <li class="ui-item ui-ignore-space  arrow-right"><a href="/web/seek/require/info?id=<%=value.id%>">
+                <li class="ui-item ui-ignore-space "><a href="/web/seek/require/info?id=<%=value.id%>">
                         <div class="my-item-left">
                             <img src ="<%=value.requireImageAtt%>" width="100%" height="100%">
                         </div>
                         <div class="my-item-right ">
-                            <p class="ui-no-wrap"><%=value.requireTitle%></p>
+                            <p style="color:cornflowerblue"><%=value.requireTitle%></p>
                             <p class="ui-gray" id = "the-code">截止：<%=value._apllayEndTime%></p>
-                            <%if(!value.requireFixedPrice){%>
-                            <p class="ui-red">价格：<%=value.requireFromPrice%>—<%=value.requireToPrice%>yuan元</p>
-                            <%}%>
-                            <%if(value.requireFixedPrice){%>
-                            <p class="ui-red">价格：<%=value.requireFixedPrice%>元<span class="ui-right ui-red"></span></p>
-                            <%}%>
 
-                            <p class="ui-red">申请：<%=value.apllayCount%></p>
-                            <p class="ui-red">已选：<%=value.chooseUserCount%></p>
+                            <p >需要服务者：<%=value.serverCount%> <%if(!value.requireFixedPrice){%>
+                                <span class="ui-red ui-right">￥<%=value.requireFromPrice%>—<%=value.requireToPrice%></span>
+                                <%}%>
+                                <%if(value.requireFixedPrice){%>
+                                <span class="ui-red ui-right">￥<%=value.requireFixedPrice%></span>
+                                <%}%></p>
+
                         </div>
                     </a>
                 </li>
@@ -210,11 +209,11 @@
                             '<img src ="%s"%s>'+
                             '</div>'+
                             '<div class="my-item-right ">'+
-                            '<p class="ui-no-wrap">%s</p>'+
+                            '<p style="color:cornflowerblue">%s</p>'+
                             '<p class="ui-no-wrap ui-gray"> 截止：%s</p>'+
-                            '<p class="ui-red">价格：%s 元 </p>'+
-                            '<p class="ui-no-wrap"><span class=" ui-red">申请:%s</span></p>'+
-                            '<p class="ui-red">已选：%s</p></div>'+
+                            '<p >需要服务者：%s '+
+                            '<span class="ui-red ui-right">%s</span>'+
+                            '</p></div>'+
                             '</a></li>';
                     obj.lst.forEach(function(value){
                         try{
@@ -227,7 +226,7 @@
                         window.str = str;
                         $("#the-list").append(sprintf(str,temp.id,temp.requireImageAtt,'width="100%" height="100%"',
                                         temp.requireTitle,new Date(temp._apllayEndTime).Format("20yy年MM月dd日 hh:mm:ss"),
-                                (temp.requireFixedPrice?temp.requireFixedPrice:(temp.requireFromPrice+"—"+temp.requireToPrice)),temp.apllayCount,temp.chooseUserCount)
+                                        temp.serverCoun,(temp.requireFixedPrice?temp.requireFixedPrice:(temp.requireFromPrice+"—"+temp.requireToPrice)))
                         );
                     })
 

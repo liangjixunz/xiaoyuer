@@ -132,16 +132,15 @@
                 <li class="ui-item"><a>随机推荐</a></li>
                 <%if(items.length){%>
                 <%items.forEach(function(value){%>
-                <li class="ui-item ui-ignore-space  arrow-right"><a href="/web/seek/<%=type_id%>/info?id=<%=value.id%>">
+                <li class="ui-item ui-ignore-space"><a href="/web/seek/<%=type_id%>/info?id=<%=value.id%>">
                         <div class="my-item-left">
                             <img src ="<%=value.serviceImageAtt%>" width="100%" height="100%">
                         </div>
                         <div class="my-item-right ">
-                            <p class="ui-no-wrap"><%=value.servTitle%></p>
-                            <p class="ui-gray" >提供：<%=value.releaseUsername%></p>
-                            <p class="ui-red">单价：<%=value.perPrice%></p>
-                            <p class="ui-gray">推荐：<%=value.recommendCount%></p>
-                            <p class="ui-gray" >成交：<%=value.dealedCount%></p>
+                            <p style="color:cornflowerblue"><%=value.servTitle%></p>
+                            <p class="ui-no-wrap" ><%=value.releaseUsername%></p>
+                            <p class="ui-red">￥<%=value.perPrice%> <span class="ui-gray ui-right" >成交：<%=value.dealedCount%></span></p>
+
                         </div>
                     </a>
                 </li>
