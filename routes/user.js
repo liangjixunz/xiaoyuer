@@ -72,26 +72,9 @@ exports.order = (function(){
                                 if(result1.coder == '0'){
                                     var temp = [];
                                     var temp1 ={};
-                                    result1.forEach(function(values){
+                                    result1.ordeList.forEach(function(values){
                                         temp1 = JSON.parse(values);
-                                        try{
-                                            temp1.suserpic = "/images/"+pic_cache.cache(temp1.suserpic.match(/files\/[\s\S]+]/));
-                                        }
-                                        catch (e){
-                                            console.log(e);
-                                        }
-                                        try{
-                                            temp1.ruserpic = "/images/"+pic_cache.cache(temp1.ruserpic.match(/files\/[\s\S]+]/));
-                                        }
-                                        catch (e){
-                                            console.log(e);
-                                        }
-                                        try{
-                                            temp1.userpic = "/images/"+pic_cache.cache(temp1.userpic.match(/files\/[\s\S]+]/));
-                                        }
-                                        catch (e){
-                                            console.log(e);
-                                        }
+
                                         temp[temp.length] = temp1;
                                     });
                                     render_obj[value1]= temp;
@@ -209,8 +192,9 @@ exports.order = (function(){
             })
         }
         else{
+
             callback('-1');
-            res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=" + mybaseUrl +"/order/fromwe&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
+           res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=" + mybaseUrl +"/order/fromwe&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
         }
 
     }
@@ -222,14 +206,22 @@ exports.order = (function(){
     }
 
     function info(req,res){
-        res.render("order_info",{
-            title:"微信公众号开发",
-            description:"第三方的，沙迪克，大叔\n峰会上凤凰科技\n发卡号是胡覅\n",
-            order_id:31232434,
-            offer:"愚吉",
-            generation:"2014-10-15 23:10:09",
-            status:"已支付"
+        orders.getOrderInfo(req.query.id,req.session.openid,req.query.type,function(result){
+            if(result.code=='0'){
+                detailList = [];
+                result.detailList.forEach(function(value){
+                    detailList[detailList.length] = JSON.parse(value);
+                })
+                detailList = detailList.reverse();
+                console.log(detailList)
+                res.render("order_info",{
+                    id: req.query.id,
+                    detaiList:detailList
+                })
+            }
+
         })
+
 
     }
     return {
@@ -864,7 +856,7 @@ exports.seek = (function(){
                         resObj.releaseTime = new Date(resObj.releaseTime).Format("20yy年MM月dd日 hh:mm:ss");
                         resObj.requireFinishTime = new Date(resObj.requireFinishTime).Format("20yy年MM月dd日 hh:mm:ss");
                         resObj.requireDes = html_decode( resObj.requireDes) ;
-                        resObj.requireAddress = resObj.requireAddress||"";
+                        resObj.requireAddress = resObj.requireAddress||" ";
                         resObj.apllayMaxNum = resObj.apllayMaxNum ||"";
                         res.render('detail-require',resObj);
                     }

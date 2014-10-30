@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta content="telephone=no" name="format-detection" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <meta name="viewport" content="width=320, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="apple-touch-icon-precomposed" href="images/apple-touch-icon.png"/>
+    <title>发送成功</title>
+    <link href="css/reset.css" rel="stylesheet" type="text/css" />
+    <link href="css/head.css" rel="stylesheet" type="text/css" />
+    <link rel='stylesheet' type='text/css' href='css/signup.css' />
+    <script>
+        function onBridgeReady(){
+            WeixinJSBridge.call('hideOptionMenu');
+            /*
+             *要放在这个函数里面
+             * 因为是事件回调
+             */
+            window.setTimeout(function(){
+                WeixinJSBridge.invoke('closeWindow',{},function(res){
+
+                    //alert(res.err_msg);
+
+                })
+            },5000);
+        }
+
+        if (typeof WeixinJSBridge == "undefined"){
+            if( document.addEventListener ){
+                document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+            }else if (document.attachEvent){
+                document.attachEvent('WeixinJSBridgeReady', onBridgeReady);
+                document.attachEvent('onWeixinJSBridgeReady', onBridgeReady);
+            }
+        }else{
+            onBridgeReady();
+
+        }
+    </script>
+</head>
+<body>
+<div class="header" id="header">
+    <span class="headline">信息已发送，请耐心等待工作人员联系您</span>
+</div>
+<img src = "/images/2.jpg" width = "100%">
+</body>
+
+</html>
+<!--页面底部-->

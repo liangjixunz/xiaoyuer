@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset='utf-8'>
-    <title>红包提现</title>
+    <title>抽奖</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="format-detection" content="telephone=no">
@@ -116,11 +116,7 @@
                     maxWidth: 800
                 });
             }) ;
-            $("#new-with").tap(function(){
-                $.get("/web/event/withdraw/new?cash=1&mobile=15851810378",function(data){
-                    alert(data);
-                })
-            })
+
         })
     </script>
 </head>
@@ -130,7 +126,7 @@
 <div class="ui-tab page1 js-active">
     <div class="header" id="header">
         <a class="back" href="javascript:history.back();"></a>
-        <span class="headline">提现</span>
+        <span class="headline">抽奖</span>
 
     </div>
 </div>
@@ -153,8 +149,8 @@
                         </div>
                         <div class="my-item-right">
                             <p class="ui-no-wrap"><%=username%></p>
-                            <p class="ui-gray">余额：<span class="ui-red"><%=user_banlance%></span>
-                            <p class="ui-no-wrap ui-gray"> 10元起提现</p>
+                            <p class="ui-gray">剩余次数：<span class="ui-red"><%=user_banlance%></span>
+                            <p class="ui-no-wrap ui-gray"> 摸摸</p>
 
 
                         </div>
@@ -168,7 +164,7 @@
                  <li class="ui-item ui-ignore-space">
                      <a class="my-deletable" >
 
-                         <p><a id="show-rule">查看提现规则</a>&nbsp;<span class="ui-right"> <button class="ui-button" id="new-with">提现</button></span></p>
+                         <p><a id="show-rule">查看抽奖规则</a>&nbsp;<span class="ui-right"> <button class="ui-button" id="new-with">提现</button></span></p>
                          <p>&nbsp;</p>
                      </a>
 
@@ -176,7 +172,7 @@
              </ul>
 
             <ul class="ui-list">
-                <li class="ui-item "><a>提现历史<span class="ui-right"> 已提现:<span class="ui-red"><%=withdraw%></span></span> </a></li>
+                <li class="ui-item "><a>抽奖历史<span class="ui-right"> 已抽奖:<span class="ui-red"><%=withdraw%></span>次</span> </a></li>
                 <% if(withdraw_his.length){%>
                 <% withdraw_his.forEach(function(value){%>
                 <li class="ui-item ui-ignore-space">
@@ -186,9 +182,9 @@
                         </div>
                         <div class="my-item-right"><span class="ui-right"><span class="ui-red"><%=value.withdraw_is_over?"已完成":"处理中"%></span></span>
                             <p class="ui-no-wrap ui-gray">流水号：<%=value.withdraw_id%></p>
-                            <p class="ui-no-wrap">金额：<%=value.money%>元</p>
-                            <p class="ui-red">手机号：<%=value.mobile%></p>
-                            <p class="ui-gray">提现日期:<%=value.withdraw_generate%></p>
+                            <p class="ui-no-wrap">抽中：<%=value.money%></p>
+                            <p class="ui-red">彩票兑换券：<%=value.mobile%></p>
+                            <p class="ui-gray">抽奖日期:<%=value.withdraw_generate%></p>
                         </div>
                     </a>
 

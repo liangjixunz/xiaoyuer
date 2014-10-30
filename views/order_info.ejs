@@ -76,7 +76,7 @@
     <div class="ui-tab page1 js-active">
         <div class="header" id="header">
             <a class="back" href="javascript:history.back();"></a>
-            <span class="headline"><%=title%></span>
+            <span class="headline">订单详情</span>
         </div>
 
     </div>
@@ -87,32 +87,37 @@
                 <ul class="ui-list ">
 
                      <li>
-                         <img src="/images/1.jpg" width = "100%">
+                         <img src="/images/bac6.jpg" width = "100%" height="50px">
                      </li>
                     <li class="ui-item">
-                        <button disabled class="ui-button">&nbsp;&nbsp;订单号&nbsp;</button>
-                        <span class="my-item-right ui-red"><%=order_id%></span>
+                        <span class="ui-red" id="the-id">订单号:<%=id%></span>
                     </li>
-                     <li class="ui-item">
-
-                         <button disabled class="ui-button">&nbsp;&nbsp;服务商&nbsp;</button>
-                         <span class = "my-item-right ui-gray"><%=offer%></span>
-                     <p></p>
-                        <button disabled class="ui-button">生成时间</button>
-                        <span class = "my-item-right ui-gray"> <%=generation%></span>
-                  <p></p>
-                        <button disabled class="ui-button">订单状态</button>
-                        <span class = "my-item-right ui-red"> <%=status%></span>
+                    <li>
+                        <img src="/images/bac6.jpg" width = "100%" height="10px">
                     </li>
 
+                    <li class="ui-item ui-gray">
+                        订单状态流水
+                        <p>
+                            &nbsp;
+                        </p>
+                    </li>
+
+                            <%detailList.forEach(function(value){%>
                     <li  class="ui-item">
-                        <button disabled class="ui-button">详细信息</button>
-                        <div ><%=description%>
-                        </div>
+                        <p>
+                            &nbsp;
+                        </p>
+                        <p class="ui-red">  <%=value.remark%><span class="ui-right ui-gray" > 流水id:<%=value.id%></span></p>
+                        <p class="ui-gray">时间:<%=value.time%></p>
+                        <p>操作人：<%-value.username%></p>
+
                     </li>
-                    <p>
-                        &nbsp:
-                    </p>
+
+                            <%})%>
+
+
+
 
                 </ul>
 
