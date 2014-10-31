@@ -261,8 +261,8 @@ exports.seek = (function(){
         return{
             index : function(req,res){
                 if(req.session.openid)
-                    seek.seek.games(" ","1",function(result){
-                    if(result.code == 0){
+                    seek.seek.games("","1",function(result){
+                    if(result.code == '0'){
                         var resObj = [];
                         var temp = {};
                         result.lst.forEach(function(value){
@@ -284,6 +284,14 @@ exports.seek = (function(){
                             new_items:2,
                             type_id :"game",
                             items:resObj
+                        })
+                    }
+                        else{
+                        res.render("seek-game",{
+                            the_type:"缤纷大赛",
+                            new_items:2,
+                            type_id :"game",
+                            items:[]
                         })
                     }
                 });
@@ -363,7 +371,7 @@ exports.seek = (function(){
 
                     }
                     else{
-                        res.render("wservice",{
+                        res.render("seek-wservice",{
                             the_type:"公益服务",
                             new_items:2,
                             type_id :"wservice",

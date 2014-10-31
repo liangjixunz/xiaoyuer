@@ -2,6 +2,7 @@ var request = require("request");
 var db = require("xiaoyuer/gift/db");
 var fs =require("fs");
 
+
 var mybaseUrl = JSON.parse(fs.readFileSync(__dirname+"/../shared/appConfig")).mybaseUrl;
 
 exports.event_info= function(req,res){
