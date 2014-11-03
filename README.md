@@ -3,4 +3,5 @@ xiaoyuer
 
 wechat for xiaoyuer                                    
 -----
-http://example.vv.si/
+配置：
+http://example.vv.si/?p=22
