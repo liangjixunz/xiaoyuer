@@ -6,21 +6,14 @@ var fs =require("fs");
 var mybaseUrl = JSON.parse(fs.readFileSync(__dirname+"/../shared/appConfig")).mybaseUrl;
 
 exports.event_info= function(req,res){
-    db.is_hire(req.query.event_id,function(result){
-
-        if(result){
-            db.get_event_info(req.query.event_id,function(result1){
-                res.render('hire',result1);
-
-            })
-        }
-        else{
-            db.get_event_info(req.query.event_id,function(result1){
-                res.render('forwarding',result1);
-
-            })
-        }
-    })
+   db.get_activity_info(req.query.event_id,function(description){
+       if(description.is_hire){
+             res.render("hire",description);
+       }
+       else{
+           res.render("forwarding",description);
+       }
+   })
 
 }
 
@@ -29,87 +22,90 @@ exports.event_index = function(req,res){
         res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=" + mybaseUrl +"/event/fromwe&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
     }
     else {
-        db.new_user(req.session.openid,function(res2){
+        db.get_user_info(req.session.openid,function(userInfo){
             var obj = {
                 event_effect: [],
-                event_over: [],
-                username: "愚吉",
-                user_banlance: "",
-                withdraw: ""
+                user_info: ""
             };
-            db.get_event_index(function (result) {
-                if(result){
-                    result.forEach(function (value) {
-                        db.get_ever_get(value.event_id, req.session.openid, function (result2) {
-                            value.left_time = value.max_time - result2.total_time;
-                            if (new Date(value.event_finish) > new Date()) {
-                                obj.event_effect[obj.event_effect.length] = value;
-                            }
-                            else
-                                obj.event_over[obj.event_over.length] = value;
-                        })
+           obj.user_info = userInfo;
 
+            db.get_holding_activity(function(activities){
+                var arr = [];
+                activities.forEach(function(value){
+                     arr[arr.length] = value.activity_id;
+                })
+                db.get_left_chance(req.session.openid,arr,function(result1){
+                    result1.forEach(function(value,index){
+                        activities[index].left_chance = activities[index].max_time - value;
                     })
-                    db.user_info(req.session.openid, function (result1) {
-                        obj.user_banlance = result1.user_balance;
-                        obj.withdraw = result1.withdraw;
-                        res.render("gift_list", obj);
-                    })
-                }
-                else
-                    res.send(500);
+                    obj.event_effect = activities;
+                    res.render("gift_list", obj);
+                })
 
             })
         })
 
     }
 }
-exports.new_withdraw = function(req,res){
+/*
+*@ TODO 抽奖结果
+ */
+exports.new_lottery = function(req,res){
     if(!req.session.openid){
         res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=" + mybaseUrl +"/event/fromwe&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
     }
     else{
+        db.lottery_generate(req.session.openid,function(result){
+            if(result == 0){
+                //res.render("")
+            }
+            else if(result == -1){
+                //res.render("")
+            }
+            else{
+                //res.render("");
+            }
 
-       db.new_withdraw(req.session.openid,req.query.cash,req.query.mobile,function(id){
-           console.log(id);
-           res.send(id);
-       });
-
+        })
     }
 }
-exports.event_withdraw = function(req,res){
+/*
+*用户提交领奖信息
+ */
+exports.setAwardAddress = function(req,res){
+    db.fillAwardAddress(req.query.id,req.body.address,req.body.mobile);
+}
+/*
+*抽奖首页
+ */
+exports.lotteryIndex = function(req,res){
     if(!req.session.openid){
         res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=" + mybaseUrl +"/event/fromwe&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
     }
     else{
-        try{
-            db.new_user(req.session.openid,function(res2){
-                var obj = {
-                    username: "愚吉",
-                    user_banlance: "",
-                    withdraw: "" ,
-                    withdraw_his:[]
-                };
-                db.get_with_draw_openid(req.session.openid,function(result){
-                    result.forEach(function(value){
-                        value.withdraw_generate = new Date(value.withdraw_generate).Format("20yy年MM月dd日 hh:mm:ss");
-                    })
-                    obj.withdraw_his = result;
-                    db.user_info(req.session.openid, function (result1) {
-                        obj.user_banlance = result1.user_balance;
-                        obj.withdraw = result1.withdraw;
-                        res.render("gift_withdraw", obj);
-                    })
-                })
-            })
-        }
-        catch (e){
-            console.log(e);
-            res.send(500);
-        }
+        db.get_user_info(req.session.openid,function(userInfo){
+               var obj = {
+                   user_info: userInfo,
+                   lottery_his:[]
+               }
+              db.lottery_history(req.session.openid,function(myHistory){
+                  if(myHistory.length){
+                      for (var i = 0; i< myHistory.length; i +=1){
+                          myHistory[i].lottery_generate = new Date(myHistory[i].lottery_generate).Format("yy-MM-dd hh:mm:ss");
+                      }
+                      obj.lottery_his = myHistory;
 
+                  }
+
+                  res.render("gift_withdraw",obj);
+              })
+        })
     }
 }
+/*
+*新的抽奖
+ */
+
 /*
 *用户试图访问活动列表时
 * 首先获得用户openid
@@ -138,9 +134,6 @@ exports.set_session = (function(req,res){
                     console.log(e);
                 }
                 req.session.openid = openid_obj.openid;
-                db.new_user(req.session.openid,function(result){
-                    console.log(result);
-                })
                 res.redirect("/web/event/index");
 
             }
@@ -155,16 +148,17 @@ exports.set_session = (function(req,res){
 exports.repostPre = (function(){
 
     var app_conf = JSON.parse(fs.readFileSync(__dirname + "/../shared/appConfig"));
-    var url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=";
-    url += app_conf.AppID;
-    url += "&secret=";
-    url += app_conf.AppSecret;
-    url += "&code=";
+
 
     return function(req,res){
         var code = req.query.code;
         var openid_from = req.path.match(/\/repost\/[^\/]+/)[0].slice(8);
         var event_id = req.path.match(/\/id\/[^\/]+/)[0].slice(4);
+        var url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=";
+        url += app_conf.AppID;
+        url += "&secret=";
+        url += app_conf.AppSecret;
+        url += "&code=";
         url += code;
         url += "&grant_type=authorization_code";
         request(url,function(err,response,body){
@@ -176,20 +170,12 @@ exports.repostPre = (function(){
                 catch (e){
                     console.log(e);
                 }
-                db.new_user(openid_obj.openid,function(result){
-                    ;
-                })
-                db.new_award(openid_from,openid_obj.openid,event_id,function(result){
-                    req.session.openid = openid_obj.openid;
-                    res.redirect("/web/event/info?event_id="+event_id +"&over=0");
-                })
+                db.process_click(openid_from,openid_obj.openid,event_id);
+                req.session.openid = openid_obj.openid;
+                res.redirect("/web/event/info?event_id="+event_id +"&over=0");
             }
         })
-        url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=";
-        url += app_conf.AppID;
-        url += "&secret=";
-        url += app_conf.AppSecret;
-        url += "&code=";
+
     }
 })();
 

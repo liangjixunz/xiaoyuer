@@ -91,15 +91,29 @@
             </a>
         </li>
         <li class=''>
+            <a href='/web/admin/new_award.html'>
+                <i class='icon-edit'></i>
+                <span>新的抽奖活动</span>
+
+            </a>
+        </li>
+        <li class=''>
             <a href='/web/myadmin/event/index'>
                 <i class='icon-star'></i>
                 <span>转发流水</span>
             </a>
         </li>
         <li class=''>
-            <a href='/web/myadmin/event/withdraw'>
+            <a href='/web/myadmin/lottery/index'>
                 <i class='icon-table'></i>
-                <span>提现流水</span>
+                <span>抽奖流水</span>
+            </a>
+        </li>
+        <li class=''>
+            <a href='/web/myadmin/award/index'>
+                <i class='icon-edit'></i>
+                <span>奖品列表</span>
+
             </a>
         </li>
         <li class=''>
@@ -145,24 +159,18 @@
 				<div class='control-group '>
                     <label class='control-label' >标题</label>
                     <div class='controls'>
-                        <input  type='text' name = "title" />
+                        <input  type='text' name = "event_title" />
                         
                     </div>
 					
                 <hr class='hr-normal' />
                 
-                <div class='control-group warning'>
-                    <label class='control-label' for='inputWarning'>总奖金</label>
-                    <div class='controls'>
-                        <input id='inputWarning' type='text'  name = "total_award"/>
-                        <span class='help-inline'>RMB</span>
-                    </div>
-                </div>
+
                 
 				<div class='control-group warning'>
                     <label class='control-label' for='inputWarning'>单人最多转</label>
                     <div class='controls'>
-                        <input id='inputWarning' type='text'  name = "max" />
+                        <input id='inputWarning' type='text'  name = "max_time" />
                         <span class='help-inline'>次</span>
                     </div>
                 </div>
@@ -170,7 +178,7 @@
                     <label class='control-label' for='inputWarning'>开始日期</label>
                     <div class='controls'>
                        <div >
-							<input placeholder="请输入日期" name= "start_time" class="laydate-icon"  onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+							<input placeholder="请输入日期" name= "activity_start" class="laydate-icon"  onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
 						</div>
                     </div>
                 </div>
@@ -178,7 +186,7 @@
                     <label class='control-label' for='inputWarning'>结束日期</label>
                     <div class='controls'>
                        <div >
-							<input placeholder="请输入日期" name = "finish_time" class="laydate-icon"  onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
+							<input placeholder="请输入日期" name = "activity_finish" class="laydate-icon"  onclick="laydate({istime: true, format: 'YYYY-MM-DD hh:mm:ss'})">
 						</div>
                     </div>
                 </div>
@@ -196,15 +204,9 @@
                     </div>
                 </div>
 				<div class='control-group'>
-                    <label class='control-label' >HR's email</label>
+                    <label class='control-label'>正文</label>
                     <div class='controls'>
-                        <input class='input-xlarge' name = "email" type='text' />
-                    </div>
-                </div>
-				<div class='control-group'>
-                    <label class='control-label' for='inputTextArea1'>正文</label>
-                    <div class='controls'>
-                        <textarea id='inputTextArea1' name= "description" placeholder='Textarea' rows='3'></textarea>
+                        <textarea class="autosize form-control"  name= "description" placeholder="" rows="2" style="overflow: hidden; word-wrap: break-word; resize: horizontal; height: 17px;"></textarea>
                     </div>
                 </div>
 				<div class='control-group'>

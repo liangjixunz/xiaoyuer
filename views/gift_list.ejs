@@ -127,14 +127,14 @@
             <ul class="ui-list">
                 <img src="/images/bac6.jpg" width="100%" height="48px">
                 <li class="ui-item ui-ignore-space">
-                    <a class="my-deletable"  href="withdraw">
+                    <a class="my-deletable"  href="/web/lottery/index">
                         <div class="my-item-left">
                             <img width="100%" src = "/images/1.jpg">
                         </div>
                         <div class="my-item-right"><span class="ui-right"><span class="ui-red">抽奖</span></span>
-                            <p class="ui-no-wrap"><%=username%></p>
-                            <p class="ui-red">剩余抽奖次数：<%=user_banlance%></p>
-                            <p class="ui-gray">已抽奖:<%=withdraw%>次</p>
+                            <p class="ui-no-wrap">小鱼粉丝</p>
+                            <p class="ui-no-wrap">&nbsp;</p>
+                            <p class="ui-red">剩余抽奖次数：<%=user_info.left_chance%></p>
                         </div>
                     </a>
 
@@ -146,14 +146,14 @@
                 <% if(event_effect.length){%>
                 <% event_effect.forEach(function(value){%>
                 <li class="ui-item ui-ignore-space arrow-right">
-                    <a class="my-deletable" href="info?event_id=<%= value.event_id%>&over=0">
+                    <a class="my-deletable" href="info?event_id=<%= value.activity_id%>&over=0">
                         <div class="my-item-left">
                             <img width="100%" src = "/images/1.jpg">
                         </div>
-                        <div class="my-item-right"><span class="ui-right ui-gray">还可获得<span class="ui-red"><%=value.left_time%></span>次红包</span>
-                            <p class="ui-no-wrap"><%=value.event_name%></p>
+                        <div class="my-item-right"><span class="ui-right ui-gray">还可获得<span class="ui-red"><%=value.left_chance%></span>次抽奖机会</span>
+                            <p class="ui-no-wrap"><%=value.event_title%></p>
                             <p class="ui-red">可用</p>
-                            <p class="ui-gray">截止日期:<%=new Date(value.event_finish).Format("yyyy-MM-dd hh:mm:ss")%></p>
+                            <p class="ui-gray">截止日期:<%=new Date(value.activity_finish).Format("yyyy-MM-dd hh:mm:ss")%></p>
                         </div>
                     </a>
                 </li>

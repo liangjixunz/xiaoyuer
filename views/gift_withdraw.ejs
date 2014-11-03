@@ -116,6 +116,9 @@
                     maxWidth: 800
                 });
             }) ;
+            $("#new-with").tap(function(){
+               window.location.href="/web/lottery/new";
+            });
 
         })
     </script>
@@ -143,15 +146,14 @@
             <ul class="ui-list">
                 <img src="/images/bac6.jpg" width="100%" height="48px">
                 <li class="ui-item ui-ignore-space">
-                    <a class="my-deletable"  href="withdraw">
+                    <a class="my-deletable"  >
                         <div class="my-item-left">
                             <img width="100%" src = "/images/1.jpg">
                         </div>
                         <div class="my-item-right">
-                            <p class="ui-no-wrap"><%=username%></p>
-                            <p class="ui-gray">剩余次数：<span class="ui-red"><%=user_banlance%></span>
-                            <p class="ui-no-wrap ui-gray"> 摸摸</p>
-
+                            <p class="ui-no-wrap">小鱼粉丝</p>
+                            <p class="ui-no-wrap">&nbsp;</p>
+                            <p class="ui-red">剩余抽奖次数：<%=user_info.left_chance%></p>
 
                         </div>
 
@@ -164,7 +166,7 @@
                  <li class="ui-item ui-ignore-space">
                      <a class="my-deletable" >
 
-                         <p><a id="show-rule">查看抽奖规则</a>&nbsp;<span class="ui-right"> <button class="ui-button" id="new-with">提现</button></span></p>
+                         <p><a id="show-rule">查看抽奖规则</a>&nbsp;<span class="ui-right"> <button class="ui-button" <%=user_info.left_chance ? "":"disabled"%> id="new-with">抽奖</button></span></p>
                          <p>&nbsp;</p>
                      </a>
 
@@ -172,19 +174,19 @@
              </ul>
 
             <ul class="ui-list">
-                <li class="ui-item "><a>抽奖历史<span class="ui-right"> 已抽奖:<span class="ui-red"><%=withdraw%></span>次</span> </a></li>
-                <% if(withdraw_his.length){%>
-                <% withdraw_his.forEach(function(value){%>
+                <li class="ui-item "><a>抽奖历史 </a></li>
+                <% if(lottery_his.length){%>
+                <% lottery_his.forEach(function(value){%>
                 <li class="ui-item ui-ignore-space">
-                    <a class="my-deletable"  href="withdraw">
+                    <a class="my-deletable" >
                         <div class="my-item-left">
                             <img width="100%" src = "/images/1.jpg">
                         </div>
-                        <div class="my-item-right"><span class="ui-right"><span class="ui-red"><%=value.withdraw_is_over?"已完成":"处理中"%></span></span>
-                            <p class="ui-no-wrap ui-gray">流水号：<%=value.withdraw_id%></p>
-                            <p class="ui-no-wrap">抽中：<%=value.money%></p>
-                            <p class="ui-red">彩票兑换券：<%=value.mobile%></p>
-                            <p class="ui-gray">抽奖日期:<%=value.withdraw_generate%></p>
+                        <div class="my-item-right"><span class="ui-right"><span class="ui-red"><%=value.is_recieved?"已完成":"处理中"%></span></span>
+                            <p class="ui-no-wrap ui-gray">流水号：<%=value.lottery_id%></p>
+                            <p class="ui-no-wrap">抽中：<%=value.is_award?"中奖":"谢谢参与"%></p>
+                            <p class="ui-red">彩票兑换券：<%=value.award_code%></p>
+                            <p class="ui-gray">抽奖日期:<%=value.lottery_generate%></p>
                         </div>
                     </a>
 
@@ -206,20 +208,20 @@
     <ul class="ui-list">
         <li class="ui-item ui-ignore-space">
             <a class="my-deletable" >
-                1.10元起可申请提现
+                1.奖品分实物和虚拟奖品
             </a>
 
         </li>
 
         <li class="ui-item ui-ignore-space">
             <a class="my-deletable" >
-                2.提现金额以话费形式充值到手机
+                2.虚拟奖品已兑换码给出
             </a>
 
         </li>
         <li class="ui-item ui-ignore-space">
             <a class="my-deletable" >
-                3.移动到账约十分钟，联通电信三到五个工作日
+                3.实物奖品请填写收货地址和电话号码，工作人员会与您联系
             </a>
 
         </li>

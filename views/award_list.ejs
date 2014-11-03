@@ -4,7 +4,7 @@
 <head>
     <title>Alpha</title>
     <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport' />
-    
+
     <!--[if lt IE 9]>
     <script src='/assets/javascripts/html5shiv.js' type='text/javascript'></script>
     <![endif]-->
@@ -52,7 +52,28 @@
     <link href='/assets/stylesheets/light-theme.css' id='color-settings-body-color' media='all' rel='stylesheet' type='text/css' />
     <!-- / demo -->
     <link href='/assets/stylesheets/demo.css' media='all' rel='stylesheet' type='text/css' />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" /></head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <script>
+
+
+        Date.prototype.Format = function (fmt) { //author: meizz
+            var o = {
+                "M+": this.getMonth() + 1, //月份
+                "d+": this.getDate(), //日
+                "h+": this.getHours(), //小时
+                "m+": this.getMinutes(), //分
+                "s+": this.getSeconds(), //秒
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                "S": this.getMilliseconds() //毫秒
+            };
+            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o)
+                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            return fmt;
+        };
+    </script>
+
+</head>
 
 <body class='contrast-red '>
 <header>
@@ -66,123 +87,154 @@
                 <a class='toggle-nav btn pull-left' href='#'>
                     <i class='icon-reorder'></i>
                 </a>
-                
+
             </div>
         </div>
     </div>
 </header>
 <div id='wrapper'>
-<div id='main-nav-bg'></div>
-<nav class='' id='main-nav'>
-<div class='navigation'>
+    <div id='main-nav-bg'></div>
+    <nav class='' id='main-nav'>
+        <div class='navigation'>
 
-    <ul class='nav nav-stacked'>
-        <li class='active'>
-            <a href='/web/admin/index.html'>
-                <i class='icon-dashboard'></i>
-                <span>Dashboard</span>
-            </a>
-        </li>
-        <li class=''>
-            <a href='/web/admin/new_event.html'>
-                <i class='icon-edit'></i>
-                <span>新的转发活动</span>
+            <ul class='nav nav-stacked'>
+                <li class=''>
+                    <a href='/web/admin/index.html'>
+                        <i class='icon-dashboard'></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class=''>
+                    <a href='/web/admin/new_event.html'>
+                        <i class='icon-edit'></i>
+                        <span>新的转发活动</span>
 
-            </a>
-        </li>
-        <li class=''>
-            <a href='/web/admin/new_award.html'>
-                <i class='icon-edit'></i>
-                <span>新的抽奖活动</span>
+                    </a>
+                </li>
+                <li class=''>
+                    <a href='/web/admin/new_award.html'>
+                        <i class='icon-edit'></i>
+                        <span>新的抽奖活动</span>
 
-            </a>
-        </li>
-        <li class=''>
-            <a href='/web/myadmin/event/index'>
-                <i class='icon-star'></i>
-                <span>转发流水</span>
-            </a>
-        </li>
-        <li class=''>
-            <a href='/web/myadmin/lottery/index'>
-                <i class='icon-table'></i>
-                <span>抽奖流水</span>
-            </a>
-        </li>
-        <li class=''>
-            <a href='/web/myadmin/award/index'>
-                <i class='icon-edit'></i>
-                <span>奖品列表</span>
+                    </a>
+                </li>
+                <li class=''>
+                    <a href='/web/myadmin/event/index'>
+                        <i class='icon-star'></i>
+                        <span>转发流水</span>
+                    </a>
+                </li>
+                <li class=''>
+                    <a href='/web/myadmin/lottery/index'>
+                        <i class='icon-table'></i>
+                        <span>抽奖流水</span>
+                    </a>
+                </li>
+                <li class='active'>
+                    <a href='/web/myadmin/award/index'>
+                        <i class='icon-edit'></i>
+                        <span>奖品列表</span>
 
-            </a>
-        </li>
-        <li class=''>
-            <a href='/web/myadmin/setreply'>
-                <i class='icon-table'></i>
-                <span>设置自动回复</span>
-            </a>
-        </li>
+                    </a>
+                </li>
+                <li class=''>
+                    <a href='/web/myadmin/setreply'>
+                        <i class='icon-table'></i>
+                        <span>设置自动回复</span>
+                    </a>
+                </li>
 
 
-    </ul>
-</div>
-</nav>
-
-<section id='content'>
-<div class='row-fluid' id='content-wrapper'>
-<div class='span12'>
-<div class='row-fluid'>
-    <div class='span12'>
-                <div class='row-fluid'>
-                    <div class='span12'>
-                        <div class='page-header'>
-                            <h1 class='pull-left'>
-                                <i class='icon-bar-chart'></i>
-                                <span>转发活动</span>
-                            </h1>
-                            
-                        </div>
-                    </div>
-                </div>
-				<hr class="double-hr">
-                <div class='row-fluid'>
-                    <div class='span12 box'>
-                        <div class='box-header'>
-                            <div class='title'>
-                                
-                            </div>
-                            
-                        </div>
-                        <div class='box-content'>
-                            <div id='stats-chart1'></div>
-                        </div>
-                    </div>
-                </div>
-				<hr class="double-hr">
-                <div class='row-fluid'>
-                    <div class='span12 box'>
-                        <div class='box-header'>
-                            <div class='title'>
-                                
-                            </div>
-                            
-                        </div>
-                        <div class='box-content'>
-                            <div id='stats-chart3'></div>
-                        </div>
-                    </div>
-                </div>
-               </div>
+            </ul>
         </div>
-<hr class='hr-double' />
-</div>
-</div>
-	
+    </nav>
 
+    <section id='content'>
+        <div class='container-fluid'>
+            <div class='row-fluid' id='content-wrapper'>
+                <div class='span12'>
+                    <div class='row-fluid'>
+                        <div class='span12'>
+                            <div class='page-header'>
+                                <h1 class='pull-left' align="center">
+                                    <i class='icon-table'></i>
+                                    <span>所有的奖品列表</span>
+                                </h1>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class='group-header'>
+                        <div class='row-fluid'>
+                            <div class='span6 offset3'>
+                                <div class='text-center'>
+                                    <small class='muted'>已举办<%=award_list.length%>次 </small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class='row-fluid'>
+                        <div class='span12 box bordered-box red-border' style='margin-bottom:0;'>
+                            <div class='box-header red-background'>
+                                <div class='title'>流水</div>
+
+                            </div>
+                            <div class='box-content box-no-padding'>
+                                <div class='responsive-table'>
+                                    <div class='scrollable-area'>
+                                        <table class='data-table table table-bordered table-striped' style='margin-bottom:0;'>
+                                            <thead>
+                                            <tr>
+                                                <th>
+                                                    id
+                                                </th>
+                                                <th>
+                                                    发布时间
+                                                </th>
+
+                                                <th>
+                                                    active
+                                                </th>
+                                                <th>
+                                                    关联活动
+                                                </th>
+
+                                            </tr>
+                                            </thead>
+                                            <tbody id = "the-tbody">
+                                            <%if(award_list.length){%>
+                                            <%award_list.forEach(function(value){%>
+                                            <tr>
+                                                <td><a href="awardinfo?id=<%=value.id%>"><%=value.id%></a></td>
+                                                <td><%=(new Date(value.release_time)).Format("yyyy-MM-dd hh:mm:ss")%></td>
+
+                                                <td><%if(value.is_active){%>
+                                                    <div class='text-right'> <a class='btn btn-success btn-mini' ><%="是"%></a></div>
+                                                    <% } else{%>
+                                                    <div class='text-right'> <a class='btn btn-danger btn-mini' ><%="否"%></a></div>
+                                                    <%}%>
+                                                </td>
+                                                <td><%=(value.associate_activity?value.associate_activity:"无")%></td>
+                                            </tr>
+                                            <%})}%>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class='hr' />
+
+                </div>
+            </div>
+
+        </div>
+
+
+
+    </section>
 </div>
-
-</section>
-
 <!-- / jquery -->
 <script src='/assets/javascripts/jquery/jquery.min.js' type='text/javascript'></script>
 <!-- / jquery mobile events (for touch and slide) -->

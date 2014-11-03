@@ -110,6 +110,13 @@
 
                     </a>
                 </li>
+                <li class=''>
+                    <a href='/web/admin/new_award.html'>
+                        <i class='icon-edit'></i>
+                        <span>新的抽奖活动</span>
+
+                    </a>
+                </li>
                 <li class='active'>
                     <a href='/web/myadmin/event/index'>
                         <i class='icon-star'></i>
@@ -117,9 +124,16 @@
                     </a>
                 </li>
                 <li class=''>
-                    <a href='/web/myadmin/event/withdraw'>
+                    <a href='/web/myadmin/lottery/index'>
                         <i class='icon-table'></i>
-                        <span>提现流水</span>
+                        <span>抽奖流水</span>
+                    </a>
+                </li>
+                <li class=''>
+                    <a href='/web/myadmin/award/index'>
+                        <i class='icon-edit'></i>
+                        <span>奖品列表</span>
+
                     </a>
                 </li>
                 <li class=''>
@@ -153,7 +167,7 @@
                         <div class='span6 offset3'>
                             <div class='text-center'>
                                 <h2 id = "the-title"><%=info.event_name%></h2>
-                                <small class='muted'>已转发<%=info.event_forwarding%>次 剩余：<%=info.event_balance%>元</small>
+                                <small class='muted'>已转发<%=info.event_forwarding%>次</small>
                             </div>
                         </div>
                     </div>
@@ -180,7 +194,7 @@
                                                 转发时间
                                             </th>
                                             <th>
-                                                获得/元
+                                                获得机会
                                             </th>
                                         </tr>
                                         </thead>
@@ -198,7 +212,7 @@
                                                 <%=(new Date(value.the_time)).Format("yyyy-MM-dd hh:mm:ss")%>
                                             </th>
                                             <th>
-                                                <%=value.money%>
+                                                <%=value.chance_got%>
                                             </th>
                                         </tr>
                                         <%})}%>

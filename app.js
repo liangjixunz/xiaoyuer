@@ -113,16 +113,6 @@ app.get('/seek/game/more',routes.user.seek.game.page_class);
 app.get("/seek/game/collect",routes.user.seek.game.collect);
 app.get("/seek/game/iscollect",routes.user.seek.game.is_collect)
 
-app.get('/test1',function(req,res){
-    res.render("info",{
-        title:"微信公众号开发",
-        description:"第三方的，沙迪克，大叔\n峰会上凤凰科技\n发卡号是胡覅\n",
-        sold:10,
-        offer:"愚吉",
-        generation:"2014-10-15 23:10:09",
-        price:"300/次"
-    })
-})
 app.post('/test',function(req,res){
     console.log(req.body);
     res.send(JSON.stringify(req.body));
@@ -152,8 +142,8 @@ app.get('/test/oneservice',function(req,res){
  */
 app.post("/user/job",routes.user.job)
 
-app.get("/event/withdraw",routes.event.event_withdraw)
-app.get("/event/withdraw/new",routes.event.new_withdraw)
+
+
 app.get('/event/whoisme',function(req,res){
 
     res.send(req.session.openid);
@@ -194,6 +184,16 @@ app.post('/myadmin/auth',function(req,res){
     else
         res.send("error");
 })
+app.post("/myadmin/award/new",admin_check,routes.admin.new_award);
+app.get("/myadmin/award/index",admin_check,routes.admin.all_award_list)
+app.get("/myadmin/award/awardinfo",admin_check,routes.admin.award_info_detail)
+
+app.get("/myadmin/lottery/index",admin_check,routes.admin.lottery_info);
+app.get("/myadmin/lottery/change",admin_check,routes.admin.change_recieve)
+
+app.get("/lottery/index",routes.event.lotteryIndex);
+app.get("/lottery/new",routes.event.new_lottery);
+
 app.post('/myadmin/event/new',admin_check,routes.admin.new_event) ;
 
 app.get('/myadmin/event/index',admin_check,routes.admin.event_index);
@@ -206,6 +206,7 @@ app.get('/myadmin/event/forwardinginfo',admin_check,routes.admin.event_forwardin
 
 app.get('/event/basicinfo',admin_check,routes.admin.event_info)
 
+app.get("/event/withdraw/new",routes.event.new_lottery);
 /*
 *设置自动回复
  */
@@ -290,7 +291,7 @@ function admin_check(req,res,next){
     }
 }
 
-process.on('uncaughtException', function (err) {
+/*process.on('uncaughtException', function (err) {
     console.log('Caught Exception:' + err);//直接捕获method()未定义函数，Node进程未被退出。
-});
+});*/
 module.exports = app;
