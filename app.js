@@ -6,7 +6,11 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var fs = require("fs")
-
+console.log1 = console.log;
+console.log  = function(o){
+    console.log1(new Date().Format("20yy-MM-dd hh:mm:ss"));
+    console.log1(o);
+}
 var routes = require('./routes');
 var app = express();
 var signature_check = (function(){
@@ -43,6 +47,7 @@ app.use(express.cookieSession());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(app.router);
 
+
 app.get('/', routes.index);
 
 /*
@@ -53,7 +58,7 @@ app.get('/util', routes.user.util);
 *客服使用的API
  */
 app.get('/kf/info',routes.user.kf.user_info);
-
+app.get('/kf/order/info', routes.user.kf.order);
 
 /*
 *用户的订单列表
@@ -193,6 +198,8 @@ app.get("/myadmin/lottery/change",admin_check,routes.admin.change_recieve)
 
 app.get("/lottery/index",routes.event.lotteryIndex);
 app.get("/lottery/new",routes.event.new_lottery);
+app.get("/lottery/info",routes.event.code2info);
+app.post("/lottery/edit",routes.event.setAwardAddress );
 
 app.post('/myadmin/event/new',admin_check,routes.admin.new_event) ;
 

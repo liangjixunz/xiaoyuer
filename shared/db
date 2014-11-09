@@ -1,8 +1,8 @@
 {
     "host": "localhost",
     "user": "root",
-    "password": "",
-    "database":"gift",
+    "password": "a",
+    "database":"weixin_gift",
     "port": "3306",
     "debug": "true"
 }

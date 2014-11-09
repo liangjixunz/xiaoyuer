@@ -116,8 +116,28 @@
                     maxWidth: 800
                 });
             }) ;
+            $(".get-info").tap(function(){
+                $("#edit").off("tap");
+                $.get("info",function(data){
+                       $("#the-add").text(data);
+                        $("#the-tel").text(data);
+                    $.pgwModal({
+                        target: 'the-prize',
+                        title: '收奖信息',
+                        maxWidth: 800
+                    });
+                    $("#edit").tap(function(){
+                        window.location.href="/user/edit_add.html";
+                    })
+                })
+
+            }) ;
             $("#new-with").tap(function(){
-               window.location.href="/web/lottery/new";
+                $("#new-with").attr("disabled");
+                $.get("/web/lottery/new",function(data){
+                    $("#new-with").removeAttr("disabled");
+                    window.location.reload();
+                });
             });
 
         })
@@ -184,8 +204,8 @@
                         </div>
                         <div class="my-item-right"><span class="ui-right"><span class="ui-red"><%=value.is_recieved?"已完成":"处理中"%></span></span>
                             <p class="ui-no-wrap ui-gray">流水号：<%=value.lottery_id%></p>
-                            <p class="ui-no-wrap">抽中：<%=value.is_award?"中奖":"谢谢参与"%></p>
-                            <p class="ui-red">彩票兑换券：<%=value.award_code%></p>
+                            <p class="ui-no-wrap">抽中：<%=value.is_award?value.name:"谢谢参与"%></p>
+                            <p class="ui-red get-info"  id="<%=value.award_code%>"><%=value.award_code?"查看详情":""%></p>
                             <p class="ui-gray">抽奖日期:<%=value.lottery_generate%></p>
                         </div>
                     </a>
@@ -202,6 +222,31 @@
     </div>
 
 
+</div>
+
+<div id="the-prize" style="display: none;">
+    <ul class="ui-list">
+        <li class="ui-item ui-ignore-space">
+            <a class="my-deletable" >
+               地址：<span id="the-add"></span>
+            </a>
+
+        </li>
+
+
+        <li class="ui-item ui-ignore-space">
+            <a class="my-deletable" >
+                电话号码：<span id="the-tel"></span>
+            </a>
+
+        </li>
+        <li class="ui-item ui-ignore-space">
+            <a class="my-deletable" id="edit" >
+                更新收件信息:
+            </a>
+
+        </li>
+    </ul>
 </div>
 
 <div id="modalContent" style="display: none;">
@@ -233,8 +278,6 @@
         </li>
     </ul>
 </div>
-
-
 
 </body>
 </html>

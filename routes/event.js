@@ -1,7 +1,7 @@
 var request = require("request");
 var db = require("xiaoyuer/gift/db");
 var fs =require("fs");
-
+var  EventEmitter = require('events').EventEmitter;
 
 var mybaseUrl = JSON.parse(fs.readFileSync(__dirname+"/../shared/appConfig")).mybaseUrl;
 
@@ -56,24 +56,26 @@ exports.new_lottery = function(req,res){
     }
     else{
         db.lottery_generate(req.session.openid,function(result){
-            if(result == 0){
-                //res.render("")
-            }
-            else if(result == -1){
-                //res.render("")
-            }
-            else{
-                //res.render("");
-            }
-
+           res.send("");
         })
     }
+}
+/*
+*获取抽奖结果信息
+ */
+exports.code2info = function(req,res){
+    req.session.lottry_id =  req.query.id;
+    db.getAwardAddInfo(req.query.id,function(result){
+
+        res.send(result);
+    })
 }
 /*
 *用户提交领奖信息
  */
 exports.setAwardAddress = function(req,res){
-    db.fillAwardAddress(req.query.id,req.body.address,req.body.mobile);
+    db.fillAwardAddress(req.session.lottery_id,req.body.address,req.body.mobile);
+    res.redirect("/user/hire_success.html");
 }
 /*
 *抽奖首页
@@ -88,16 +90,38 @@ exports.lotteryIndex = function(req,res){
                    user_info: userInfo,
                    lottery_his:[]
                }
+
               db.lottery_history(req.session.openid,function(myHistory){
+                  var event = new EventEmitter();
+                  var wait = 0;
                   if(myHistory.length){
                       for (var i = 0; i< myHistory.length; i +=1){
-                          myHistory[i].lottery_generate = new Date(myHistory[i].lottery_generate).Format("yy-MM-dd hh:mm:ss");
+                          (function(){
+                              var _i = i;
+                              myHistory[_i].lottery_generate = new Date(myHistory[_i].lottery_generate).Format("yy-MM-dd hh:mm:ss");
+                              if(myHistory[_i].is_award){
+                                  wait += 1;
+                                  db.getAwardInfo(myHistory[_i].award_code,function(result1){
+                                        myHistory[_i].name = result1.award_name;
+                                      event.emit("ready");
+                                  })
+                              }
+                          })()
+
+
                       }
+
                       obj.lottery_his = myHistory;
 
                   }
+                  if(wait==0)
+                      res.render("gift_withdraw",obj);
+                  event.on("ready",function(){
+                      wait -= 1;
+                      if(wait==0)
+                        res.render("gift_withdraw",obj);
+                  });
 
-                  res.render("gift_withdraw",obj);
               })
         })
     }

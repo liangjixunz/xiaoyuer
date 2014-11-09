@@ -1,10 +1,10 @@
 var userInfo = require("xiaoyuer/userInfo"),
     orders = require("xiaoyuer/order"),
-    hire = require("xiaoyuer/hire")
+    hire = require("xiaoyuer/hire"),
     fs = require("fs"),
-    seek = require("xiaoyuer/seek");
+    seek = require("xiaoyuer/seek"),
     request = require("request"),
-    pic_cache = require("xiaoyuer/pic-cache");
+    pic_cache = require("xiaoyuer/pic-cache"),
     EventEmitter = require('events').EventEmitter,
     area_class = require("xiaoyuer/area_class");
 
@@ -68,8 +68,8 @@ exports.order = (function(){
                         (function(){
                             var value1 = value;
                             orders.get_order_list[value1](req.session.openid,1,function(result1){
-                                result1.coder =   result1.coder||result1.code;
-                                if(result1.coder == '0'){
+                                console.log(result1);
+                                if(result1.code == '0'){
                                     var temp = [];
                                     var temp1 ={};
                                     result1.ordeList.forEach(function(values){
@@ -174,10 +174,7 @@ exports.order = (function(){
             userInfo.getUserInfo(req.session.openid,function(result){
                 switch(result.code){
                     case '0':
-                        if(result.photo){
-                            var uri =  result.photo.match(/files\/[\S\s]+/)[0];
-                            result.photo = "/images/"+pic_cache.cache(result.phto);
-                        }
+
                         callback(result);
                         break;
                     case '-1':
@@ -192,7 +189,7 @@ exports.order = (function(){
             })
         }
         else{
-
+            req.session.openid="aaa";
             callback('-1');
            res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=" + mybaseUrl +"/order/fromwe&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
         }
@@ -261,7 +258,7 @@ exports.seek = (function(){
         return{
             index : function(req,res){
                 if(req.session.openid)
-                    seek.seek.games("","1",function(result){
+                    seek.seek.games(req.query.class,"1",function(result){
                     if(result.code == '0'){
                         var resObj = [];
                         var temp = {};
@@ -269,8 +266,7 @@ exports.seek = (function(){
                             temp = JSON.parse(value);
 
                             try{
-                                var uri = temp.gameImageAtt.match(/files\/[\s\S]+/)[0];
-                                temp.gameImageAtt = "/images/"+ pic_cache.cache(uri);
+                                     temp.gameImageAtt = pic_cache.cache(temp.gameImageAtt);
                             }
                            catch (e){
                                console.log(e);
@@ -346,15 +342,15 @@ exports.seek = (function(){
 
         return{
             index: function(req,res) {
-                seek.seek.wel_service("","1",function(result){
+                seek.seek.wel_service("","1","",function(result){
                     if(result.code ==0){
                         var resObj = [];
                         var temp = {};
                         result.lst.forEach(function(value){
                             temp = JSON.parse(value);
                             try{
-                                var uri = temp.serviceImageAtt.match(/files\/[\s\S]+/)[0];
-                                temp.serviceImageAtt = "/images/" + pic_cache.cache(uri);
+
+                                temp.serviceImageAtt = pic_cache.cache(temp.gameImageAtt);
                             }
                            catch (e){
                                console.log(e);
@@ -390,15 +386,15 @@ exports.seek = (function(){
                 })
             },
             class_info: function(req,res) {
-                seek.seek.wel_service(req.query.class,"1",function(result){
+                seek.seek.wel_service(req.query.class,"1",req.query.orderfield,function(result){
                     if(result.code ==0){
                         var resObj = [];
                         var temp = {};
                         result.lst.forEach(function(value){
                             temp = JSON.parse(value);
                             try{
-                                var uri = temp.serviceImageAtt.match(/files\/[\s\S]+/)[0];
-                                temp.serviceImageAtt = "/images/" + pic_cache.cache(uri);
+
+                                temp.serviceImageAtt = pic_cache.cache(temp.serviceImageAtt);
                             }
                             catch (e){
                                 console.log(e);
@@ -433,14 +429,8 @@ exports.seek = (function(){
                         var  resObj = JSON.parse(result);
                         var  uri;
                         try{
-                            if(!resObj.serviceImageAtt.match(/files\//)){
-                                uri = "files/" ;
-                                uri += resObj.serviceImageAtt.match(/wservice\/[\s\S]+/)[0];
-                            }
-                            else{
-                                uri =  resObj.serviceImageAtt.match(/files\//)[0];
-                            }
-                            resObj.serviceImageAtt = "/images/"+ pic_cache.cache(uri);
+
+                            resObj.serviceImageAtt =  pic_cache.cache(resObj.serviceImageAtt);
                         }
                         catch (e){
                             console.log(e);
@@ -458,7 +448,7 @@ exports.seek = (function(){
 
             } ,
             page_class: function(req,res){
-                seek.seek.wel_service(req.query.class,req.query.page,function(result){
+                seek.seek.wel_service(req.query.class,req.query.page,req.query.orderfield,function(result){
                     res.send(result);
                 })
             }
@@ -471,15 +461,14 @@ exports.seek = (function(){
 
         return{
             index: function(req,res) {
-                seek.seek.wel_require("","1",function(result){
+                seek.seek.wel_require("","1","",function(result){
                     if(result.code ==0){
                        var resObj = [];
                        var temp = {};
                        result.lst.forEach(function(value){
                            temp = JSON.parse(value);
                            try{
-                               var uri = temp.attCoverStore.match(/files\/[\s\S]+/)[0];
-                               temp.attCoverStore = "/images/" + pic_cache.cache(uri);
+                               temp.attCoverStore = pic_cache.cache(temp.attCoverStore );
                            }
                            catch (e){
                                console.log(e);
@@ -515,15 +504,15 @@ exports.seek = (function(){
                 })
             },
             class_info: function(req,res) {
-                seek.seek.wel_require("","1",function(result){
+                seek.seek.wel_require(req.query.class,"1",req.query.orderfield,function(result){
                     if(result.code ==0){
                         var resObj = [];
                         var temp = {};
                         result.lst.forEach(function(value){
                             temp = JSON.parse(value);
                             try{
-                                var uri = temp.attCoverStore.match(/files\/[\s\S]+/)[0];
-                                temp.attCoverStore = "/images/" + pic_cache.cache(uri);
+
+                                temp.attCoverStore = pic_cache.cache(temp.attCoverStore);
                             }
                             catch (e){
                                 console.log(e);
@@ -560,20 +549,8 @@ exports.seek = (function(){
                         resObj.releaseTime = new Date(resObj.releaseTime).Format("20yy年MM月dd日 hh:mm:ss");
                         resObj.requireFinishTime = new Date(resObj.requireFinishTime).Format("20yy年MM月dd日 hh:mm:ss");
                         resObj.welfareProjectDes = html_decode( resObj.welfareProjectDes)  ;
-                        var uri;
-                        try{
-                            if(!resObj.attCoverStore.match(/files\//)){
-                                uri = "files/" ;
-                                uri += resObj.attCoverStore.match(/game\/[\s\S]+/)[0];
-                            }
-                            else{
-                                uri =  resObj.attCoverStore.match(/game\//)[0];
-                            }
-                        }
-                        catch (e){
-                            console.log(e);
-                        }
-                        resObj.attCoverStore = "/images/" + pic_cache.cache(uri);
+
+                        resObj.attCoverStore =  pic_cache.cache( resObj.attCoverStore);
                         res.render('detail-wrequire',resObj);
                     }
                     catch (e){
@@ -585,7 +562,7 @@ exports.seek = (function(){
             } ,
             page_class: function(req,res){
 
-                seek.seek.wel_require(req.query.class,req.query.page,function(result){
+                seek.seek.wel_require(req.query.class,req.query.page,req.query.orderfield,function(result){
                     res.send(result);
                 })
             }
@@ -598,7 +575,7 @@ exports.seek = (function(){
         return{
             index:function(req,res) {
                 if(req.session.openid)
-                    seek.seek.service("","1",function(result){
+                    seek.seek.service("","1","",function(result){
                     var resObj = [];
                     var temp = {};
                     /*
@@ -608,8 +585,8 @@ exports.seek = (function(){
                         result.lst.forEach(function(value){
                             temp  =  JSON.parse(value);
                             try{
-                                var uri = temp.serviceImageAtt.match(/files\/[\s\S]+/)[0];
-                                temp.serviceImageAtt = "/images/"+ pic_cache.cache(uri);
+
+                                temp.serviceImageAtt = pic_cache.cache(temp.serviceImageAtt);
                             }
                              catch (e){
                                  console.log(e);
@@ -647,7 +624,7 @@ exports.seek = (function(){
 
             } ,
             class_info:function(req,res){
-                seek.seek.service(req.query.class,"1",function(result){
+                seek.seek.service(req.query.class,"1",req.query.orderfield,function(result){
                     var resObj = [];
                     var temp = {};
                     /*
@@ -658,8 +635,7 @@ exports.seek = (function(){
                             temp  =  JSON.parse(value);
 
                             try{
-                                var uri = temp.serviceImageAtt.match(/files\/[\s\S]+/)[0];
-                                temp.serviceImageAtt = "/images/"+ pic_cache.cache(uri);
+                                temp.serviceImageAtt =  pic_cache.cache(temp.serviceImageAtt);
                             }
                             catch (e){
                                 console.log(e);
@@ -696,7 +672,7 @@ exports.seek = (function(){
                             if(!resObj.serviceImageAtt.match(/files\//)){
                                 uri = "files/" + uri;
                             }
-                            resObj.serviceImageAtt = "/images/"+ pic_cache.cache(uri);
+                            resObj.serviceImageAtt = pic_cache.cache(resObj.serviceImageAtt);
                         }
                         catch (e){
                             console.log(e);
@@ -714,13 +690,16 @@ exports.seek = (function(){
             des:function(req,res){
                 seek.info("service",req.query.id,function(result){
                     try{
-                        var  resObj = JSON.parse(result);
                         try{
-                            var uri = resObj.serviceImageAtt.match(/service\/[\s\S]+/)[0];
-                            if(!resObj.serviceImageAtt.match(/files\//)){
-                                uri = "files/" + uri;
-                            }
-                            resObj.serviceImageAtt = "/images/"+ pic_cache.cache(uri);
+                            var  resObj = JSON.parse(result);
+                        }
+                        catch (e){
+                            console.log(e);
+                            var resObj = result;
+                        }
+                        try{
+
+                            resObj.serviceImageAtt = pic_cache.cache( resObj.serviceImageAtt);
                         }
                         catch (e){
                             console.log(e);
@@ -736,7 +715,7 @@ exports.seek = (function(){
                 })
             },
             page_class: function(req,res){
-                seek.seek.service(req.query.class,req.query.page,function(result){
+                seek.seek.service(req.query.class,req.query.page,req.query.orderfield,function(result){
                     res.send(result);
                 })
             },
@@ -761,7 +740,7 @@ exports.seek = (function(){
         return{
             index:function(req,res) {
                 if(req.session.openid)
-                    seek.seek.require("1","1",function(result){
+                    seek.seek.require("1","1","",function(result){
                     var resObj = [];
 
                     /*
@@ -772,8 +751,7 @@ exports.seek = (function(){
                             var temp = {};
                             temp  =  JSON.parse(value)
                             try{
-                                var uri = temp.requireImageAtt.match(/files\/[\s\S]+/)[0];
-                                temp.requireImageAtt = "/images/"+ pic_cache.cache(uri);
+                                temp.requireImageAtt = pic_cache.cache(temp.requireImageAtt);
                             }
                             catch (e){
                                 console.log(e);
@@ -814,7 +792,7 @@ exports.seek = (function(){
             },
             class_info:function(req,res) {
 
-                seek.seek.require(req.query.class,"1",function(result){
+                seek.seek.require(req.query.class,"1",req.query.orderfield,function(result){
                     console.log(result);
                     var resObj = [];
                     var temp = {};
@@ -825,8 +803,7 @@ exports.seek = (function(){
                         result.lst.forEach(function(value){
                             temp  =  JSON.parse(value);
                             try{
-                                var uri = temp.requireImageAtt.match(/files\/[\s\S]+/)[0];
-                                temp.requireImageAtt = "/images/"+ pic_cache.cache(uri);
+                                temp.requireImageAtt =pic_cache.cache(temp.requireImageAtt);
                             }
                             catch (e){
                                 console.log(e);
@@ -880,7 +857,7 @@ exports.seek = (function(){
             },
             page_class: function(req,res){
 
-                seek.seek.require(req.query.class,req.query.page,function(result){
+                seek.seek.require(req.query.class,req.query.page,req.query.orderfield,function(result){
                     res.send(result);
                 })
             },
@@ -915,31 +892,55 @@ exports.kf = (function(){
 
     function  user_info (req,res){
         userInfo.getUserInfo(req.query.openid,function(result){
-            console.log(result);
             res.send(result);
         })
     }
+    function order(req,res){
+
+        (function(){
+            var noteReady = new EventEmitter();
+            var  render_obj = {};
+            var count = 0;
+            for(var value in orders.get_order_list){
+                (function(){
+                    var value1 = value;
+                    orders.get_order_list[value1](req.query.openid,1,function(result1){
+                        if(result1.code == '0'){
+                            var temp = [];
+                            var temp1 ={};
+                            result1.ordeList.forEach(function(values){
+                                temp1 = JSON.parse(values);
+
+                                temp[temp.length] = temp1;
+                            });
+                            render_obj[value1]= temp;
+                        }
+                        else{
+                            render_obj[value1]= [];
+                        }
+                        noteReady.emit("ready");
+
+                    });
+                })();
+            }
+            noteReady.on("ready",function(){
+                count +=1;
+                if(count == 10){
+                    console.log(render_obj);
+                    res.send(render_obj);
+                    count = 0;
+                }
+
+            })
+        }) ();
+
+    }
     return {
         user_info :user_info,
-        order_require: function(req,res){
-            orders.get_require_order(req.query.openid,req.query.page,function(result){
-                res.send(result);
-            })
-        },
-        /*客服用
-         * 根据openid分页
-         *获取用户服务订单列表
-         */
-        order_service:  function(req,res){
-            orders.get_service_order(req.query.openid,req.query.page,function(result){
-                res.send(result);
-            })
-        }
+        order:order
 
     }
 })();
-
-
 
 
 /*

@@ -89,10 +89,10 @@
 
         <div class="ui-tab js-active " id="page1-tab1" role="tabpanel">
             <ul class="ui-groupbutton" role="tablist">
-                <li class="ui-button  ">发布时间 &nbsp;<span class="ion-arrow-down-a"></span></li>
-                <li class="ui-button js-active">截止时间&nbsp;<span class="ion-arrow-down-a"></span></li>
-                <li class="ui-button" >价格&nbsp;<span class="ion-arrow-up-a"></span></li>
-                <li class="ui-button" >参与&nbsp;<span class="ion-arrow-down-a"></span><li>
+                <li class="ui-button  " id="releasetime">最新 &nbsp;<span class="ion-arrow-down-a"></span></li>
+                <li class="ui-button" id="dealnum">成交&nbsp;<span class="ion-arrow-down-a"></span></li>
+                <li class="ui-button" id="price">价格&nbsp;<span class="ion-arrow-up-a"></span></li>
+                <li class="ui-button" id="recommendnum" >推荐&nbsp;<span class="ion-arrow-down-a"></span><li>
             </ul>
             <ul class="ui-list" id="the-list">
 
@@ -146,7 +146,93 @@
 <script>
     var page = 2;
     var the_class = window.location.href.match(/\?class[\s\S]+/)[0].slice(7);
+    var the_classes = window.location.href.match(/\?class[^&]+/)[0].slice(7);
+    try{
+        var order_fields = window.location.href.match(/\&orderfield[^&]+/)[0].slice(12);
+    }
+    catch (e){
+        var order_fields = "";
+    }
     $().ready(function(){
+        (function(){
+            var active_orders = [];
+            active_orders = order_fields.split(",");
+            var _this ;
+            if(active_orders.length){
+                switch (active_orders[0]){
+                    case  "releasetime":
+                        _this = $("#releasetime");
+                        break;
+                    case "recommendnum":
+                        _this = $("#recommendnum");
+                        break;
+                    case "dealnum":
+                        _this = $("#dealnum");
+                        break;
+                    case "price":
+                        _this = $("#price");
+                        break;
+                    default:
+                        ;
+                }
+                $(_this).attr("class", $(_this).attr("class") + " js-active");
+                if(active_orders[1] == "asc"){
+                    $(_this).children().attr("class","ion-arrow-up-a");
+                }
+                else{
+                    $(_this).children().attr("class","ion-arrow-down-a");
+                }
+            }
+        })();
+
+
+        $("#releasetime").tap(function(){
+            var _this = this;
+            var orderfield = "releasetime,desc";
+            console.log($(_this).attr("class"));
+            if(~($(_this).attr("class").indexOf("js-active"))){
+                var the_class = $(_this).children().attr("class");
+                if(the_class=="ion-arrow-down-a"){
+                    orderfield = "releasetime,asc"
+                }
+            }
+            window.location.href = window.location.pathname + "?class=" + the_classes +"&orderfield=" + orderfield;
+        })
+        $("#dealnum").tap(function(){
+            var orderfield = "dealnum,desc";
+            var _this = this;
+            if(~$(_this).attr("class").indexOf("js-active")){
+                var the_class = $(_this).children().attr("class");
+                if(the_class=="ion-arrow-down-a"){
+                    orderfield = "dealnum,asc"
+                }
+            }
+            window.location.href = window.location.pathname + "?class=" + the_classes +"&orderfield=" + orderfield;
+        })
+        $("#price").tap(function(){
+            var _this = this;
+            var orderfield = "price,desc";
+            if(~($(_this).attr("class").indexOf("js-active"))){
+                var the_class = $(_this).children().attr("class");
+                if(the_class=="ion-arrow-down-a"){
+                    orderfield = "price,asc"
+                }
+            }
+
+            window.location.href = window.location.pathname + "?class=" + the_classes +"&orderfield=" +  orderfield;
+        })
+        $("#recommendnum").tap(function(){
+            var _this = this;
+            var orderfield = "recommendnum,desc";
+            if(~($(_this).attr("class").indexOf("js-active"))){
+                var the_class = $(_this).children().attr("class");
+                if(the_class=="ion-arrow-down-a"){
+                    orderfield = "recommendnum,asc"
+                }
+            }
+
+            window.location.href = window.location.pathname + "?class=" + the_classes +"&orderfield=" +  orderfield;
+        })
         $(".ui-page-content").swipeRight(function(){
             history.back();
         })
