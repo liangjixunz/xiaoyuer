@@ -123,7 +123,7 @@
     var the_class = "";
     var the_classes ="";
     try{
-        var order_fields = window.location.href.match(/\&orderfield[^&]+/)[0].slice(12);
+        var order_fields = window.location.href.match(/\?orderfield[^&]+/)[0].slice(12);
     }
     catch (e){
         var order_fields = "";
@@ -171,7 +171,7 @@
                     orderfield = "releasetime,asc"
                 }
             }
-            window.location.href = window.location.pathname + "?class=" + the_classes +"&orderfield=" + orderfield;
+            window.location.href = window.location.pathname + "?orderfield=" + orderfield;
         })
         $("#ddl").tap(function(){
             var orderfield = "endtime,desc";
@@ -182,7 +182,7 @@
                     orderfield = "endtime,asc"
                 }
             }
-            window.location.href = window.location.pathname + "?class=" + the_classes +"&orderfield=" + orderfield;
+            window.location.href = window.location.pathname + "?orderfield=" + orderfield;
         })
         $("#price").tap(function(){
             var _this = this;
@@ -194,7 +194,7 @@
                 }
             }
 
-            window.location.href = window.location.pathname + "?class=" + the_classes +"&orderfield=" +  orderfield;
+            window.location.href = window.location.pathname + "?orderfield=" +  orderfield;
         })
         $("#joins").tap(function(){
             var _this = this;
@@ -206,7 +206,7 @@
                 }
             }
 
-            window.location.href = window.location.pathname + "?class=" + the_classes +"&orderfield=" +  orderfield;
+            window.location.href = window.location.pathname + "?orderfield=" +  orderfield;
         })
         $(".ui-page-content").swipeRight(function(){
             history.back();
@@ -217,7 +217,7 @@
         $("#more-items").tap(function(){
             $("#show-load-items").attr("style","");
             $("#show-more-items").attr("style","display:none");
-             $.get("/web/seek/game/more?page="+page+"",function(data){
+             $.get("/web/seek/game/more?page="+page+"&orderfield="+order_fields,function(data){
                  page +=1;
                 $("#show-load-items").attr("style","display:none");
              try{
@@ -248,7 +248,7 @@
                          temp = value;
                      }
                      window.str = str;
-                     $("#the-list").append(sprintf(str,temp.id,temp.gameImageAtt,'width="100%" height="100%"',temp.gameTitle,new Date(temp.apllayEndTime).Format("20yy年MM月dd日 hh:mm:ss"),temp.gameFixedPrice,temp.apllayCount));
+                     $("#the-list").append(sprintf(str,temp.id,temp.gameImageAtt,'width="100%" height="100%"',temp.gameTitle,temp.apllayEndTime,temp.gameFixedPrice,temp.apllayCount));
                  })
 
              }

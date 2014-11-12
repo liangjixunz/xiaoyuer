@@ -139,7 +139,7 @@
                         </div>
                         <div class="my-item-right ">
                             <p style="color:cornflowerblue"><%=value.requireTitle%></p>
-                            <p class="ui-gray" id = "the-code">截止：<%=value._apllayEndTime%></p>
+                            <p class="ui-gray" id = "the-code">截止：<%=value.apllayEndTime%></p>
 
                             <p >需要服务者：<%=value.serverCount%> <%if(!value.requireFixedPrice){%>
                                 <span class="ui-red ui-right">￥<%=value.requireFromPrice%>—<%=value.requireToPrice%></span>
@@ -312,7 +312,7 @@
                         }
                         window.str = str;
                         $("#the-list").append(sprintf(str,temp.id,temp.requireImageAtt,'width="100%" height="100%"',
-                                        temp.requireTitle,new Date(temp._apllayEndTime).Format("20yy年MM月dd日 hh:mm:ss"),
+                                        temp.requireTitle,temp.apllayEndTime,
                                         temp.serverCoun,(temp.requireFixedPrice?temp.requireFixedPrice:(temp.requireFromPrice+"—"+temp.requireToPrice)))
                         );
                     })

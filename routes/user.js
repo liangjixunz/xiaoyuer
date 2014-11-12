@@ -189,9 +189,8 @@ exports.order = (function(){
             })
         }
         else{
-            req.session.openid="aaa";
             callback('-1');
-           res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=" + mybaseUrl +"/order/fromwe&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
+           res.redirect("https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxdfca784ad548eea0&redirect_uri=" + mybaseUrl +"/order/fromwe&response_type=code&scope=snsapi_base&state=1#wechat_redirect");
         }
 
     }
@@ -258,7 +257,7 @@ exports.seek = (function(){
         return{
             index : function(req,res){
                 if(req.session.openid)
-                    seek.seek.games(req.query.class,"1",function(result){
+                    seek.seek.games("1",req.query.orderfield,function(result){
                     if(result.code == '0'){
                         var resObj = [];
                         var temp = {};
@@ -317,7 +316,7 @@ exports.seek = (function(){
                 })
             },
             page_class: function(req,res){
-                seek.seek.games("1",req.query.page,function(result){
+                seek.seek.games(req.query.page,req.query.orderfield,function(result){
                     res.send(result);
                 })
             } ,

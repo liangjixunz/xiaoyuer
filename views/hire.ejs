@@ -85,7 +85,7 @@
     <script src = "/js/WeixinApi.js"></script>
     <script>
         var openid;
-        var baseurl = "http://ber.chinacloudapp.cn/web";
+        var baseurl = "http://wx.xiaoyuer.com/web";
         var event_id = window.location.search.slice(0);
         event_id = event_id.match(/=[^\/]+/)[0].slice(1);
         $.get("/web/event/whoisme",function(data,status){
@@ -104,7 +104,7 @@
             // 微信分享的数据
             var wxData = {
                 "appId": "wxfd339e5a03048eb3", // 服务号可以填写appId
-                "imgUrl": 'http://www.baidufe.com/fe/blog/static/img/weixin-qrcode-2.jpg',
+                "imgUrl": 'http://xiaoyuer.baidufe.com/fe/blog/static/img/weixin-qrcode-2.jpg',
                 "link": 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxfd339e5a03048eb3&redirect_uri=' + baseurl + '/repost/' + openid + '/id/' + event_id + '&response_type=code&scope=snsapi_base&state=1#wechat_redirect',
                 "desc": '小鱼儿活动，分享就能获得红包哦，快来一起抢吧',
                 "title": "小鱼儿活动，分享就能获得红包哦，快来一起抢吧"

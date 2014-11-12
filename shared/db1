@@ -1,8 +1,0 @@
-{
-    "host": "localhost",
-    "user": "root",
-    "password": "",
-    "database":"fish",
-    "port": "3306",
-    "debug": "true"
-}

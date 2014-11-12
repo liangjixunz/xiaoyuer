@@ -4,5 +4,5 @@
     "password": "a",
     "database":"weixin_gift",
     "port": "3306",
-    "debug": "true"
+    "debug": "false"
 }

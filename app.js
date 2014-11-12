@@ -6,11 +6,8 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var fs = require("fs")
-console.log1 = console.log;
-console.log  = function(o){
-    console.log1(new Date().Format("20yy-MM-dd hh:mm:ss"));
-    console.log1(o);
-}
+var logs = require("./log");
+
 var routes = require('./routes');
 var app = express();
 var signature_check = (function(){
@@ -38,6 +35,7 @@ var signature_check = (function(){
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
+logs.use(app);
 app.use(favicon());
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -49,7 +47,10 @@ app.use(app.router);
 
 
 app.get('/', routes.index);
-
+ app.get('/test1',function(req,res){
+     req.session.openid ="aaa";
+     res.send("1");
+ })
 /*
 *客服所用页面
  */
