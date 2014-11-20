@@ -1,6 +1,6 @@
 {
-"AppID":"wxdfca784ad548eea0",
-"AppSecret":"c91a199b19842aabe1c443dc7fc555d8" ,
+"AppID":"",
+"AppSecret":"" ,
 "baseUrl":"http://zx.xiaoyuer.com/weixin",
 "token":"xye",
 "mybaseUrl":"http://wx.xiaoyuer.com/web",
